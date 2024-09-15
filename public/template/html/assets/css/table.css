@@ -1,0 +1,36 @@
+.sticky-col {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 0;
+    background-color: #fff;
+    z-index: 10; /* Pastikan kolom sticky berada di atas */
+}
+
+.sticky-col:nth-child(2) {
+    left: 50px; /* Sesuaikan dengan lebar kolom pertama */
+    z-index: 11; /* Mengatur urutan z-index */
+}
+
+.sticky-col:nth-child(3) {
+    left: 150px; /* Sesuaikan dengan lebar kolom sebelumnya */
+    z-index: 12; /* Mengatur urutan z-index */
+}
+
+.sticky-col:nth-child(4) {
+    left: 250px; /* Sesuaikan dengan lebar kolom sebelumnya */
+    z-index: 13; /* Mengatur urutan z-index */
+}
+
+.sticky-col:nth-child(5) {
+    left: 350px; /* Sesuaikan dengan lebar kolom sebelumnya */
+    z-index: 14; /* Mengatur urutan z-index */
+}
+
+table th, table td {
+    z-index: 1; /* Memberikan z-index pada kolom non-sticky */
+}
+
+/* tabel.css */
+body {
+    background-color: yellow !important;
+}
