@@ -32,20 +32,19 @@ class Login extends Controller
 
     public function loginProcess()
     {
-
         Request()->validate([
             'nip'             => 'required',
-            'password'        => 'min:6|required',
+            'login.password'        => 'min:6|required',
         ], [
             'nip.required'              => 'NIP harus diisi!',
-            'password.required'         => 'Password harus diisi!',
-            'password.min'              => 'Password minimal 6 karakter!',
+            'login.password.required'         => 'Password harus diisi!',
+            'login.password.min'              => 'Password minimal 6 karakter!',
         ]);
 
         $cekNip = $this->ModelAuth->cekNip(Request()->nip);
 
         if ($cekNip) {
-            if (Hash::check(Request()->password, $cekNip->password)) {
+            if (Hash::check(Request()->input('login.password'), $cekNip->password)) {
                 Session()->put('id_user', $cekNip->id_user);
                 Session()->put('nip', $cekNip->nip);
                 Session()->put('role', $cekNip->role);

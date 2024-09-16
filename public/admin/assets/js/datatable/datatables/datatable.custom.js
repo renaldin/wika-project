@@ -62,6 +62,11 @@
       scrollCollapse: true,
       paging: false,
     });
+    $("#datatable-basic").DataTable({
+      scrollX: true,
+      scrollCollapse: true,
+      paging: true,
+    });
     $("#basic-13").DataTable({
       scrollY: 200,
       scrollX: true,
