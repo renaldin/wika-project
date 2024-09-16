@@ -1,135 +1,48 @@
-<!doctype html>
-<html lang="en" dir="ltr">
+
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>Infrastructure 2 Division | {{$title}}</title>
-      <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-      <!-- Favicon -->
-      <link rel="shortcut icon" href="{{ asset('image/WIDER.png') }}" />
-      <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
-      <!-- Library / Plugin Css Build -->
-      <link rel="stylesheet" href="{{ asset('template/html/assets/css/core/libs.min.css') }}" />
-      
-      
-      <!-- Hope Ui Design System Css -->
-      <link rel="stylesheet" href="{{ asset('template/html/assets/css/hope-ui.min.css?v=1.2.0') }}" />
-      
-      <!-- Custom Css -->
-      <link rel="stylesheet" href="{{ asset('template/html/assets/css/custom.min.css?v=1.2.0') }}" />
-      
-      <!-- Dark Css -->
-      <link rel="stylesheet" href="{{ asset('template/html/assets/css/dark.min.css') }}"/>
-      
-      <!-- Customizer Css -->
-      <link rel="stylesheet" href="{{ asset('template/html/assets/css/customizer.min.css') }}" />
-      
-      <!-- RTL Css -->
-      <link rel="stylesheet" href="{{ asset('template/html/assets/css/rtl.min.css') }}"/>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" />
-
-      <script>
-        function hanyaAngka(evt) {
-            var charCode = (evt.which) ? evt.which : event.keyCode;
-            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-                return false;
-            }
-            return true;
-        }
-      </script>
-      <style>
-        @media (max-width: 768px) {
-          .logo-kanan {
-              /* padding-right: 180px !important; */
-              /* display: flex; */
-              /* margin-right: 100px; */
-              width: 200px !important;
-              margin-left: -45px !important;
-              /* height: 150%; */
-          }
-        }
-        body {
-    font-family: 'Open Sans', sans-serif;
-}
-
-      </style>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Riho admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities.">
+    <meta name="keywords" content="admin template, Riho admin template, dashboard template, flat admin template, responsive admin template, web app">
+    <meta name="author" content="pixelstrap">
+    <link rel="icon" href="{{ asset('image/WIDER.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('image/WIDER.png') }}" type="image/x-icon">
+    <title>Infrastructure 2 Division | {{$title}}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/font-awesome.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/icofont.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/themify.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/flag-icon.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/feather-icon.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/bootstrap.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/style.css') }}">
+    <link id="color" rel="stylesheet" href="{{ asset('admin/assets/css/color-1.css') }}" media="screen">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/responsive.css') }}">
   </head>
-  <body class=" " data-bs-spy="scroll" data-bs-target="#elements-section" data-bs-offset="0" tabindex="0">
-    
-    <!-- loader Start -->
-    <div id="loading">
-      <div class="loader simple-loader">
-          <div class="loader-body"></div>
-      </div>    </div>
-    <!-- loader END -->
-    
-      <div class="wrapper">
-      @yield('content')
+  <body>
+    <div class="container-fluid p-0">
+      <div class="row m-0">
+        <div class="col-12 p-0">    
+          <div class="login-card login-dark">
+            <div>
+              <div><a class="logo" href="index.html"><img class="img-fluid for-dark" src="{{ asset('admin/assets/images/logo/logo.png') }}" alt="looginpage"><img class="img-fluid for-light" src="{{ asset('admin/assets/images/logo/logo_dark.png') }}" alt="looginpage"></a></div>
+              @yield('content')
+            </div>
+          </div>
+        </div>
       </div>
-    
-    <!-- Library Bundle Script -->
-    <script src="{{ asset('template/html/assets/js/core/libs.min.js') }}"></script>
-    
-    <!-- External Library Bundle Script -->
-    <script src="{{ asset('template/html/assets/js/core/external.min.js') }}"></script>
-    
-    <!-- Widgetchart Script -->
-    <script src="{{ asset('template/html/assets/js/charts/widgetcharts.js') }}"></script>
-    
-    <!-- mapchart Script -->
-    <script src="{{ asset('template/html/assets/js/charts/vectore-chart.js') }}"></script>
-    <script src="{{ asset('template/html/assets/js/charts/dashboard.js') }}" ></script>
-    
-    <!-- fslightbox Script -->
-    <script src="{{ asset('template/html/assets/js/plugins/fslightbox.js') }}"></script>
-    
-    <!-- Settings Script -->
-    <script src="{{ asset('template/html/assets/js/plugins/setting.js') }}"></script>
-    
-    <!-- Slider-tab Script -->
-    <script src="{{ asset('template/html/assets/js/plugins/slider-tabs.js') }}"></script>
-    
-    <!-- Form Wizard Script -->
-    <script src="{{ asset('template/html/assets/js/plugins/form-wizard.js') }}"></script>
-    
-    <!-- AOS Animation Plugin-->
-    
-    <!-- App Script -->
-    <script src="{{ asset('template/html/assets/js/hope-ui.js') }}" defer></script>
-
-    <script>
-      // umum
-      function readImage(input) {
-        if (input.files && input.files[0]) {
-          var reader = new FileReader();
-          reader.onload = function(e) {
-            $('#load_image').attr('src', e.target.result);
-          }
-          reader.readAsDataURL(input.files[0]);
-        }
-      }
-      $('#preview_image').change(function() {
-        readImage(this);
-      })
-    </script>
-
-   <script>
-      window.setTimeout(function() {
-      $(".alert").fadeTo(1500, 0).slideUp(1500, function() {
-         $(this).remove();
-      });
-      }, 6000);
-   </script>
-
-<script>
-  document.getElementById("togglePassword").addEventListener("click", function () {
-      var passwordField = document.getElementById("password");
-      if (passwordField.type === "password") {
-          passwordField.type = "text";
-      } else {
-          passwordField.type = "password";
-      }
-  });
-</script>
+      <script src="{{ asset('admin/assets/js/jquery.min.js') }}"></script>
+      <script src="{{ asset('admin/assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
+      <script src="{{ asset('admin/assets/js/icons/feather-icon/feather.min.js') }}"></script>
+      <script src="{{ asset('admin/assets/js/icons/feather-icon/feather-icon.js') }}"></script>
+      <script src="{{ asset('admin/assets/js/alert.js') }}"></script>
+      <script src="{{ asset('admin/assets/js/config.js') }}"></script>
+      <script src="{{ asset('admin/assets/js/script.js') }}"></script>
+    </div>
   </body>
 </html>

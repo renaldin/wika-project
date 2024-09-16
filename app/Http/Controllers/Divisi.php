@@ -11,7 +11,7 @@ use App\Models\ModelDetailAkhlak;
 use App\Models\ModelAkhlak;
 use Illuminate\Http\Request;
 
-class ModelAkhlak extends Controller
+class Divisi extends Controller
 {
 
     public function __construct()
