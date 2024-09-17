@@ -14,7 +14,7 @@ use App\Http\Controllers\EngineeringActivity;
 use App\Http\Controllers\Event;
 use App\Http\Controllers\Carousel;
 use App\Http\Controllers\Chat;
-use App\Http\Controllers\Divisi;
+use App\Http\Controllers\Engineering\Divisi;
 use App\Http\Controllers\InfraNews;
 use App\Http\Controllers\KiKm;
 use App\Http\Controllers\Landing;
@@ -349,7 +349,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 
     Route::post('/download-rkp-pdf-mankon', [RkpMankon::class, 'downloadPdf']);
 
-    Route::group(['middleware' => 'admin'], function () {
+    Route::group(['middleware' => 'admin-engineering'], function () {
         Route::get('/data-activities', [Activity::class, 'index'])->name('data-activities');
         Route::get('/tambah-activities', [Activity::class, 'tambah']);
         Route::get('/edit-activities/{id}', [Activity::class, 'edit']);
@@ -463,12 +463,12 @@ Route::group(['middleware' => 'revalidate'], function () {
         Route::post('/edit-jabatan/{id}', [Jabatan::class, 'prosesEdit']);
         Route::get('/hapus-jabatan/{id}', [Jabatan::class, 'prosesHapus']);
 
-        Route::get('/daftar-divisi', [Divisi::class, 'index'])->name('daftar-divisi');
-        Route::get('/tambah-divisi', [Divisi::class, 'tambah'])->name('tambah-divisi');
-        Route::post('/tambah-divisi', [Divisi::class, 'prosesTambah']);
-        Route::get('/edit-divisi/{id}', [Divisi::class, 'edit']);
-        Route::post('/edit-divisi/{id}', [Divisi::class, 'prosesEdit']);
-        Route::get('/hapus-divisi/{id}', [Divisi::class, 'prosesHapus']);
+        Route::get('/engineering/kelola-divisi', [Divisi::class, 'index'])->name('engineering-kelola-divisi');
+        Route::get('/engineering/tambah-divisi', [Divisi::class, 'tambah'])->name('engineering-tambah-divisi');
+        Route::post('/engineering/tambah-divisi', [Divisi::class, 'prosesTambah']);
+        Route::get('/engineering/edit-divisi/{id}', [Divisi::class, 'edit']);
+        Route::post('/engineering/edit-divisi/{id}', [Divisi::class, 'prosesEdit']);
+        Route::get('/engineering/hapus-divisi/{id}', [Divisi::class, 'prosesHapus']);
     });
 
     Route::group(['middleware' => 'headoffice'], function () {

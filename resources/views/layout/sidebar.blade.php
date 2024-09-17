@@ -1,3 +1,6 @@
+@php
+    $firstDivisi = 'engineering';
+@endphp
 <div class="sidebar-wrapper" data-layout="stroke-svg">
     <div class="logo-wrapper"><a href="index.html"><img class="img-fluid" src="{{ asset('admin/assets/images/logo/logo.png') }}" alt=""></a>
       <div class="back-btn"><i class="fa fa-angle-left"> </i></div>
@@ -239,7 +242,7 @@
                     <h6>General</h6>
                 </div>
             </li>
-            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="">
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/dashboard">
               <svg class="stroke-icon">
                 <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-project') }}"></use>
               </svg>
@@ -268,7 +271,7 @@
                     <li><a href="">Carousel</a></li>
                 </ul>
             </li>
-            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="">
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/{{$firstDivisi}}/kelola-jabatan">
                 <svg class="stroke-icon">
                     <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-project') }}"></use>
                 </svg>
@@ -276,7 +279,7 @@
                     <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-project') }}"></use>
                 </svg><span>Jabatan</span></a>
             </li>
-            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="">
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/{{$firstDivisi}}/kelola-divisi">
                 <svg class="stroke-icon">
                     <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-project') }}"></use>
                 </svg>
