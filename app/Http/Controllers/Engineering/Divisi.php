@@ -1,14 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Engineering;
 
 use App\Http\Controllers\Controller;
 use App\Models\ModelUser;
 use App\Models\Divisies;
-use App\Models\ModelProyek;
-use App\Models\ModelAspekAkhlak;
-use App\Models\ModelDetailAkhlak;
-use App\Models\ModelAkhlak;
 use Illuminate\Http\Request;
 
 class Divisi extends Controller
@@ -27,17 +23,17 @@ class Divisi extends Controller
 
         $daftarDivisi = Divisies::where('is_active', 1)
             ->orderBy('created_at', 'DESC')
-            ->limit(200)
+            ->limit(1000)
             ->get();
         
         $data = [
             'title'             => 'Data Divisi',
-            'subTitle'          => 'Daftar Divisi',
+            'subTitle'          => 'Kelola Divisi',
             'daftarDivisi'      => $daftarDivisi,
             'user'              => ModelUser::find(Session()->get('id_user')),
         ];
         
-        return view('admin/divisi.index', $data);
+        return view('engineering.divisi.index', $data);
     }
 
     public function detail($id_divisi)
@@ -54,7 +50,7 @@ class Divisi extends Controller
             'user'              => ModelUser::find(Session()->get('id_user')),
         ];
 
-        return view('admin/divisi.form', $data);
+        return view('engineering.divisi.form', $data);
     }
 
     public function tambah()
@@ -70,7 +66,7 @@ class Divisi extends Controller
             'user'              => ModelUser::find(Session()->get('id_user'))
         ];
 
-        return view('admin/divisi.form', $data);
+        return view('engineering.divisi.form', $data);
     }
 
     public function prosesTambah(Request $request)
@@ -81,10 +77,10 @@ class Divisi extends Controller
 
         $divisi = new Divisies();
         $divisi->nama_divisi      = $request->nama_divisi;
-        $divisi->is_active         = 1;
+        $divisi->is_active        = 1;
         $divisi->save();
 
-        return redirect()->route('daftar-divisi')->with('success', 'Data berhasil ditambahkan!');
+        return redirect()->route('engineering-kelola-divisi')->with('success', 'Data berhasil ditambahkan!');
     }
 
     public function edit($id_divisi)
@@ -101,7 +97,7 @@ class Divisi extends Controller
             'user'              => ModelUser::find(Session()->get('id_user')),
         ];
 
-        return view('admin/divisi.form', $data);
+        return view('engineering.divisi.form', $data);
     }
 
     public function prosesEdit(Request $request, $id_divisi)
@@ -114,7 +110,7 @@ class Divisi extends Controller
         $divisi->nama_divisi       = $request->nama_divisi;
         $divisi->save();
 
-        return redirect()->route('daftar-divisi')->with('success', 'Data berhasil diedit!');
+        return redirect()->route('engineering-kelola-divisi')->with('success', 'Data berhasil diedit!');
     }
 
     public function prosesHapus($id_divisi)
@@ -129,6 +125,4 @@ class Divisi extends Controller
 
         return back()->with('success', 'Data berhasil dihapus !');
     }
-
-    
 }

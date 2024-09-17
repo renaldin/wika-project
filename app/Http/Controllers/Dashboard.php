@@ -112,15 +112,9 @@ class Dashboard extends Controller
         $role = Session()->get('role');
         $divisi = Session()->get('divisi');
 
-        if ($role == 'Admin') {
-            if ($divisi == 'PCP') {
-                $route = 'pcp.dashboard';
-            } else {
-                $route = 'admin.dashboard';
-            }
-
+        if ($role == 'Admin' && $divisi == 'Engineering') {
+            $route = 'engineering.admin.dashboard';
             $user = $this->ModelUser->detail(Session()->get('id_user'));
-
             $data = [
                 'title'                     => null,
                 'user'                      => $user,
@@ -265,19 +259,18 @@ class Dashboard extends Controller
                 'subTitle'              => 'Dashboard',
                 'daftarAkhlak' => $daftarAkhlak,
             ];
-        } elseif ($role == 'Tim Proyek') {
-            if ($divisi == 'PCP') {
-                $route = 'pcp.dashboard';
-            } elseif ($divisi == 'Mankon') {
-                $route = 'mankon.dashboard';
-            } else {
-                $route = 'timProyek.dashboard';
-            }
-
-            $user = $this->ModelUser->detail(Session()->get('id_user'));
-
-            $maxDokumenId = DokumenTimelines::count();
-            $select = ['timelines.id', 'proyek.nama_proyek'];
+        } elseif ($role == 'Tim Proyek' && $divisi == 'Engineering') {
+            // if ($divisi == 'PCP') {
+            //     $route = 'pcp.dashboard';
+            // } elseif ($divisi == 'Mankon') {
+            //     $route = 'mankon.dashboard';
+            // } else {
+            //     $route = 'timProyek.dashboard';
+            // }
+            $route          = 'timProyek.dashboard';
+            $user           = $this->ModelUser->detail(Session()->get('id_user'));
+            $maxDokumenId   = DokumenTimelines::count();
+            $select         = ['timelines.id', 'proyek.nama_proyek'];
 
             for ($i = 1; $i <= $maxDokumenId; $i++) {
                 $select[] = DB::raw("SUM(CASE WHEN timeline_details.id_dokumen_timeline = $i THEN 1 ELSE 0 END) as jumlah_dokumen_$i");
@@ -339,19 +332,18 @@ class Dashboard extends Controller
                 'dokumenTimeline'       => DokumenTimelines::get(),
                 'subTitle'              => 'Dashboard',
             ];
-        } elseif ($role == 'Head Office') {
-            if ($divisi == 'PCP') {
-                $route = 'pcp.dashboard';
-            } elseif ($divisi == 'Mankon') {
-                $route = 'mankon.dashboard';
-            } else {
-                $route = 'headOffice.dashboard';
-            }
-
-            $user = $this->ModelUser->detail(Session()->get('id_user'));
-
-            $maxDokumenId = DokumenTimelines::count();
-            $select = ['timelines.id', 'proyek.nama_proyek'];
+        } elseif ($role == 'Head Office' && $divisi == 'Engineering') {
+            // if ($divisi == 'PCP') {
+            //     $route = 'pcp.dashboard';
+            // } elseif ($divisi == 'Mankon') {
+            //     $route = 'mankon.dashboard';
+            // } else {
+            //     $route = 'headOffice.dashboard';
+            // }
+            $route          = 'headOffice.dashboard';
+            $user           = $this->ModelUser->detail(Session()->get('id_user'));
+            $maxDokumenId   = DokumenTimelines::count();
+            $select         = ['timelines.id', 'proyek.nama_proyek'];
 
             for ($i = 1; $i <= $maxDokumenId; $i++) {
                 $select[] = DB::raw("SUM(CASE WHEN timeline_details.id_dokumen_timeline = $i THEN 1 ELSE 0 END) as jumlah_dokumen_$i");

@@ -34,21 +34,21 @@
     console.log(tets);
   });
 
-  if ($(".page-wrapper").hasClass("horizontal-wrapper")) {
-    $(".sidebar-list").hover(
-      function () {
-        $(this).addClass("hoverd");
-      },
-      function () {
-        $(this).removeClass("hoverd");
-      }
-    );
-    $(window).on("scroll", function () {
-      if ($(this).scrollTop() < 600) {
-        $(".sidebar-list").removeClass("hoverd");
-      }
-    });
-  }
+  // if ($(".page-wrapper").hasClass("horizontal-wrapper")) {
+  //   $(".sidebar-list").hover(
+  //     function () {
+  //       $(this).addClass("hoverd");
+  //     },
+  //     function () {
+  //       $(this).removeClass("hoverd");
+  //     }
+  //   );
+  //   $(window).on("scroll", function () {
+  //     if ($(this).scrollTop() < 600) {
+  //       $(".sidebar-list").removeClass("hoverd");
+  //     }
+  //   });
+  // }
 
   /*----------------------------------------
      password show hide
