@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Engineering;
 
 use App\Http\Controllers\Controller;
 use App\Models\ModelUser;
@@ -23,17 +23,17 @@ class Jabatan extends Controller
 
         $daftarJabatan = Jabatans::where('is_active', 1)
             ->orderBy('created_at', 'DESC')
-            ->limit(200)
+            ->limit(1000)
             ->get();
         
         $data = [
             'title'             => 'Data Jabatan',
-            'subTitle'          => 'Daftar Jabatan',
+            'subTitle'          => 'Kelola Jabatan',
             'daftarJabatan'     => $daftarJabatan,
             'user'              => ModelUser::find(Session()->get('id_user')),
         ];
         
-        return view('admin/jabatan.index', $data);
+        return view('engineering.jabatan.index', $data);
     }
 
     public function detail($id_jabatan)
@@ -50,7 +50,7 @@ class Jabatan extends Controller
             'user'              => ModelUser::find(Session()->get('id_user')),
         ];
 
-        return view('admin/jabatan.form', $data);
+        return view('engineering.jabatan.form', $data);
     }
 
     public function tambah()
@@ -66,7 +66,7 @@ class Jabatan extends Controller
             'user'              => ModelUser::find(Session()->get('id_user'))
         ];
 
-        return view('admin/jabatan.form', $data);
+        return view('engineering.jabatan.form', $data);
     }
 
     public function prosesTambah(Request $request)
@@ -80,7 +80,7 @@ class Jabatan extends Controller
         $jabatan->is_active         = 1;
         $jabatan->save();
 
-        return redirect()->route('daftar-jabatan')->with('success', 'Data berhasil ditambahkan!');
+        return redirect()->route('engineering-kelola-jabatan')->with('success', 'Data berhasil ditambahkan!');
     }
 
     public function edit($id_jabatan)
@@ -97,7 +97,7 @@ class Jabatan extends Controller
             'user'              => ModelUser::find(Session()->get('id_user')),
         ];
 
-        return view('admin/jabatan.form', $data);
+        return view('engineering.jabatan.form', $data);
     }
 
     public function prosesEdit(Request $request, $id_jabatan)
@@ -110,7 +110,7 @@ class Jabatan extends Controller
         $jabatan->nama_jabatan       = $request->nama_jabatan;
         $jabatan->save();
 
-        return redirect()->route('daftar-jabatan')->with('success', 'Data berhasil diedit!');
+        return redirect()->route('engineering-kelola-jabatan')->with('success', 'Data berhasil diedit!');
     }
 
     public function prosesHapus($id_jabatan)

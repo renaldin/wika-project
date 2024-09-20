@@ -11,7 +11,7 @@
         <div class="card-body">
           <div class="row my-2">
             <div class="col-sm-12 text-end">
-              <a href="/engineering/tambah-divisi" class="btn btn-primary">Tambah</a>
+              <a href="/engineering/tambah-jabatan" class="btn btn-primary">Tambah</a>
             </div>
           </div>
           <div class="row my-2">
@@ -35,20 +35,20 @@
               <thead>
                 <tr>
                     <th style="min-width: 20px">No</th>
-                    <th>Nama Divisi</th>
+                    <th>Nama Jabatan</th>
                     <th style="min-width: 100px">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 <?php $no = 1;?>
-                @foreach ($daftarDivisi as $item)
+                @foreach ($daftarJabatan as $item)
                     <tr>
                         <td>{{$no++}}</td>
-                        <td>{{$item->nama_divisi}}</td>
+                        <td>{{$item->nama_jabatan}}</td>
                         <td> 
                             <ul class="action"> 
-                                <li class="btn btn-success btn-xs"> <a href="/engineering/edit-divisi/{{$item->id}}"><i class="icon-pencil-alt text-white"></i></a></li>
-                                <li class="btn btn-danger btn-xs"><a href="#" class="btn-confirm" data-title="Hapus" data-button-color="btn-primary" data-href="/engineering/hapus-divisi/{{$item->id}}" data-content="Apakah Anda yakin akan hapus data ini ?"><i class="icon-trash text-white"></i></a></li>
+                                <li class="btn btn-success btn-xs"> <a href="/engineering/edit-jabatan/{{$item->id}}"><i class="icon-pencil-alt text-white"></i></a></li>
+                                <li class="btn btn-danger btn-xs"><a href="#" class="btn-confirm" data-title="Hapus" data-button-color="btn-primary" data-href="/engineering/hapus-jabatan/{{$item->id}}" data-content="Apakah Anda yakin akan hapus data ini ?"><i class="icon-trash text-white"></i></a></li>
                             </ul>
                         </td>
                     </tr>
