@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\Engineering\Divisi;
+use App\Http\Controllers\Engineering\Jabatan;
+use App\Http\Controllers\Engineering\User;
+
 use App\Http\Controllers\Achievement;
 use App\Http\Controllers\Activity;
 use App\Http\Controllers\Csi;
-use App\Http\Controllers\User;
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\HC;
 use App\Http\Controllers\DetailAchievement;
@@ -14,7 +17,6 @@ use App\Http\Controllers\EngineeringActivity;
 use App\Http\Controllers\Event;
 use App\Http\Controllers\Carousel;
 use App\Http\Controllers\Chat;
-use App\Http\Controllers\Engineering\Divisi;
 use App\Http\Controllers\InfraNews;
 use App\Http\Controllers\KiKm;
 use App\Http\Controllers\Landing;
@@ -27,7 +29,6 @@ use App\Http\Controllers\MonthlyReport;
 use App\Http\Controllers\MonthlyReportAdmin;
 use App\Http\Controllers\Pcp\Agenda;
 use App\Http\Controllers\Pcp\DokumenTimeline;
-use App\Http\Controllers\Jabatan;
 use App\Http\Controllers\Productivity;
 use App\Http\Controllers\Proyek;
 use App\Http\Controllers\Rencana;
@@ -456,12 +457,21 @@ Route::group(['middleware' => 'revalidate'], function () {
         Route::get('/detail-log/{id}', [Log::class, 'detail'])->name('detail-log');
         Route::get('/hapus-log/{id}', [Log::class, 'prosesHapus']);
 
-        Route::get('/daftar-jabatan', [Jabatan::class, 'index'])->name('daftar-jabatan');
-        Route::get('/tambah-jabatan', [Jabatan::class, 'tambah'])->name('tambah-jabatan');
-        Route::post('/tambah-jabatan', [Jabatan::class, 'prosesTambah']);
-        Route::get('/edit-jabatan/{id}', [Jabatan::class, 'edit']);
-        Route::post('/edit-jabatan/{id}', [Jabatan::class, 'prosesEdit']);
-        Route::get('/hapus-jabatan/{id}', [Jabatan::class, 'prosesHapus']);
+        // ENGINEERING
+
+        Route::get('/engineering/kelola-user', [User::class, 'index'])->name('engineering-kelola-user');
+        Route::get('/engineering/tambah-user', [User::class, 'tambah'])->name('engineering-tambah-user');
+        Route::post('/engineering/tambah-user', [User::class, 'prosesTambah']);
+        Route::get('/engineering/edit-user/{id}', [User::class, 'edit'])->name('engineering-edit-user');
+        Route::post('/engineering/edit-user/{id}', [User::class, 'prosesEdit']);
+        Route::get('/engineering/hapus-user/{id}', [User::class, 'prosesHapus']);
+
+        Route::get('/engineering/kelola-jabatan', [Jabatan::class, 'index'])->name('engineering-kelola-jabatan');
+        Route::get('/engineering/tambah-jabatan', [Jabatan::class, 'tambah'])->name('engineering-tambah-jabatan');
+        Route::post('/engineering/tambah-jabatan', [Jabatan::class, 'prosesTambah']);
+        Route::get('/engineering/edit-jabatan/{id}', [Jabatan::class, 'edit']);
+        Route::post('/engineering/edit-jabatan/{id}', [Jabatan::class, 'prosesEdit']);
+        Route::get('/engineering/hapus-jabatan/{id}', [Jabatan::class, 'prosesHapus']);
 
         Route::get('/engineering/kelola-divisi', [Divisi::class, 'index'])->name('engineering-kelola-divisi');
         Route::get('/engineering/tambah-divisi', [Divisi::class, 'tambah'])->name('engineering-tambah-divisi');
@@ -469,6 +479,8 @@ Route::group(['middleware' => 'revalidate'], function () {
         Route::get('/engineering/edit-divisi/{id}', [Divisi::class, 'edit']);
         Route::post('/engineering/edit-divisi/{id}', [Divisi::class, 'prosesEdit']);
         Route::get('/engineering/hapus-divisi/{id}', [Divisi::class, 'prosesHapus']);
+
+        // ENGINEERING
     });
 
     Route::group(['middleware' => 'headoffice'], function () {

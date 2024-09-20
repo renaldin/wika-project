@@ -59,6 +59,13 @@
     uppercase: true,
   });
 
+  var cleave = new Cleave("#cleave-number", {
+    // delimiters: ["(", ")", "-"],
+    // blocks: [0, 3, 3, 4],
+    numericOnly: true,
+    uppercase: true,
+  });
+
   // Tailprefix
   new Cleave("#tailprefix", {
     numeral: true,

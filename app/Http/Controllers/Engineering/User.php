@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Engineering;
 
 use App\Http\Controllers\Controller;
 use App\Models\Divisies;
@@ -28,7 +28,7 @@ class User extends Controller
 
         $data = [
             'title'             => 'Data User',
-            'subTitle'          => 'Daftar User',
+            'subTitle'          => 'Kelola User',
             'daftarUser'        => ModelUser::with('jabatanNew', 'divisiNew')->get(),
             'user'              => $this->ModelUser->detail(Session()->get('id_user')),
         ];
@@ -39,7 +39,7 @@ class User extends Controller
         $log->feature   = 'USER';
         $log->save();
 
-        return view('admin.user.index', $data);
+        return view('engineering.user.index', $data);
     }
 
     public function tambah()
@@ -49,12 +49,12 @@ class User extends Controller
         }
 
         $data = [
-            'title'     => 'Data User',
-            'subTitle'  => 'Tambah User',
+            'title'         => 'Data User',
+            'subTitle'      => 'Tambah User',
             'daftarJabatan' => Jabatans::where('is_active', 1)->get(),
-            'daftarDivisi' => Divisies::where('is_active', 1)->get(),
-            'user'      => $this->ModelUser->detail(Session()->get('id_user')),
-            'form'      => 'Tambah',
+            'daftarDivisi'  => Divisies::where('is_active', 1)->get(),
+            'user'          => $this->ModelUser->detail(Session()->get('id_user')),
+            'form'          => 'Tambah',
         ];
 
         $log            = new ModelLog();
@@ -63,7 +63,7 @@ class User extends Controller
         $log->feature   = 'USER';
         $log->save();
 
-        return view('admin.user.form', $data);
+        return view('engineering.user.form', $data);
     }
 
     public function prosesTambah()
@@ -123,7 +123,7 @@ class User extends Controller
         $log->feature   = 'USER';
         $log->save();
 
-        return redirect()->route('daftar-user')->with('success', 'Data user berhasil ditambahkan!');
+        return redirect()->route('engineering-kelola-user')->with('success', 'Data user berhasil ditambahkan!');
     }
 
     public function edit($id_user)
@@ -148,7 +148,7 @@ class User extends Controller
         $log->feature   = 'USER';
         $log->save();
 
-        return view('admin.user.form', $data);
+        return view('engineering.user.form', $data);
     }
 
     public function prosesEdit($id_user)
@@ -274,7 +274,7 @@ class User extends Controller
         $log->feature   = 'USER';
         $log->save();
 
-        return redirect()->route('daftar-user')->with('success', 'Data user berhasil diedit!');
+        return redirect()->route('engineering-kelola-user')->with('success', 'Data user berhasil diedit!');
     }
 
     public function prosesHapus($id_user)
@@ -293,7 +293,7 @@ class User extends Controller
         $log->feature   = 'USER';
         $log->save();
 
-        return redirect()->route('daftar-user')->with('success', 'Data user berhasil dihapus !');
+        return redirect()->route('engineering-kelola-user')->with('success', 'Data user berhasil dihapus !');
     }
 
     public function profil()
