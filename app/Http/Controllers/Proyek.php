@@ -35,7 +35,7 @@ class Proyek extends Controller
 
         $data = [
             'title'                     => 'Data Proyek',
-            'subTitle'                  => 'Daftar Proyek',
+            'subTitle'                  => 'Kelola Proyek',
             'daftarProyek'              => ModelProyek::orderBy('id_proyek', 'DESC')->get(),
             'user'                      => ModelUser::find(Session()->get('id_user')),
         ];
@@ -46,7 +46,30 @@ class Proyek extends Controller
         $log->feature   = 'PROYEK';
         $log->save();
 
-        return view('admin.proyek.index', $data);
+        return view('engineering.proyek.index', $data);
+    }
+
+    public function detail($id_proyek)
+    {
+        if (!Session()->get('role')) {
+            return redirect()->route('login');
+        }
+
+        $data = [
+            'title'             => 'Data Proyek',
+            'subTitle'          => 'Detail Proyek',
+            'form'              => 'Detail',
+            'user'              => ModelUser::find(Session()->get('id_user')),
+            'detail'            => ModelProyek::find($id_proyek)
+        ];
+
+        $log            = new ModelLog();
+        $log->id_user   = Session()->get('id_user');
+        $log->activity  = 'Melihat Halaman Form Detail Proyek.';
+        $log->feature   = 'PROYEK';
+        $log->save();
+
+        return view('engineering.proyek.form', $data);
     }
 
     public function tambah()
@@ -69,7 +92,7 @@ class Proyek extends Controller
         $log->feature   = 'PROYEK';
         $log->save();
 
-        return view('admin.proyek.form', $data);
+        return view('engineering.proyek.form', $data);
     }
 
     public function prosesTambah()
@@ -147,7 +170,7 @@ class Proyek extends Controller
         $log->feature   = 'PROYEK';
         $log->save();
 
-        return view('admin.proyek.form', $data);
+        return view('engineering.proyek.form', $data);
     }
 
     public function prosesEdit($id_proyek)
@@ -219,7 +242,7 @@ class Proyek extends Controller
         return redirect()->route('daftar-proyek')->with('success', 'Data Proyek berhasil diupdate!');
     }
 
-    public function hapus($id_proyek)
+    public function prosesHapus($id_proyek)
     {
         ModelProyek::where('id_proyek', $id_proyek)->delete();
 
