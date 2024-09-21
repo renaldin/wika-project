@@ -1,64 +1,76 @@
 @extends('layout.main')
 
 @section('content')
-<div class="row">
-  <div class="col-sm-12">
-    <div class="card">
-      <div class="card-header pb-0 card-no-border">
-        <h4>{{$subTitle}}</h4>
-        <span>Anda bisa melakukan kelola data berikut.</span>
-      </div>
+<div class="row"> 
+  <div class="col-sm-12"> 
+    <div class="card"> 
       <div class="card-body">
-        <div class="row my-2">
-          <div class="col-sm-12 text-end">
-            <a href="/engineering/tambah-user" class="btn btn-primary">Tambah</a>
+        <div class="list-product-header">
+          <div> 
+            <a class="btn btn-primary" href="/engineering/tambah-user"><i class="fa fa-plus"></i>Tambah</a>
           </div>
+          @if (Session('success'))
+            <div class="alert alert-primary dark alert-dismissible fade show my-3" role="alert">
+              {{Session('success')}}
+              <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          @endif
+          @if (Session('fail'))
+            <div class="alert alert-danger dark alert-dismissible fade show my-3" role="alert">
+              {{Session('fail')}}
+              <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          @endif
         </div>
-        <div class="row my-2">
-          <div class="col-sm-12 text-end">
-            @if (Session('success'))
-              <div class="alert alert-primary dark alert-dismissible fade show" role="alert">
-                {{Session('success')}}
-                <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-            @endif
-            @if (Session('fail'))
-              <div class="alert alert-danger dark alert-dismissible fade show" role="alert">
-                {{Session('fail')}}
-                <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-            @endif
-          </div>
-        </div>
-        <div class="table-responsive custom-scrollbar">
-          <table class="display" id="datatable-basic">
-            <thead>
-              <tr>
-                  <th>No</th>
-                  <th>NIP</th>
-                  <th>Nama</th>
-                  <th>Divisi</th>
-                  <th>Role</th>
-                  <th>Aksi</th>
+        <div class="list-product">
+          <table class="table" id="project-status">
+            <thead> 
+              <tr> 
+                <th><span class="f-light f-w-600">No</span></th>
+                <th><span class="f-light f-w-600">NIP</span></th>
+                <th><span class="f-light f-w-600">Nama</span></th>
+                <th><span class="f-light f-w-600">Divisi</span></th>
+                <th><span class="f-light f-w-600">Role</span></th>
+                <th><span class="f-light f-w-600">Aksi</span></th>
               </tr>
             </thead>
-            <tbody>
-              <?php $no = 1;?>
+            <tbody> 
+              @php
+                  $no = 1;
+              @endphp
               @foreach ($daftarUser as $item)
-                  <tr>
-                      <td>{{$no++}}</td>
-                      <td>{{$item->nip}}</td>
-                      <td>{{$item->nama_user}}</td>
-                      <td>{{$item->divisi}}</td>
-                      <td>{{$item->role}}</td>
-                      <td> 
-                          <ul class="action"> 
-                              <li class="btn btn-primary btn-xs"> <a href="/engineering/detail-user/{{$item->id_user}}"><i class="icon-eye text-white"></i></a></li>
-                              <li class="btn btn-success btn-xs"> <a href="/engineering/edit-user/{{$item->id_user}}"><i class="icon-pencil-alt text-white"></i></a></li>
-                              <li class="btn btn-danger btn-xs"><a href="#" class="btn-confirm" data-title="Hapus" data-button-color="btn-primary" data-href="/engineering/hapus-user/{{$item->id_user}}" data-content="Apakah Anda yakin akan hapus data ini ?"><i class="icon-trash text-white"></i></a></li>
-                          </ul>
-                      </td>
-                  </tr>
+                <tr class="product-removes">
+                  <td> 
+                    <p class="f-light">{{$no++}}</p>
+                  </td>
+                  <td> 
+                    <div class="product-names">
+                      <p>{{$item->nama_user}}</p>
+                    </div>
+                  </td>
+                  <td> 
+                    <p class="f-light">{{$item->nip}}</p>
+                  </td>
+                  <td> 
+                    <p class="f-light">{{$item->divisi}}</p>
+                  </td>
+                  <td> 
+                    <p class="f-light">{{$item->role}}</p>
+                  </td>
+                  <td> 
+                    <div class="product-action">
+                      <a href="/engineering/detail-user/{{$item->id_user}}"> 
+                        <i class="icofont icofont-eye-alt text-info"></i>
+                      </a>
+                      <a href="/engineering/edit-user/{{$item->id_user}}"> 
+                        <i class="icofont icofont-edit text-success"></i>
+                      </a>
+                      <a href="#" class="btn-confirm" data-title="Hapus" data-button-color="btn-primary" data-href="/engineering/hapus-user/{{$item->id_user}}" data-content="Apakah Anda yakin akan hapus data ini ?"> 
+                        <i class="icofont icofont-trash text-danger"></i>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
               @endforeach
             </tbody>
           </table>

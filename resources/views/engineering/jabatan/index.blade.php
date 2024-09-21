@@ -1,63 +1,67 @@
 @extends('layout.main')
 
 @section('content')
-<div class="row">
-    <div class="col-sm-12">
-      <div class="card">
-        <div class="card-header pb-0 card-no-border">
-          <h4>{{$subTitle}}</h4>
-          <span>Anda bisa melakukan kelola data berikut.</span>
+<div class="row"> 
+  <div class="col-sm-12"> 
+    <div class="card"> 
+      <div class="card-body">
+        <div class="list-product-header">
+          <div> 
+            <a class="btn btn-primary" href="/engineering/tambah-jabatan"><i class="fa fa-plus"></i>Tambah</a>
+          </div>
+          @if (Session('success'))
+            <div class="alert alert-primary dark alert-dismissible fade show my-3" role="alert">
+              {{Session('success')}}
+              <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          @endif
+          @if (Session('fail'))
+            <div class="alert alert-danger dark alert-dismissible fade show my-3" role="alert">
+              {{Session('fail')}}
+              <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          @endif
         </div>
-        <div class="card-body">
-          <div class="row my-2">
-            <div class="col-sm-12 text-end">
-              <a href="/engineering/tambah-jabatan" class="btn btn-primary">Tambah</a>
-            </div>
-          </div>
-          <div class="row my-2">
-            <div class="col-sm-12 text-end">
-              @if (Session('success'))
-                <div class="alert alert-primary dark alert-dismissible fade show" role="alert">
-                  {{Session('success')}}
-                  <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-              @endif
-              @if (Session('fail'))
-                <div class="alert alert-danger dark alert-dismissible fade show" role="alert">
-                  {{Session('fail')}}
-                  <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-              @endif
-            </div>
-          </div>
-          <div class="table-responsive custom-scrollbar">
-            <table class="display" id="datatable-basic">
-              <thead>
-                <tr>
-                    <th style="min-width: 20px">No</th>
-                    <th>Nama Jabatan</th>
-                    <th style="min-width: 100px">Aksi</th>
+        <div class="list-product">
+          <table class="table" id="project-status">
+            <thead> 
+              <tr> 
+                <th><span class="f-light f-w-600">No</span></th>
+                <th><span class="f-light f-w-600">Nama Jabatan</span></th>
+                <th><span class="f-light f-w-600">Aksi</span></th>
+              </tr>
+            </thead>
+            <tbody> 
+              @php
+                  $no = 1;
+              @endphp
+              @foreach ($daftarJabatan as $item)
+                <tr class="product-removes">
+                  <td> 
+                    <p class="f-light">{{$no++}}</p>
+                  </td>
+                  <td> 
+                    <div class="product-names">
+                      <p>{{$item->nama_jabatan}}</p>
+                    </div>
+                  </td>
+                  <td> 
+                    <div class="product-action">
+                      <a href="/engineering/edit-jabatan/{{$item->id}}"> 
+                        <i class="icofont icofont-edit text-success"></i>
+                      </a>
+                      <a href="#" class="btn-confirm" data-title="Hapus" data-button-color="btn-primary" data-href="/engineering/hapus-jabatan/{{$item->id}}" data-content="Apakah Anda yakin akan hapus data ini ?"> 
+                        <i class="icofont icofont-trash text-danger"></i>
+                      </a>
+                    </div>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                <?php $no = 1;?>
-                @foreach ($daftarJabatan as $item)
-                    <tr>
-                        <td>{{$no++}}</td>
-                        <td>{{$item->nama_jabatan}}</td>
-                        <td> 
-                            <ul class="action"> 
-                                <li class="btn btn-success btn-xs"> <a href="/engineering/edit-jabatan/{{$item->id}}"><i class="icon-pencil-alt text-white"></i></a></li>
-                                <li class="btn btn-danger btn-xs"><a href="#" class="btn-confirm" data-title="Hapus" data-button-color="btn-primary" data-href="/engineering/hapus-jabatan/{{$item->id}}" data-content="Apakah Anda yakin akan hapus data ini ?"><i class="icon-trash text-white"></i></a></li>
-                            </ul>
-                        </td>
-                    </tr>
-                @endforeach
-              </tbody>
-            </table>
-          </div>
+              @endforeach
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
+  </div>
 </div>
 @endsection

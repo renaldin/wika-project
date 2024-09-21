@@ -42,6 +42,31 @@ class User extends Controller
         return view('engineering.user.index', $data);
     }
 
+    public function detail($id_user)
+    {
+        if (!Session()->get('role')) {
+            return redirect()->route('login');
+        }
+
+        $data = [
+            'title'         => 'Data User',
+            'subTitle'      => 'Detail User',
+            'form'          => 'Detail',
+            'daftarJabatan' => Jabatans::where('is_active', 1)->get(),
+            'daftarDivisi'  => Divisies::where('is_active', 1)->get(),
+            'user'          => $this->ModelUser->detail(Session()->get('id_user')),
+            'detail'        => $this->ModelUser->detail($id_user)
+        ];
+
+        $log            = new ModelLog();
+        $log->id_user   = Session()->get('id_user');
+        $log->activity  = 'Melihat Halaman Form Detail User.';
+        $log->feature   = 'USER';
+        $log->save();
+
+        return view('engineering.user.form', $data);
+    }
+
     public function tambah()
     {
         if (!Session()->get('role')) {
@@ -72,7 +97,7 @@ class User extends Controller
             'nama_user'     => 'required',
             'telepon'       => 'required',
             'nip'           => 'required|unique:user,nip',
-            'password'      => 'min:6|required',
+            'login.password'      => 'min:6|required',
             'role'          => 'required',
             'foto_user'     => 'required|mimes:jpeg,png,jpg|max:2048'
         ], [
@@ -80,8 +105,8 @@ class User extends Controller
             'telepon.required'      => 'Nomor telepon harus diisi!',
             'nip.required'          => 'NIP harus diisi!',
             'nip.unique'            => 'niP sudah digunakan!',
-            'password.required'     => 'Password harus diisi!',
-            'password.min'          => 'Password minikal 6 karakter!',
+            'login.password.required'     => 'Password harus diisi!',
+            'login.password.min'          => 'Password minikal 6 karakter!',
             'role.required'         => 'Role harus diisi!',
             'foto_user.required'    => 'Foto Anda harus diisi!',
             'foto_user.mimes'       => 'Format Foto User harus jpg/jpeg/png!',
@@ -112,7 +137,7 @@ class User extends Controller
             'role'          => Request()->role,
             'divisi'        => $divisi->nama_divisi,
             'id_divisi'     => Request()->id_divisi,
-            'password'      => Hash::make(Request()->password),
+            'password'      => Hash::make(Request()->input('login.password')),
         ];
 
         $this->ModelUser->tambah($data);
@@ -181,7 +206,7 @@ class User extends Controller
             $fungsi = null;
         }
 
-        if (Request()->password) {
+        if (Request()->input('login.password')) {
 
             $user = $this->ModelUser->detail($id_user);
 
@@ -206,7 +231,7 @@ class User extends Controller
                     'role'          => Request()->role,
                     'divisi'        => $divisi->nama_divisi,
                     'id_divisi'     => Request()->id_divisi,
-                    'password'      => Hash::make(Request()->password),
+                    'password'      => Hash::make(Request()->input('login.password')),
                 ];
                 $this->ModelUser->edit($data);
             } else {
@@ -221,7 +246,7 @@ class User extends Controller
                     'divisi'        => $divisi->nama_divisi,
                     'id_divisi'     => Request()->id_divisi,
                     'fungsi'        => $fungsi,
-                    'password'      => Hash::make(Request()->password),
+                    'password'      => Hash::make(Request()->input('login.password')),
                 ];
                 $this->ModelUser->edit($data);
             }
