@@ -8,6 +8,7 @@
     <meta name="description" content="Riho admin is super flexible, powerful, clean &amp; modern responsive bootstrap 5 admin template with unlimited possibilities.">
     <meta name="keywords" content="admin template, Riho admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="pixelstrap">
+
     <link rel="icon" href="{{ asset('admin/assets/images/favicon.png') }}" type="image/x-icon">
     <link rel="shortcut icon" href="{{ asset('admin/assets/images/favicon.png') }}" type="image/x-icon">
     <title>Infrastructure 2 Division | {{ $subTitle }}</title>
@@ -28,6 +29,32 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/style.css') }}">
     <link id="color" rel="stylesheet" href="{{ asset('admin/assets/css/color-1.css') }}" media="screen">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/responsive.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/js-datatables/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/owlcarousel.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/quill.snow.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/intltelinput.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/tagify.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/flatpickr/flatpickr.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/dropzone.css') }}">
+    {{-- select --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+      .select2-results__option--highlighted {
+        background-color: #096f6f;
+        color: #fff;
+      }
+    
+      .select2-container--default .select2-results__option[aria-selected="true"] {
+        background-color: #086464;
+        color: #fff;
+      }
+
+      .select2-container--default .select2-results__option--highlighted[aria-selected] {
+          background-color: #086464;
+          color: #fff;
+      }
+    </style>
   </head>
   <body> 
     <div class="loader-wrapper">
@@ -94,7 +121,7 @@
             <div class="page-title">
               <div class="row">
                 <div class="col-6">
-                  <h4>{{$title}}</h4>
+                  <h4>{{$subTitle}}</h4>
                 </div>
                 <div class="col-6">
                   <ol class="breadcrumb">
@@ -146,5 +173,24 @@
     <script src="{{ asset('admin/assets/js/script.js') }}"></script>
     <script src="{{ asset('admin/assets/js/theme-customizer/customizer.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/script.js') }}?v={{date('YmdHis')}}"></script>
+    <script src="{{ asset('admin/assets/js/js-datatables/simple-datatables@latest.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/custom-list-product.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/owlcarousel/owl.carousel.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/ecommerce.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/tooltip-init.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/flat-pickr/flatpickr.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/flat-pickr/custom-flatpickr.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/dropzone/dropzone.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/dropzone/dropzone-script.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/select2/tagify.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/select2/tagify.polyfills.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/select2/intltelinput.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/add-product/select4-custom.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/editors/quill.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/custom-add-product.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/height-equal.js') }}"></script>
+    {{-- select --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
   </body>
 </html>

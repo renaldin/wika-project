@@ -38,3 +38,27 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+$(document).ready(function() {
+  $('.select2').select2();
+});
+
+$(function() {
+    $("#role").on("change", function() {
+        let role = $(this).val();
+        const fungsiDiv = document.getElementById('fungsi-div');
+        const fungsiLabel = document.getElementById('fungsi-label');
+        const fungsiForm = document.getElementById('fungsi-form');
+        if (role == 'Head Office') {
+          fungsiDiv.style.display = 'block';
+          fungsiLabel.style.display = 'block';
+          fungsiForm.style.display = 'block';
+          fungsiForm.required = true;
+        } else {
+          fungsiDiv.style.display = 'none';
+          fungsiLabel.style.display = 'none';
+          fungsiForm.style.display = 'none';
+          fungsiForm.required = false;
+        }
+    });
+});

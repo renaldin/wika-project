@@ -460,6 +460,7 @@ Route::group(['middleware' => 'revalidate'], function () {
         // ENGINEERING
 
         Route::get('/engineering/kelola-user', [User::class, 'index'])->name('engineering-kelola-user');
+        Route::get('/engineering/detail-user/{id}', [User::class, 'detail'])->name('engineering-detail-user');
         Route::get('/engineering/tambah-user', [User::class, 'tambah'])->name('engineering-tambah-user');
         Route::post('/engineering/tambah-user', [User::class, 'prosesTambah']);
         Route::get('/engineering/edit-user/{id}', [User::class, 'edit'])->name('engineering-edit-user');
