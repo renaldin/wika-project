@@ -459,6 +459,16 @@ Route::group(['middleware' => 'revalidate'], function () {
 
         // ENGINEERING
 
+        Route::get('/engineering/kelola-proyek', [Proyek::class, 'index'])->name('engineering-daftar-proyek');
+        Route::get('/engineering/detail-proyek/{id}', [Proyek::class, 'detail'])->name('engineering-detail-proyek');
+        Route::get('/engineering/tambah-proyek', [Proyek::class, 'tambah'])->name('engineering-tambah-proyek');
+        Route::post('/engineering/tambah-proyek', [Proyek::class, 'prosesTambah']);
+        Route::get('/engineering/edit-proyek/{id}', [Proyek::class, 'edit'])->name('engineering-edit-proyek');
+        Route::post('/engineering/edit-proyek/{id}', [Proyek::class, 'prosesEdit']);
+        Route::get('/engineering/hapus-proyek/{id}', [Proyek::class, 'prosesHapus']);
+        Route::get('/engineering/export-proyek', [Proyek::class, 'exportExcel']);
+        Route::get('/engineering/export-proyek-pdf', [Proyek::class, 'exportPdf']);
+
         Route::get('/engineering/kelola-user', [User::class, 'index'])->name('engineering-kelola-user');
         Route::get('/engineering/detail-user/{id}', [User::class, 'detail'])->name('engineering-detail-user');
         Route::get('/engineering/tambah-user', [User::class, 'tambah'])->name('engineering-tambah-user');

@@ -59,6 +59,11 @@
                     <div class="col-12"> 
                       <label class="form-label" for="foto_user">Foto</label>
                       <input class="form-control" id="foto_user" name="foto_user" type="file" required>
+                      @error('foto_user')
+                        <div class="text-danger">
+                          {{ $message }}
+                        </div>
+                      @enderror
                     </div>
                   @endif
                   @if ($form == 'Detail')
@@ -77,7 +82,7 @@
                     <select class="form-control select2" id="id_divisi" name="id_divisi" required @if($form == 'Detail') disabled @endif>
                       <option value="" selected disabled>-- Pilih --</option>
                       @foreach ($daftarDivisi as $item)
-                          <option value="{{$item->id}}" @if($form == "Tambah" && old("id_divisi") == $item->id) selected @elseif($detail->id_divisi == $item->id) selected @endif>{{$item->nama_divisi}}</option>
+                          <option value="{{$item->id}}" @if($form == "Tambah" && old("id_divisi") == $item->id) selected @elseif(($form == 'Edit' || $form == 'Detail') && $detail->id_divisi == $item->id) selected @endif>{{$item->nama_divisi}}</option>
                       @endforeach
                     </select>
                     @error('id_divisi')
@@ -91,7 +96,7 @@
                     <select class="form-control select2" id="id_jabatan" name="id_jabatan" required @if($form == 'Detail') disabled @endif>
                       <option value="" selected disabled>-- Pilih --</option>
                       @foreach ($daftarJabatan as $item)
-                          <option value="{{$item->id}}" @if($form == "Tambah" && old("id_jabatan") == $item->id) selected @elseif($detail->id_jabatan == $item->id) selected @endif>{{$item->nama_jabatan}}</option>
+                          <option value="{{$item->id}}" @if($form == "Tambah" && old("id_jabatan") == $item->id) selected @elseif(($form == 'Edit' || $form == 'Detail') && $detail->id_jabatan == $item->id) selected @endif>{{$item->nama_jabatan}}</option>
                       @endforeach
                     </select>
                     @error('id_jabatan')
@@ -104,10 +109,10 @@
                     <label class="form-label" for="role">Role</label>
                     <select class="form-control select2" id="role" name="role" required @if($form == 'Detail') disabled @endif>
                       <option value="" selected disabled>-- Pilih --</option>
-                      <option value="Admin" @if($form == "Tambah" && old("role") == "Admin") selected @elseif($detail->role == "Admin") selected @endif>Admin</option>
-                      <option value="Tim Proyek" @if($form == "Tambah" && old("role") == "Tim Proyek") selected @elseif($detail->role == "Tim Proyek") selected @endif>Tim Proyek</option>
-                      <option value="Head Office" @if($form == "Tambah" && old("role") == "Head Office") selected @elseif($detail->role == "Head Office") selected @endif>Head Office</option>
-                      <option value="Manajemen" @if($form == "Tambah" && old("role") == "Manajemen") selected @elseif($detail->role == "Manajemen") selected @endif>Manajemen</option>
+                      <option value="Admin" @if($form == "Tambah" && old("role") == "Admin") selected @elseif(($form == 'Edit' || $form == 'Detail') && $detail->role == "Admin") selected @endif>Admin</option>
+                      <option value="Tim Proyek" @if($form == "Tambah" && old("role") == "Tim Proyek") selected @elseif(($form == 'Edit' || $form == 'Detail') && $detail->role == "Tim Proyek") selected @endif>Tim Proyek</option>
+                      <option value="Head Office" @if($form == "Tambah" && old("role") == "Head Office") selected @elseif(($form == 'Edit' || $form == 'Detail') && $detail->role == "Head Office") selected @endif>Head Office</option>
+                      <option value="Manajemen" @if($form == "Tambah" && old("role") == "Manajemen") selected @elseif(($form == 'Edit' || $form == 'Detail') && $detail->role == "Manajemen") selected @endif>Manajemen</option>
                     </select>
                     @error('role')
                       <div class="text-danger">
@@ -119,10 +124,10 @@
                     <label class="form-label" for="fungsi" id="fungsi-label" style="display: none;">Fungsi</label>
                     <select class="form-control" name="fungsi" id="fungsi-form" style="display: none;" @if($form == 'Detail') disabled @endif>
                         <option value="" selected disabled>-- Pilih --</option>
-                        <option @if($form == "Tambah" && old("fungsi") == "Design & Analysis") selected @elseif($detail->fungsi == "Design & Analysis") selected @endif value="Design & Analysis">Design & Analysis</option>
-                        <option @if($form == "Tambah" && old("fungsi") == "BIM & Digitalization Engineering") selected @elseif($detail->fungsi == "BIM & Digitalization Engineering") selected @endif value="BIM & Digitalization Engineering">BIM & Digitalization Engineering</option>
-                        <option @if($form == "Tambah" && old("fungsi") == "System Engineering & Lean Construction") selected @elseif($detail->fungsi == "System Engineering & Lean Construction") selected @endif value="System Engineering & Lean Construction">System Engineering & Lean Construction</option>
-                        <option @if($form == "Tambah" && old("fungsi") == "Manager of Engineering") selected @elseif($detail->fungsi == "Manager of Engineering") selected @endif value="Manager of Engineering">Manager of Engineering</option>
+                        <option @if($form == "Tambah" && old("fungsi") == "Design & Analysis") selected @elseif(($form == 'Edit' || $form == 'Detail') && $detail->fungsi == "Design & Analysis") selected @endif value="Design & Analysis">Design & Analysis</option>
+                        <option @if($form == "Tambah" && old("fungsi") == "BIM & Digitalization Engineering") selected @elseif(($form == 'Edit' || $form == 'Detail') && $detail->fungsi == "BIM & Digitalization Engineering") selected @endif value="BIM & Digitalization Engineering">BIM & Digitalization Engineering</option>
+                        <option @if($form == "Tambah" && old("fungsi") == "System Engineering & Lean Construction") selected @elseif(($form == 'Edit' || $form == 'Detail') && $detail->fungsi == "System Engineering & Lean Construction") selected @endif value="System Engineering & Lean Construction">System Engineering & Lean Construction</option>
+                        <option @if($form == "Tambah" && old("fungsi") == "Manager of Engineering") selected @elseif(($form == 'Edit' || $form == 'Detail') && $detail->fungsi == "Manager of Engineering") selected @endif value="Manager of Engineering">Manager of Engineering</option>
                     </select>
                   </div>
                   @if ($form == 'Detail')
@@ -130,10 +135,10 @@
                       <label class="form-label" for="fungsi" id="fungsi-label">Fungsi</label>
                       <select class="form-control" name="fungsi" id="fungsi-form" @if($form == 'Detail') disabled @endif>
                           <option value="" selected disabled>-- Pilih --</option>
-                          <option @if($form == "Tambah" && old("fungsi") == "Design & Analysis") selected @elseif($detail->fungsi == "Design & Analysis") selected @endif value="Design & Analysis">Design & Analysis</option>
-                          <option @if($form == "Tambah" && old("fungsi") == "BIM & Digitalization Engineering") selected @elseif($detail->fungsi == "BIM & Digitalization Engineering") selected @endif value="BIM & Digitalization Engineering">BIM & Digitalization Engineering</option>
-                          <option @if($form == "Tambah" && old("fungsi") == "System Engineering & Lean Construction") selected @elseif($detail->fungsi == "System Engineering & Lean Construction") selected @endif value="System Engineering & Lean Construction">System Engineering & Lean Construction</option>
-                          <option @if($form == "Tambah" && old("fungsi") == "Manager of Engineering") selected @elseif($detail->fungsi == "Manager of Engineering") selected @endif value="Manager of Engineering">Manager of Engineering</option>
+                          <option @if($form == "Tambah" && old("fungsi") == "Design & Analysis") selected @elseif(($form == 'Edit' || $form == 'Detail') && $detail->fungsi == "Design & Analysis") selected @endif value="Design & Analysis">Design & Analysis</option>
+                          <option @if($form == "Tambah" && old("fungsi") == "BIM & Digitalization Engineering") selected @elseif(($form == 'Edit' || $form == 'Detail') && $detail->fungsi == "BIM & Digitalization Engineering") selected @endif value="BIM & Digitalization Engineering">BIM & Digitalization Engineering</option>
+                          <option @if($form == "Tambah" && old("fungsi") == "System Engineering & Lean Construction") selected @elseif(($form == 'Edit' || $form == 'Detail') && $detail->fungsi == "System Engineering & Lean Construction") selected @endif value="System Engineering & Lean Construction">System Engineering & Lean Construction</option>
+                          <option @if($form == "Tambah" && old("fungsi") == "Manager of Engineering") selected @elseif(($form == 'Edit' || $form == 'Detail') && $detail->fungsi == "Manager of Engineering") selected @endif value="Manager of Engineering">Manager of Engineering</option>
                       </select>
                     </div>
                   @endif

@@ -295,7 +295,7 @@
                     <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-project') }}"></use>
                 </svg><span>User</span></a>
             </li>
-            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="">
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/engineering/kelola-proyek">
                 <svg class="stroke-icon">
                     <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-project') }}"></use>
                 </svg>
