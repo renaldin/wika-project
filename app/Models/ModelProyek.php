@@ -40,7 +40,12 @@ class ModelProyek extends Model
             ->where($field, $value)
             ->first();
     }
+    public function users()
+    {
+        return $this->belongsToMany(ModelUser::class, 'proyek_user', 'proyek_id', 'user_id');
+    }
 
+    
     public function detail($id_proyek)
     {
         return DB::table('proyek')

@@ -47,7 +47,7 @@ class MasterActivity extends Controller
         $log->feature   = 'MASTER ACTIVITY';
         $log->save();
 
-        return view('admin.masterActivity.index', $data);
+        return view('engineering.masterActivity.index', $data);
     }
 
     public function pilihBulan()
@@ -64,7 +64,7 @@ class MasterActivity extends Controller
         ];
         
 
-        return view('admin.masterActivity.index', $data);
+        return view('engineering.masterActivity.index', $data);
     }
 
     public function prosesTambah()
@@ -93,7 +93,7 @@ class MasterActivity extends Controller
                 'pesanSuccess' => null,
             ];
 
-            return view('admin.masterActivity.index', $data);
+            return view('engineering.masterActivity.index', $data);
         }
 
         $activity = $this->ModelEngineeringActivity->whereMonthYear($detailBulan);
@@ -132,7 +132,7 @@ class MasterActivity extends Controller
         $log->feature   = 'MASTER ACTIVITY';
         $log->save();
 
-        return view('admin.masterActivity.index', $data);
+        return view('engineering.masterActivity.index', $data);
     }
 
 
@@ -159,7 +159,7 @@ class MasterActivity extends Controller
         $log->feature   = 'MASTER ACTIVITY';
         $log->save();
 
-        return view('admin.masterActivity.index', $data);
+        return view('engineering.masterActivity.index', $data);
     }
 
     public function networkDaysWithHolidays($start, $end, $holidays) 

@@ -37,7 +37,7 @@ class DokumenLps extends Controller
         $log->feature   = 'DOKUMEN LPS';
         $log->save();
 
-        return view('admin.dokumenLps.index', $data);
+        return view('engineering.dokumenLps.index', $data);
     }
 
     public function prosesTambah()

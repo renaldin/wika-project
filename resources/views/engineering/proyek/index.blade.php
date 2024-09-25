@@ -1,86 +1,64 @@
 @extends('layout.main')
 
 @section('content')
-<div class="row"> 
-    <div class="col-sm-12"> 
-      <div class="card"> 
-        <div class="card-body">
-          <div class="list-product-header">
-            <div> 
-              <a class="btn btn-primary" href="/engineering/tambah-proyek"><i class="fa fa-plus"></i>Tambah</a>
+<div class="container-fluid">
+    <h2 class="mt-4">Daftar Proyek</h2>
+    <div class="row">
+        @foreach ($daftarProyek as $item)
+        <div class="col-xxl-4 col-lg-6 box-col-6"> 
+            <div class="project-box b-light1-primary">
+                
+                <h5 class="f-w-500">{{ $item->nama_proyek }}</h5>
+                <div class="d-flex">
+                    <img class="img-20 me-1 rounded-circle" src="{{ asset($item->client_image) }}" alt="" title="">
+                    <div class="flex-grow-1">
+                        <p>{{ $item->kode_spk }}, {{ $item->tanggal }}</p>
+                    </div>
+                </div>
+                <p>{{ $item->tipe_konstruksi }}</p>
+                <div class="row details"> 
+                    <div class="col-6"><span>Prioritas</span></div>
+                    <div class="col-6 font-primary">{{ $item->prioritas }}</div>
+                    <div class="col-6"><span>Deskripsi</span></div>
+                    <div class="col-6 font-primary">{{ $item->deskripsi_proyek}}</div>
+                    <div class="col-6"><span>Status</span></div>
+                    <div class="col-6 font-primary">{{ $item->status }}</div>
+                </div>
+                <div class="customers">
+                    <ul>
+                        @foreach($item->users as $user)
+                            <li class="d-inline-block">
+                                <img class="img-30 rounded-circle" src="{{ asset('foto_user/'.$user->foto_user) }}" alt="{{ $user->nama_user }}" title="{{ $user->nama_user }}">
+                            </li>
+                        @endforeach
+                        <li class="d-inline-block ms-2">
+                            <p class="f-12">+{{ max(0, $item->users->count() - 3) }} More</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="project-status mt-4">
+                    <div class="d-flex mb-0">
+                        <p>{{ $item->realisasi }}%</p>
+                        <div class="flex-grow-1 text-end"><span>Done</span></div>
+                    </div>
+                    <div class="progress" style="height: 5px">
+                        <div class="progress-bar-animated bg-primary progress-bar-striped" role="progressbar" style="width: {{ $item->realisasi }}%" aria-valuenow="{{ $item->realisasi }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+                <div class="product-action">
+                    <a href="/engineering/detail-proyek/{{$item->id_proyek}}"> 
+                        <i class="icofont icofont-eye-alt text-info"></i>
+                    </a>
+                    <a href="/engineering/edit-proyek/{{$item->id_proyek}}"> 
+                        <i class="icofont icofont-edit text-success"></i>
+                    </a>
+                    <a href="#" class="btn-confirm" data-title="Hapus" data-button-color="btn-primary" data-href="/engineering/hapus-proyek/{{$item->id_proyek}}" data-content="Apakah Anda yakin akan hapus data ini ?"> 
+                        <i class="icofont icofont-trash text-danger"></i>
+                    </a>
+                </div>
             </div>
-            @if (Session('success'))
-              <div class="alert alert-primary dark alert-dismissible fade show my-3" role="alert">
-                {{Session('success')}}
-                <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-            @endif
-            @if (Session('fail'))
-              <div class="alert alert-danger dark alert-dismissible fade show my-3" role="alert">
-                {{Session('fail')}}
-                <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-            @endif
-          </div>
-          <div class="list-product">
-            <table class="table" id="project-status">
-              <thead> 
-                <tr>
-                  <th><span class="f-light f-w-600">No</span></th>
-                  <th><span class="f-light f-w-600">Nama Proyek</span></th>
-                  <th><span class="f-light f-w-600">Kode SPK</span></th>
-                  <th><span class="f-light f-w-600">Tanggal</span></th>
-                  <th><span class="f-light f-w-600">Tipe Konstruksi</span></th>
-                  <th><span class="f-light f-w-600">Prioritas</span></th>
-                  <th><span class="f-light f-w-600">Aksi</span></th>
-                </tr>
-              </thead>
-              <tbody> 
-                @php
-                    $no = 1;
-                @endphp
-                @foreach ($daftarProyek as $item)
-                  <tr class="product-removes">
-                    <td> 
-                      <p class="f-light">{{$no++}}</p>
-                    </td>
-                    <td> 
-                      <div class="product-names">
-                        <p>{{$item->nama_proyek}}</p>
-                      </div>
-                    </td>
-                    <td> 
-                      <p class="f-light">{{$item->kode_spk}}</p>
-                    </td>
-                    <td> 
-                      <p class="f-light">{{$item->tanggal}}</p>
-                    </td>
-                    <td> 
-                      <p class="f-light">{{$item->tipe_konstruksi}}</p>
-                    </td>
-                    <td> 
-                      <p class="f-light">{{$item->prioritas}}</p>
-                    </td>
-                    <td> 
-                      <div class="product-action">
-                        <a href="/engineering/detail-proyek/{{$item->id_proyek}}"> 
-                          <i class="icofont icofont-eye-alt text-info"></i>
-                        </a>
-                        <a href="/engineering/edit-proyek/{{$item->id_proyek}}"> 
-                          <i class="icofont icofont-edit text-success"></i>
-                        </a>
-                        <a href="#" class="btn-confirm" data-title="Hapus" data-button-color="btn-primary" data-href="/engineering/hapus-proyek/{{$item->id_proyek}}" data-content="Apakah Anda yakin akan hapus data ini ?"> 
-                          <i class="icofont icofont-trash text-danger"></i>
-                        </a>
-                      </div>
-                    </td>
-                  </tr>
-                @endforeach
-              </tbody>
-            </table>
-          </div>
         </div>
-      </div>
+        @endforeach
     </div>
 </div>
 @endsection

@@ -459,6 +459,36 @@ Route::group(['middleware' => 'revalidate'], function () {
 
         // ENGINEERING
 
+        Route::get('/engineering/pilih-bulan', [MasterActivity::class, 'pilihBulan'])->name('pilih-bulan');
+        Route::post('/engineering/pilih-bulan', [MasterActivity::class, 'index']);
+
+        Route::get('/engineering/daftar-monthly-report-admin', [MonthlyReportAdmin::class, 'index'])->name('daftar-monthly-report-admin');
+        Route::get('/engineering/detail-monthly-report-admin/{id_proyek}', [MonthlyReportAdmin::class, 'detail'])->name('detail-monthly-report-admin');
+        Route::get('/engineering/edit-monthly-report-admin/{id}', [MonthlyReportAdmin::class, 'edit'])->name('edit-monthly-report-admin');
+        Route::post('/engineering/edit-monthly-report-admin/{id}', [MonthlyReportAdmin::class, 'prosesEdit']);
+        Route::get('/engineering/hapus-monthly-report-admin/{id}', [MonthlyReportAdmin::class, 'prosesHapus']);
+        Route::get('/engineering/export-all-monthly-report-admin', [MonthlyReportAdmin::class, 'exportExcel']);
+        Route::get('/engineering/export-proyek-monthly-report-admin/{id_proyek}', [MonthlyReportAdmin::class, 'exportExcel']);
+
+        Route::get('/engineering/daftar-sni', [Sni::class, 'index'])->name('daftar-sni');
+        Route::get('/engineering/tambah-sni', [Sni::class, 'tambah'])->name('tambah-sni');
+        Route::post('/engineering/tambah-sni', [Sni::class, 'prosesTambah']);
+        Route::get('/engineering/edit-sni/{id}', [Sni::class, 'edit'])->name('edit-sni');
+        Route::post('/engineering/edit-sni/{id}', [Sni::class, 'prosesEdit']);
+        Route::get('/engineering/hapus-sni/{id}', [Sni::class, 'prosesHapus']);
+
+        Route::get('/engineering/daftar-software', [Software::class, 'index'])->name('daftar-software');
+        Route::get('/engineering/tambah-software', [Software::class, 'tambah'])->name('tambah-software');
+        Route::post('/engineering/tambah-software', [Software::class, 'prosesTambah']);
+        Route::get('/engineering/edit-software/{id}', [Software::class, 'edit'])->name('edit-software');
+        Route::post('/engineering/edit-software/{id}', [Software::class, 'prosesEdit']);
+        Route::get('/engineering/hapus-software/{id}', [Software::class, 'prosesHapus']);
+
+        Route::get('/engineering/daftar-dokumen-lps', [DokumenLps::class, 'index'])->name('daftar-dokumen-lps');
+        Route::post('/engineering/tambah-dokumen-lps', [DokumenLps::class, 'prosesTambah']);
+        Route::post('/engineering/edit-dokumen-lps/{id}', [DokumenLps::class, 'prosesEdit']);
+        Route::get('/engineering/hapus-dokumen-lps/{id}', [DokumenLps::class, 'prosesHapus']);
+
         Route::get('/engineering/kelola-proyek', [Proyek::class, 'index'])->name('engineering-daftar-proyek');
         Route::get('/engineering/detail-proyek/{id}', [Proyek::class, 'detail'])->name('engineering-detail-proyek');
         Route::get('/engineering/tambah-proyek', [Proyek::class, 'tambah'])->name('engineering-tambah-proyek');

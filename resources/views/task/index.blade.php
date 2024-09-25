@@ -65,7 +65,7 @@
                         @foreach ($daftarTask as $item)
                             <tr>
                                 <td>{{$no++}}</td>
-                                @if (Session()->get('role') == 'Manajemen')
+                                @if (Session()->get('role') == 'Manajemen' || Session()->get('role') == 'Coordinator')
                                     <td>{{$item->personil->nama_user}}</td>
                                 @endif
                                 <td>{{$item->item_task}}</td>
