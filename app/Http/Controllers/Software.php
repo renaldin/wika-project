@@ -38,7 +38,7 @@ class Software extends Controller
         $log->feature   = 'SOFTWARE';
         $log->save();
 
-        return view('admin.software.index', $data);
+        return view('engineering.software.index', $data);
     }
 
     public function tambah()
@@ -60,7 +60,7 @@ class Software extends Controller
         $log->feature   = 'SOFTWARE';
         $log->save();
 
-        return view('admin.software.form', $data);
+        return view('engineering.software.form', $data);
     }
 
     public function prosesTambah()
@@ -121,7 +121,7 @@ class Software extends Controller
         $log->feature   = 'SOFTWARE';
         $log->save();
 
-        return view('admin.software.form', $data);
+        return view('engineering.software.form', $data);
     }
 
     public function prosesEdit($id_software)

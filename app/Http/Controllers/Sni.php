@@ -38,7 +38,7 @@ class Sni extends Controller
         $log->feature   = 'SNI';
         $log->save();
 
-        return view('admin.sni.index', $data);
+        return view('engineering.sni.index', $data);
     }
 
     public function tambah()
@@ -60,7 +60,7 @@ class Sni extends Controller
         $log->feature   = 'SNI';
         $log->save();
 
-        return view('admin.sni.form', $data);
+        return view('engineering.sni.form', $data);
     }
 
     public function prosesTambah()
@@ -115,7 +115,7 @@ class Sni extends Controller
         $log->feature   = 'SNI';
         $log->save();
 
-        return view('admin.sni.form', $data);
+        return view('engineering.sni.form', $data);
     }
 
     public function prosesEdit($id_sni)

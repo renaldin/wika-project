@@ -31,7 +31,7 @@ class Task extends Controller
             $month = date('Y-m');
         }
 
-        if (Session()->get('role') == 'Manajemen') {
+        if (Session()->get('role') == 'Manajemen' || Session()->get('role') == 'Coordinator') {
             $daftarTask = ModelTask::with('personil', 'manajemen')
                 ->whereYear('created_at', date('Y', strtotime($month)))
                 ->whereMonth('created_at', '=', date('m', strtotime($month)))
@@ -160,7 +160,7 @@ class Task extends Controller
             return redirect()->route('login');
         }
 
-        if (Session()->get('role') == 'Manajemen') {
+        if (Session()->get('role') == 'Manajemen' || Session()->get('role') == 'Coordinator') {
             $subTitle = 'Komentar Task';
         } else {
             $subTitle = 'Edit Task';
@@ -185,63 +185,94 @@ class Task extends Controller
 
     public function prosesEdit(Request $request, $id_task)
     {
-        if (!Session()->get('role')) {
-            return redirect()->route('login');
-        }
-
-        $task = ModelTask::with('personil', 'manajemen')->find($id_task);
-
-        if (Session()->get('role') == 'Head Office') {
-            $validateData = $request->validate([
-                'item_task'     => 'required',
-                'timeline'      => 'required',
-                'status'        => 'required',
-                'file'          => 'mimes:pdf|max:2048'
-            ], [
-                'item_task.required'    => 'Item task harus diisi!',
-                'timeline.required'     => 'Timeline harus diisi!',
-                'status.required'       => 'Status harus diisi!',
-                'file.mimes'            => 'Format file harus pdf!',
-                'file.max'              => 'Ukuran file maksimal 2 mb',
-            ]);
-
-            $task->item_task    = $validateData['item_task'];
-            $task->timeline     = $validateData['timeline'];
-            $task->status       = $validateData['status'];
-            $task->id_personil  = Session()->get('id_user');
-            
-            if (array_key_exists('file', $validateData) && $validateData['file'] <> "") {
-                if ( $task->file <> "") {
-                    unlink(public_path($this->public_path) . '/' . $task->file);
-                }
-    
-                $file = $validateData['file'];
-                $fileName = date('mdYHis') . '.' . $file->extension();
-                $file->move(public_path($this->public_path), $fileName);
-    
-                $task->file = $fileName;
-            }
-        } elseif (Session()->get('role') == 'Manajemen') {
-            $validateData = $request->validate([
-                'komentar'             => 'required'
-            ], [
-                'komentar.required'    => 'Komentar harus diisi!'
-            ]);
-
-            $task->komentar = $validateData['komentar'];
-            $task->id_manajemen = Session()->get('id_user');
-        }
-
-        $task->save();
-
-        $log            = new ModelLog();
-        $log->id_user   = Session()->get('id_user');
-        $log->activity  = 'Mengedit Data Task.';
-        $log->feature   = 'Manajemen TASK';
-        $log->save();
-
-        return redirect()->route('daftar-task')->with('success', 'Data berhasil diedit!');
+    if (!Session()->get('role')) {
+        return redirect()->route('login');
     }
+
+    $task = ModelTask::with('personil', 'manajemen')->find($id_task);
+
+    // Tambahkan pengecekan kondisi "if" terlebih dahulu sebelum "elseif"
+    if (Session()->get('role') == 'Head Office') {
+        $validateData = $request->validate([
+            'item_task'     => 'required',
+            'timeline'      => 'required',
+            'status'        => 'required',
+            'file'          => 'mimes:pdf|max:2048'
+        ], [
+            'item_task.required'    => 'Item task harus diisi!',
+            'timeline.required'     => 'Timeline harus diisi!',
+            'status.required'       => 'Status harus diisi!',
+            'file.mimes'            => 'Format file harus pdf!',
+            'file.max'              => 'Ukuran file maksimal 2 mb',
+        ]);
+
+        $task->item_task    = $validateData['item_task'];
+        $task->timeline     = $validateData['timeline'];
+        $task->status       = $validateData['status'];
+        $task->id_personil  = Session()->get('id_user');
+        
+        if ($request->hasFile('file')) {
+            if ($task->file <> "") {
+                unlink(public_path($this->public_path) . '/' . $task->file);
+            }
+
+            $file = $validateData['file'];
+            $fileName = date('mdYHis') . '.' . $file->extension();
+            $file->move(public_path($this->public_path), $fileName);
+
+            $task->file = $fileName;
+        }
+    } elseif (Session()->get('role') == 'Manajemen' || Session()->get('role') == 'Head Office' && Session()->get('jabatan') == 'Coordinator') {
+        $validateData = $request->validate([
+            'item_task'     => 'required',
+            'timeline'      => 'required',
+            'status'        => 'required',
+            'file'          => 'mimes:pdf|max:2048'
+        ], [
+            'item_task.required'    => 'Item task harus diisi!',
+            'timeline.required'     => 'Timeline harus diisi!',
+            'status.required'       => 'Status harus diisi!',
+            'file.mimes'            => 'Format file harus pdf!',
+            'file.max'              => 'Ukuran file maksimal 2 mb',
+        ]);
+
+        $task->item_task    = $validateData['item_task'];
+        $task->timeline     = $validateData['timeline'];
+        $task->status       = $validateData['status'];
+        $task->id_personil  = Session()->get('id_user');
+        
+        if ($request->hasFile('file')) {
+            if ($task->file <> "") {
+                unlink(public_path($this->public_path) . '/' . $task->file);
+            }
+
+            $file = $validateData['file'];
+            $fileName = date('mdYHis') . '.' . $file->extension();
+            $file->move(public_path($this->public_path), $fileName);
+
+            $task->file = $fileName;
+        }
+    } elseif (Session()->get('role') == 'Manajemen') {
+        $validateData = $request->validate([
+            'komentar'             => 'required'
+        ], [
+            'komentar.required'    => 'Komentar harus diisi!'
+        ]);
+
+        $task->komentar = $validateData['komentar'];
+        $task->id_manajemen = Session()->get('id_user');
+    }
+
+    $task->save();
+
+    $log            = new ModelLog();
+    $log->id_user   = Session()->get('id_user');
+    $log->activity  = 'Mengedit Data Task.';
+    $log->feature   = 'Manajemen TASK';
+    $log->save();
+
+    return redirect()->route('daftar-task')->with('success', 'Data berhasil diedit!');
+}
 
     public function prosesHapus($id_task)
     {
