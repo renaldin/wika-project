@@ -36,6 +36,36 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/tagify.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/flatpickr/flatpickr.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/dropzone.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/rangeslider/rSlider.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/prism.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/fullcalender.css') }}">
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/font-awesome.css') }}">
+     <!-- ico-font-->
+     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/icofont.css') }}">
+     <!-- Themify icon-->
+     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/themify.css') }}">
+     <!-- Flag icon-->
+     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/flag-icon.css') }}">
+     <!-- Feather icon-->
+     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/feather-icon.css') }}">
+     <!-- Plugins css start-->
+     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/slick.css') }}">
+     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/slick-theme.css') }}">
+     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/scrollbar.css') }}">
+     <!-- Range slider css-->
+     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/rangeslider/rSlider.min.css') }}">
+     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/animate.css') }}">
+     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/prism.css') }}">
+     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/fullcalender.css') }}">
+     <!-- Plugins css Ends-->
+     <!-- Bootstrap css-->
+     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/bootstrap.css') }}">
+     <!-- App css-->
+     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/style.css') }}">
+     <link id="color" rel="stylesheet" href="{{ asset('admin/assets/css/color-1.css') }}" media="screen">
+     <!-- Responsive css-->
+     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/responsive.css') }}">
     {{-- select --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
@@ -189,8 +219,173 @@
     <script src="{{ asset('admin/assets/js/editors/quill.js') }}"></script>
     <script src="{{ asset('admin/assets/js/custom-add-product.js') }}"></script>
     <script src="{{ asset('admin/assets/js/height-equal.js') }}"></script>
-    {{-- select --}}
+    <script src="{{ asset('admin/assets/js/calendar/fullcalender.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/calendar/custom-calendar.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/animation/wow/wow.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/chart/apex-chart/apex-chart.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/chart/apex-chart/stock-prices.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/range-slider/rSlider.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/rangeslider/rangeslider.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/prism/prism.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/clipboard/clipboard.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/counter/jquery.waypoints.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/counter/jquery.counterup.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/counter/counter-custom.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/custom-card/custom-card.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/header-slick.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="{{ asset('admin/assets/js/dashboard/dashboard_2.js') }}"></script>
+    <script>new WOW().init();</script>
 
+    <script>
+      if (document.querySelectorAll("#chartProject").length) {
+          var chartElement = document.getElementById('chartProject');
+          var persen_0_30 = parseInt(chartElement.getAttribute('persen_0_30'));
+          var persen_30_50 = parseInt(chartElement.getAttribute('persen_30_50'));
+          var persen_50_70 = parseInt(chartElement.getAttribute('persen_50_70'));
+          var persen_70_100 = parseInt(chartElement.getAttribute('persen_70_100'));
+  
+          var options = {
+            series: [{
+                  name: '',
+                  data: [persen_0_30, persen_30_50, persen_50_70, persen_70_100]
+              }],
+              colors: ['#FF5733', '#33FF57', '#3357FF', '#F1C40F'],
+              chart: { 
+                  type: 'bar',
+                  height: 412, 
+                  toolbar: {
+                      show: false,
+                      tools: {
+                          download: false,
+                      }
+                  },
+                  zoom: {
+                      enabled: true 
+                  }
+              },
+              plotOptions: {
+                  bar: {
+                      horizontal: false,
+                      borderRadius: 6,
+                      columnWidth: '30%',
+                      barHeight: '100%',
+                      distributed: true,
+                      barSpacing: 20
+                  },
+              },
+              dataLabels: {
+                  enabled: false,
+              },
+              xaxis: {
+                  categories: ['0 - 30 %', '30 - 50 %', '50 - 70 %', '70 - 100 %'],
+                  axisTicks: {
+                      show: false
+                  },
+                  axisBorder: {
+                      show: false
+                  },
+              },
+              legend: {
+                  position: 'bottom',
+                  offsetY: 5
+              },
+              fill: {
+                  opacity: 1
+              }
+          };
+  
+          var chartProject = new ApexCharts(document.querySelector("#chartProject"), options);
+          chartProject.render();
+  
+          function radialCommonOption(data) {
+            return {
+                series: data.radialYseries,
+                chart: {
+                  height: 90,
+                  type: 'radialBar',
+                  offsetX: -5,
+                  offsetY: -15,
+                },
+                plotOptions: {
+                  radialBar: {
+                      hollow: {
+                          size: '35%',
+                      },
+                      track: {
+                          background: 'var(--theme-deafult)',
+                          opacity: 0.2,
+                      },
+                      dataLabels: {
+                          value: {
+                              color: "var(--tag-text-color--edit)",
+                              fontSize: "10px",
+                              show: true,
+                              offsetY: -12,
+                          }
+                      }
+                  },
+              },
+              colors: ["var(--theme-deafult)"],
+              stroke: {
+                  lineCap: "round",
+              },
+            }
+          }
+  
+          const radial1 = {
+              radialYseries: [75],
+          };
+  
+          const radialchart1 = document.querySelector('#widgetsChart1');
+          if (radialchart1) {
+              var radialprogessChart1 = new ApexCharts(radialchart1, radialCommonOption(radial1));
+              radialprogessChart1.render();
+          }
+  
+          // radial 2
+          const radial2 = {
+              radialYseries: [50],
+          };
+          const radialchart2 = document.querySelector('#widgetsChart2');
+          if (radialchart2) {
+              var radialprogessChart2 = new ApexCharts(radialchart2, radialCommonOption(radial2));
+              radialprogessChart2.render();
+          }
+  
+          // radial 3
+          const radial3 = {
+              radialYseries: [25],
+          };
+          const radialchart3 = document.querySelector('#widgetsChart3');
+          if (radialchart3) {
+              var radialprogessChart3 = new ApexCharts(radialchart3, radialCommonOption(radial3));
+              radialprogessChart3.render();
+          }
+  
+          // radial 4
+          const radial4 = {
+              radialYseries: [86],
+          };
+          const radialchart4 = document.querySelector('#widgetsChart4');
+          if (radialchart4) {
+              var radialprogessChart4 = new ApexCharts(radialchart4, radialCommonOption(radial4));
+              radialprogessChart4.render();
+          }
+  
+          // radial 5
+          const radial5 = {
+              chart: {
+                  offsetY: -50,
+              },
+              radialYseries: [74],
+          };
+          const radialchart5 = document.querySelector('#widgetsChart5');
+          if (radialchart5) { 
+              var radialprogessChart5 = new ApexCharts(radialchart5, radialCommonOption(radial5));
+              radialprogessChart5.render();
+          }
+      }
+    </script>
   </body>
 </html>
