@@ -20,7 +20,7 @@
                     <br>
                     <div class="row">
                         <div class="col-lg-12">
-                            @if ($user->role == 'Manajemen')
+                            @if ($user->role == 'Divisi')
                                 <a href="/download-monitoring-akhlak/{{$detailAkhlak->id_akhlak}}" target="_blank" class="btn btn-primary mb-4">Download PDF</a>      
                             @endif
                         </div>
@@ -38,6 +38,7 @@
                 <div class="header-title">
                 <h4 class="card-title">Daftar AKHLAK</h4>
                 </div>
+
             </div>
             <div class="card-body px-4" style="margin-bottom: -50px;">
                 <div class="row">

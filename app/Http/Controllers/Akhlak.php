@@ -9,6 +9,8 @@ use App\Models\ModelAspekAkhlak;
 use App\Models\ModelDetailAkhlak;
 use App\Models\ModelLog;
 use Barryvdh\DomPDF\Facade\Pdf;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Akhlak extends Controller
 {
@@ -326,4 +328,52 @@ class Akhlak extends Controller
         
         return view('Divisi.panduanSpesifik', $data);
     }
+
+    public function exportDetailAkhlak($id_akhlak)
+    {
+        // Ambil data detail akhlak dari model
+        $data = [
+            'detailAkhlak'              => $this->ModelAkhlak->detail($id_akhlak),
+            'daftarDetailAkhlak'        => $this->ModelDetailAkhlak->data(),
+            'user'                      => $this->ModelUser->detail(Session()->get('id_user')),
+        ];
+
+        // Membuat instance spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Menambahkan header kolom
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Aspek');
+        $sheet->setCellValue('C1', 'Parameter');
+        $sheet->setCellValue('D1', 'Deskripsi');
+        $sheet->setCellValue('E1', 'Periode');
+        $sheet->setCellValue('F1', 'Evidence');
+        $sheet->setCellValue('G1', 'Penilaian');
+        $sheet->setCellValue('H1', 'Nilai');
+
+        // Mengisi data ke dalam sheet
+        $row = 2;
+        $no = 1;
+        foreach ($data as $item) {
+            $sheet->setCellValue('A' . $row, $no++);
+            $sheet->setCellValue('B' . $row, $item->aspek); // Ganti dengan nama kolom yang sesuai dari data
+            $sheet->setCellValue('C' . $row, $item->parameter); // Ganti dengan nama kolom yang sesuai dari data
+            $sheet->setCellValue('D' . $row, $item->deskripsi); // Ganti dengan nama kolom yang sesuai dari data
+            $sheet->setCellValue('E' . $row, $item->periode); // Ganti dengan nama kolom yang sesuai dari data
+            $sheet->setCellValue('F' . $row, $item->evidence); // Ganti dengan nama kolom yang sesuai dari data
+            $sheet->setCellValue('G' . $row, $item->penilaian); // Ganti dengan nama kolom yang sesuai dari data
+            $sheet->setCellValue('H' . $row, $item->nilai); // Ganti dengan nama kolom yang sesuai dari data
+            $row++;
+        }
+
+        // Membuat writer untuk file Excel
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'detail_akhlak.xlsx';
+
+        // Menyimpan dan mengunduh file Excel
+        $writer->save($filename);
+        return response()->download($filename)->deleteFileAfterSend(true);
+    }
+
 }

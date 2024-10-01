@@ -105,6 +105,9 @@ Route::group(['middleware' => 'revalidate'], function () {
     Route::get('/change-leader', [Akhlak::class, 'changeLeader']);
     Route::get('/dashboard-change', [Akhlak::class, 'dashboardChange']);
     Route::get('/panduan-spesifik', [Akhlak::class, 'panduanSpesifik']);
+    Route::get('/export-detail-akhlak/{id}', [Akhlak::class, 'exportDetailAkhlak'])->name('export-detail-akhlak');
+    
+
 
 
 

@@ -35,7 +35,6 @@
                         </div>
                     @endif
                 </div>
-            </div>
             <div class="card-body px-0">
                 <div class="table-responsive">
                 <table id="user-list-table" class="table table-striped" role="grid" data-toggle="data-table">
@@ -49,7 +48,7 @@
                     <tbody>
     <?php $no = 1;?>
     @foreach ($daftarAkhlak as $item)
-        @if ($user->role == 'HC' || $item->id_user == $user->id_user)
+        @if ($user->divisi == 'HC' || $item->id_user == $user->id_user)
             <tr>
                 <td>{{ $no++ }}</td>
                 <td>{{ $item->nama_user }}</td>

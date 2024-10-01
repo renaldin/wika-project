@@ -267,7 +267,7 @@ class Dashboard extends Controller
             // } else {
             //     $route = 'timProyek.dashboard';
             // }
-            $route          = 'timProyek.dashboard';
+            $route          = 'engineering.admin.dashboard';
             $user           = $this->ModelUser->detail(Session()->get('id_user'));
             $maxDokumenId   = DokumenTimelines::count();
             $select         = ['timelines.id', 'proyek.nama_proyek'];
@@ -340,7 +340,7 @@ class Dashboard extends Controller
             // } else {
             //     $route = 'headOffice.dashboard';
             // }
-            $route          = 'headOffice.dashboard';
+            $route          = 'engineering.admin.dashboard';
             $user           = $this->ModelUser->detail(Session()->get('id_user'));
             $maxDokumenId   = DokumenTimelines::count();
             $select         = ['timelines.id', 'proyek.nama_proyek'];

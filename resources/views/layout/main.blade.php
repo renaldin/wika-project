@@ -114,7 +114,7 @@
           <div class="left-header col-xxl-5 col-xl-6 col-lg-5 col-md-4 col-sm-3 p-0">
             <div> <a class="toggle-sidebar" href="#"> <i class="iconly-Category icli"> </i></a>
               <div class="d-flex align-items-center gap-2 ">
-                <h4 class="f-w-600">Selamat Datang {{$user->nama_user}}</h4>
+                <h4 class="f-w-600">Selamat Datang {{$user->nama_user}}</h4><img class="mt-0" src="../image/hand.gif" alt="hand-gif">
               </div>
             </div>
             <div class="welcome-content d-xl-block d-none">
@@ -185,7 +185,8 @@
         </footer>
       </div>
     </div>
-    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="{{ asset('admin/assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('admin/assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('admin/assets/js/icons/feather-icon/feather.min.js') }}"></script>
@@ -223,6 +224,7 @@
     <script src="{{ asset('admin/assets/js/calendar/custom-calendar.js') }}"></script>
     <script src="{{ asset('admin/assets/js/animation/wow/wow.min.js') }}"></script>
     <script src="{{ asset('admin/assets/js/chart/apex-chart/apex-chart.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="{{ asset('admin/assets/js/chart/apex-chart/stock-prices.js') }}"></script>
     <script src="{{ asset('admin/assets/js/range-slider/rSlider.min.js') }}"></script>
     <script src="{{ asset('admin/assets/js/rangeslider/rangeslider.js') }}"></script>
@@ -236,156 +238,469 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="{{ asset('admin/assets/js/dashboard/dashboard_2.js') }}"></script>
     <script>new WOW().init();</script>
+  
 
     <script>
-      if (document.querySelectorAll("#chartProject").length) {
-          var chartElement = document.getElementById('chartProject');
-          var persen_0_30 = parseInt(chartElement.getAttribute('persen_0_30'));
-          var persen_30_50 = parseInt(chartElement.getAttribute('persen_30_50'));
-          var persen_50_70 = parseInt(chartElement.getAttribute('persen_50_70'));
-          var persen_70_100 = parseInt(chartElement.getAttribute('persen_70_100'));
-  
-          var options = {
+    document.addEventListener('DOMContentLoaded', function () {
+        var chart = Highcharts.chart('pie-chart-progress-proyek', {
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: 'Progress Proyek',
+                style: {
+                    display: 'none' // Hide the title if you don't want it
+                }
+            },
+            tooltip: {
+                useHTML: true, // Enable HTML content in tooltips
+                pointFormat: '<b>{point.name}</b>: {point.y} proyek', // Format tooltip text
+                followPointer: true // Follow the cursor
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false // Disable data labels
+                    },
+                    innerSize: '50%', // Creates the donut effect
+                }
+            },
             series: [{
-                  name: '',
-                  data: [persen_0_30, persen_30_50, persen_50_70, persen_70_100]
-              }],
-              colors: ['#FF5733', '#33FF57', '#3357FF', '#F1C40F'],
-              chart: { 
-                  type: 'bar',
-                  height: 412, 
-                  toolbar: {
-                      show: false,
-                      tools: {
-                          download: false,
-                      }
-                  },
-                  zoom: {
-                      enabled: true 
-                  }
-              },
-              plotOptions: {
-                  bar: {
-                      horizontal: false,
-                      borderRadius: 6,
-                      columnWidth: '30%',
-                      barHeight: '100%',
-                      distributed: true,
-                      barSpacing: 20
-                  },
-              },
-              dataLabels: {
-                  enabled: false,
-              },
-              xaxis: {
-                  categories: ['0 - 30 %', '30 - 50 %', '50 - 70 %', '70 - 100 %'],
-                  axisTicks: {
-                      show: false
-                  },
-                  axisBorder: {
-                      show: false
-                  },
-              },
-              legend: {
-                  position: 'bottom',
-                  offsetY: 5
-              },
-              fill: {
-                  opacity: 1
-              }
-          };
-  
-          var chartProject = new ApexCharts(document.querySelector("#chartProject"), options);
-          chartProject.render();
-  
-          function radialCommonOption(data) {
-            return {
-                series: data.radialYseries,
-                chart: {
-                  height: 90,
-                  type: 'radialBar',
-                  offsetX: -5,
-                  offsetY: -15,
-                },
-                plotOptions: {
-                  radialBar: {
-                      hollow: {
-                          size: '35%',
-                      },
-                      track: {
-                          background: 'var(--theme-deafult)',
-                          opacity: 0.2,
-                      },
-                      dataLabels: {
-                          value: {
-                              color: "var(--tag-text-color--edit)",
-                              fontSize: "10px",
-                              show: true,
-                              offsetY: -12,
-                          }
-                      }
-                  },
-              },
-              colors: ["var(--theme-deafult)"],
-              stroke: {
-                  lineCap: "round",
-              },
-            }
-          }
-  
-          const radial1 = {
-              radialYseries: [75],
-          };
-  
-          const radialchart1 = document.querySelector('#widgetsChart1');
-          if (radialchart1) {
-              var radialprogessChart1 = new ApexCharts(radialchart1, radialCommonOption(radial1));
-              radialprogessChart1.render();
-          }
-  
-          // radial 2
-          const radial2 = {
-              radialYseries: [50],
-          };
-          const radialchart2 = document.querySelector('#widgetsChart2');
-          if (radialchart2) {
-              var radialprogessChart2 = new ApexCharts(radialchart2, radialCommonOption(radial2));
-              radialprogessChart2.render();
-          }
-  
-          // radial 3
-          const radial3 = {
-              radialYseries: [25],
-          };
-          const radialchart3 = document.querySelector('#widgetsChart3');
-          if (radialchart3) {
-              var radialprogessChart3 = new ApexCharts(radialchart3, radialCommonOption(radial3));
-              radialprogessChart3.render();
-          }
-  
-          // radial 4
-          const radial4 = {
-              radialYseries: [86],
-          };
-          const radialchart4 = document.querySelector('#widgetsChart4');
-          if (radialchart4) {
-              var radialprogessChart4 = new ApexCharts(radialchart4, radialCommonOption(radial4));
-              radialprogessChart4.render();
-          }
-  
-          // radial 5
-          const radial5 = {
-              chart: {
-                  offsetY: -50,
-              },
-              radialYseries: [74],
-          };
-          const radialchart5 = document.querySelector('#widgetsChart5');
-          if (radialchart5) { 
-              var radialprogessChart5 = new ApexCharts(radialchart5, radialCommonOption(radial5));
-              radialprogessChart5.render();
-          }
-      }
+                name: 'Proyek',
+                colorByPoint: true,
+                data: [{
+                    name: '0 - 30%',
+                    y: {{ $persen_0_30 ?? 0 }}, // Provide default value if $persen_0_30 is not set
+                    color: '#007bff'
+                }, {
+                    name: '30 - 50%',
+                    y: {{ $persen_30_50 ?? 0 }}, // Provide default value if $persen_30_50 is not set
+                    color: '#28a745'
+                }, {
+                    name: '50 - 70%',
+                    y: {{ $persen_50_70 ?? 0 }}, // Provide default value if $persen_50_70 is not set
+                    color: '#ffc107'
+                }, {
+                    name: '70 - 100%',
+                    y: {{ $persen_70_100 ?? 0 }}, // Provide default value if $persen_70_100 is not set
+                    color: '#dc3545'
+                }]
+            }]
+        });
+    });
     </script>
+
+<script>
+    // Memastikan elemen grafik ada di DOM
+    if (document.querySelectorAll("#pie-chart-status-implementasi-bim").length) {
+        var chartElement = document.getElementById('pie-chart-status-implementasi-bim');
+        var bukanPrioritas = parseInt(chartElement.getAttribute('bukanPrioritas'));
+        var prioritas1 = parseInt(chartElement.getAttribute('prioritas1'));
+        var prioritas2 = parseInt(chartElement.getAttribute('prioritas2'));
+        var prioritas3 = parseInt(chartElement.getAttribute('prioritas3'));
+        console.log(prioritas3);
+        
+        var options = {
+            chart: {
+                height: 350,
+                type: "pie"
+            },
+            labels: ["Bukan Prioritas", "Prioritas 1", "Prioritas 2", "Prioritas 3"],
+            series: [bukanPrioritas, prioritas1, prioritas2, prioritas3],
+            colors: ["#64B5F6", "#388E3C", "#1565C0", "#F66D00"],
+            legend: {
+                position: "bottom"
+            }
+        };
+
+        // Memastikan ApexCharts terdefinisi
+        if (typeof ApexCharts !== 'undefined') {
+            var chart = new ApexCharts(chartElement, options);
+            chart.render();
+        }
+    }
+</script>
+<script>
+    $(document).ready(function() {
+        function setEqualHeight() {
+            var maxHeight = 0;
+
+            // Reset height
+            $('.equal-height').css('height', 'auto');
+
+            // Cari tinggi maksimum
+            $('.equal-height').each(function() {
+                var thisHeight = $(this).outerHeight();
+                if (thisHeight > maxHeight) {
+                    maxHeight = thisHeight;
+                }
+            });
+
+            // Set semua kotak dengan tinggi yang sama
+            $('.equal-height').css('height', maxHeight + 'px');
+        }
+
+        // Panggil fungsi saat dokumen siap
+        setEqualHeight();
+
+        // Jika Anda menggunakan AOS atau efek animasi lainnya, pastikan untuk mengatur ulang setelah animasi selesai
+        AOS.init({
+            duration: 800,
+            easing: 'slide',
+            once: true,
+            mirror: false,
+            complete: setEqualHeight
+        });
+
+        // Panggil ulang saat jendela diubah ukurannya
+        $(window).resize(function() {
+            setEqualHeight();
+        });
+    });
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const options = {
+        chart: {
+            height: 350,
+            type: 'line',
+            toolbar: { show: false },
+            animations: {
+                enabled: true,
+                easing: 'easeinout',
+                speed: 800,
+                animateGradually: {
+                    enabled: true,
+                    delay: 150
+                },
+                dynamicAnimation: {
+                    enabled: true,
+                    speed: 350
+                }
+            }
+        },
+        series: [
+            {
+                name: 'Productivity',
+                type: 'line',
+                data: [
+                    parseFloat("{{ $productivityJan ?? 0 }}"), 
+                    parseFloat("{{ $productivityFeb ?? 0 }}"), 
+                    parseFloat("{{ $productivityMar ?? 0 }}"), 
+                    parseFloat("{{ $productivityApr ?? 0 }}"), 
+                    parseFloat("{{ $productivityMei ?? 0 }}"), 
+                    parseFloat("{{ $productivityJun ?? 0 }}"), 
+                    parseFloat("{{ $productivityJul ?? 0 }}"), 
+                    parseFloat("{{ $productivityAug ?? 0 }}"), 
+                    parseFloat("{{ $productivitySep ?? 0 }}"), 
+                    parseFloat("{{ $productivityOct ?? 0 }}"), 
+                    parseFloat("{{ $productivityNov ?? 0 }}"), 
+                    parseFloat("{{ $productivityDes ?? 0 }}")
+                ]
+            },
+            {
+                name: 'Target Productivity',
+                type: 'column',
+                data: [80, 85, 90, 80, 85, 90, 95, 90, 92, 93, 94, 95] // Adjust this target data as needed
+            }
+        ],
+        xaxis: {
+            categories: [
+                'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 
+                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+            ],
+            labels: { style: { colors: '#8A92A6' } }
+        },
+        tooltip: {
+            shared: true,
+            intersect: false,
+            y: {
+                formatter: function (val) {
+                    return `${val}%`;
+                }
+            }
+        },
+        theme: {
+            mode: 'light',
+            palette: 'palette1',
+        },
+        stroke: {
+            width: [2, 0],
+            curve: 'smooth'
+        },
+        grid: {
+            borderColor: '#e0e0e0',
+            row: {
+                colors: ['#f3f3f3', 'transparent'],
+                opacity: 0.5
+            },
+        }
+    };
+
+    const chart = new ApexCharts(document.querySelector("#chart-productivity-rate-mixed"), options);
+    chart.render();
+});
+</script>
+
+
+
+<script>
+   if (document.querySelectorAll("#pie-chart-software-1").length) {
+                var chartElement = document.getElementById('pie-chart-software-1');
+                var val1 = parseInt(chartElement.getAttribute('val1'));
+                var val2 = parseInt(chartElement.getAttribute('val2'));
+                options = {
+                    chart: {
+                        height: 500,
+                        type: "pie"
+                    },
+                    labels: ['1', '2'],
+                    series: [val1, val2],
+                    colors: ["#BA440A", "#F69433"],
+                    legend: {
+                        position: "bottom"
+                    }
+                };
+                if(typeof ApexCharts !== undefined){
+                    (chart = new ApexCharts(document.querySelector("#pie-chart-software-1"), options)).render()
+                }
+            }
+            if (document.querySelectorAll("#pie-chart-software-2").length) {
+                var chartElement = document.getElementById('pie-chart-software-2');
+                var val1 = parseInt(chartElement.getAttribute('val1'));
+                var val2 = parseInt(chartElement.getAttribute('val2'));
+                options = {
+                    chart: {
+                        height: 500,
+                        type: "pie"
+                    },
+                    labels: ['1', '2'],
+                    series: [val1, val2],
+                    colors: ["#0971A7", "#010642"],
+                    legend: {
+                        position: "bottom"
+                    }
+                };
+                if(typeof ApexCharts !== undefined){
+                    (chart = new ApexCharts(document.querySelector("#pie-chart-software-2"), options)).render()
+                }
+            }
+            if (document.querySelectorAll("#pie-chart-software-3").length) {
+                var chartElement = document.getElementById('pie-chart-software-3');
+                var val1 = parseInt(chartElement.getAttribute('val1'));
+                var val2 = parseInt(chartElement.getAttribute('val2'));
+                options = {
+                    chart: {
+                        height: 500,
+                        type: "pie"
+                    },
+                    labels: ['1', '2'],
+                    series: [val1, val2],
+                    colors: ["#39E8B0", "#039C69"],
+                    legend: {
+                        position: "bottom"
+                    }
+                };
+                if(typeof ApexCharts !== undefined){
+                    (chart = new ApexCharts(document.querySelector("#pie-chart-software-3"), options)).render()
+                }
+            }
+
+</script>
+<script>
+    if (document.querySelectorAll('#bar-chart-new-1').length) {
+        var chartElement = document.getElementById('bar-chart-new-1');
+        var proyekData = JSON.parse(chartElement.getAttribute('proyek'));
+        var dokumen = parseInt(chartElement.getAttribute('dokumen'));
+
+        var categories = [];
+        var filePdf = [];
+        var fileNative = [];
+        proyekData.forEach(function(item) {
+            categories.push(item.nama_proyek);
+            filePdf.push(Math.round(item.pdf_utama / dokumen * 100, 2));
+            fileNative.push(Math.round(item.native_utama / dokumen * 100, 2));
+        });
+
+        const seriesData = [
+            {
+                name: 'File PDF',
+                data: filePdf
+            },
+            {
+                name: 'File Native',
+                data: fileNative
+            }
+        ];
+
+        const options = {
+            series: seriesData,
+            chart: {
+                type: 'bar',
+                height: 250,
+                stacked: true,
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: ['#FF6600', '#009EA9'],
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '40%',
+                    endingShape: 'flat',
+                    borderRadius: 5,
+                },
+            },
+            legend: {
+                position: 'top',
+                horizontalAlign: 'left',
+                offsetX: 40
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                categories: categories,
+                labels: {
+                    style: {
+                        colors: '#8A92A6',
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        colors: '#8A92A6',
+                    }
+                }
+            },
+            fill: {
+                opacity: 1,
+                type: 'gradient',
+                gradient: {
+                    shade: 'light',
+                    type: "vertical",
+                    shadeIntensity: 0.25,
+                    gradientToColors: undefined,
+                    inverseColors: true,
+                    opacityFrom: 0.85,
+                    opacityTo: 0.85,
+                    stops: [50, 0, 100]
+                },
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return " " + val + " %";
+                    }
+                }
+            }
+        };
+
+        const chart = new ApexCharts(document.querySelector("#bar-chart-new-1"), options);
+        chart.render();
+    }
+
+    if (document.querySelectorAll('#bar-chart-new-2').length) {
+        var chartElement = document.getElementById('bar-chart-new-2');
+        var proyekData = JSON.parse(chartElement.getAttribute('proyek'));
+        var dokumen = parseInt(chartElement.getAttribute('dokumen'));
+
+        var categories = [];
+        var filePdf = [];
+        var fileNative = [];
+        proyekData.forEach(function(item) {
+            categories.push(item.nama_proyek);
+            filePdf.push(Math.round(item.pdf_pendukung / dokumen * 100, 2));
+            fileNative.push(Math.round(item.native_pendukung / dokumen * 100, 2));
+        });
+
+        const seriesData = [
+            {
+                name: 'File PDF',
+                data: filePdf
+            },
+            {
+                name: 'File Native',
+                data: fileNative
+            }
+        ];
+
+        const options = {
+            series: seriesData,
+            chart: {
+                type: 'bar',
+                height: 250,
+                stacked: true,
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: ['#FF6600', '#009EA9'],
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '40%',
+                    endingShape: 'flat',
+                    borderRadius: 5,
+                },
+            },
+            legend: {
+                position: 'top',
+                horizontalAlign: 'left',
+                offsetX: 40
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                categories: categories,
+                labels: {
+                    style: {
+                        colors: '#8A92A6',
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        colors: '#8A92A6',
+                    }
+                }
+            },
+            fill: {
+                opacity: 1,
+                type: 'gradient',
+                gradient: {
+                    shade: 'light',
+                    type: "vertical",
+                    shadeIntensity: 0.25,
+                    gradientToColors: undefined,
+                    inverseColors: true,
+                    opacityFrom: 0.85,
+                    opacityTo: 0.85,
+                    stops: [50, 0, 100]
+                },
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return " " + val + " %";
+                    }
+                }
+            }
+        };
+
+        const chart = new ApexCharts(document.querySelector("#bar-chart-new-2"), options);
+        chart.render();
+    }
+</script>
+
+
   </body>
 </html>
