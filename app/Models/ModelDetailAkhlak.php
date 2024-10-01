@@ -30,6 +30,15 @@ class ModelDetailAkhlak extends Model
             ->get();
     }
 
+    public function dataAkhlak($id_akhlak)
+    {
+        return DB::table('detail_akhlak')
+            ->join('aspek_akhlak', 'detail_akhlak.id_aspek_akhlak', '=', 'aspek_akhlak.id_aspek_akhlak')
+            ->where('id_akhlak', $id_akhlak)
+            ->orderBy('id_detail_akhlak', 'ASC')
+            ->get();
+    }
+
 
     public function detail($id_detail_akhlak)
     {

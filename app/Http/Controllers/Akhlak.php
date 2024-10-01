@@ -337,7 +337,8 @@ class Akhlak extends Controller
             'daftarDetailAkhlak'        => $this->ModelDetailAkhlak->data(),
             'user'                      => $this->ModelUser->detail(Session()->get('id_user')),
         ];
-
+        
+        $daftarDetailAkhlak        = $this->ModelDetailAkhlak->dataAkhlak($id_akhlak);
         // Membuat instance spreadsheet
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -355,7 +356,7 @@ class Akhlak extends Controller
         // Mengisi data ke dalam sheet
         $row = 2;
         $no = 1;
-        foreach ($data as $item) {
+        foreach ($daftarDetailAkhlak as $item) {
             $sheet->setCellValue('A' . $row, $no++);
             $sheet->setCellValue('B' . $row, $item->aspek); // Ganti dengan nama kolom yang sesuai dari data
             $sheet->setCellValue('C' . $row, $item->parameter); // Ganti dengan nama kolom yang sesuai dari data
