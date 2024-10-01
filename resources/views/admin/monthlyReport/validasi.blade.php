@@ -64,23 +64,40 @@
                                     @endif    
                                 </td>
                                 <td>
-                                    <div class="flex align-items-center list-user-action">
-                                        <button type="button" class="btn btn-sm btn-icon btn-primary btn-verifikasi" data-toggle="tooltip" data-placement="top" title="Kirim Ke Head Office" data-original-title="Kirim Ke Head Office" data-href="/proses-validasi-monthly-report/{{$item->id_monthly_report}}" data-content="Apakah Anda yakin akan kirim ke Head Office?" data-title="Kirim ke Head Office">
-                                            <span class="btn-inner">
-                                                <svg class="icon-32" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">                                    <path d="M15.8325 8.17463L10.109 13.9592L3.59944 9.88767C2.66675 9.30414 2.86077 7.88744 3.91572 7.57893L19.3712 3.05277C20.3373 2.76963 21.2326 3.67283 20.9456 4.642L16.3731 20.0868C16.0598 21.1432 14.6512 21.332 14.0732 20.3953L10.106 13.9602" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>                                </svg>                                 
-                                            </span>
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-icon btn-danger btn-verifikasi" data-toggle="tooltip" data-placement="top" title="Kirim Kembali ke Tim Proyek" data-original-title="Kirim Kembali ke Tim Proyek" data-href="/rollback-monthly-report/{{$item->id_monthly_report}}" data-content="Apakah Anda yakin akan kembalikan data ini ke Tim Proyek?" data-title="Kirim Kembali ke Tim Proyek">
-                                            <span class="btn-inner">
-                                                <svg class="icon-32" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">                                    <path d="M15.8325 8.17463L10.109 13.9592L3.59944 9.88767C2.66675 9.30414 2.86077 7.88744 3.91572 7.57893L19.3712 3.05277C20.3373 2.76963 21.2326 3.67283 20.9456 4.642L16.3731 20.0868C16.0598 21.1432 14.6512 21.332 14.0732 20.3953L10.106 13.9602" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>                                </svg>                                 
-                                            </span>
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-icon btn-primary" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#detail{{$item->id_monthly_report}}" data-placement="top" title="Detail Proyek" data-original-title="Detail">
-                                            <span class="btn-inner">
-                                                <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">                                    <path d="M22.4541 11.3918C22.7819 11.7385 22.7819 12.2615 22.4541 12.6082C21.0124 14.1335 16.8768 18 12 18C7.12317 18 2.98759 14.1335 1.54586 12.6082C1.21811 12.2615 1.21811 11.7385 1.54586 11.3918C2.98759 9.86647 7.12317 6 12 6C16.8768 6 21.0124 9.86647 22.4541 11.3918Z" stroke="currentColor"></path>                                    <circle cx="12" cy="12" r="5" stroke="currentColor"></circle>                                    <circle cx="12" cy="12" r="3" fill="#130F26"></circle>                                    <mask mask-type="alpha" maskUnits="userSpaceOnUse" x="9" y="9" width="6" height="6">                                    <circle cx="12" cy="12" r="3" fill="#130F26"></circle>                                    </mask>                                    <circle opacity="0.89" cx="13.5" cy="10.5" r="1.5" fill="white"></circle>                                    </svg>                                
-                                            </span>
-                                        </button>
-                                    </div>
+                                <div class="d-flex justify-content-start align-items-center list-user-action">
+    <!-- Tombol Kirim Ke Head Office -->
+    <button type="button" class="btn btn-sm btn-icon btn-warning btn-verifikasi" data-toggle="tooltip" data-placement="top" title="Kirim Ke Head Office">
+        <span class="btn-inner">
+            <svg class="icon-32" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 12h3v8h14v-8h3L12 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+        </span>
+    </button>
+
+    <!-- Tombol Kirim Kembali ke Tim Proyek -->
+    <button type="button" class="btn btn-sm btn-icon btn-danger btn-verifikasi" data-toggle="tooltip" data-placement="top" title="Kirim Kembali ke Tim Proyek">
+        <span class="btn-inner">
+            <svg class="icon-32" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 12H5m0 0l7-7m-7 7l7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+        </span>
+    </button>
+
+    <!-- Tombol Detail Proyek -->
+    <button type="button" class="btn btn-sm btn-icon btn-primary" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#detail" data-placement="top" title="Detail Proyek">
+        <span class="btn-inner">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.4541 11.3918C22.7819 11.7385 22.7819 12.2615 22.4541 12.6082C21.0124 14.1335 16.8768 18 12 18C7.12317 18 2.98759 14.1335 1.54586 12.6082C1.21811 12.2615 1.21811 11.7385 1.54586 11.3918C2.98759 9.86647 7.12317 6 12 6C16.8768 6 21.0124 9.86647 22.4541 11.3918Z" stroke="currentColor"></path>
+                <circle cx="12" cy="12" r="5" stroke="currentColor"></circle>
+                <circle cx="12" cy="12" r="3" fill="#130F26"></circle>
+            </svg>
+        </span>
+    </button>
+</div>
+
+
+
+
                                 </td>
                             </tr>
                         @endforeach

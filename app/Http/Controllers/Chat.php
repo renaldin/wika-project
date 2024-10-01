@@ -27,18 +27,9 @@ class Chat extends Controller
             return redirect()->route('login');
         }
 
-        if(Request()->filterMonth) {
-            $month = Request()->filterMonth;
-        } else {
-            $month = date('Y-m');
-        }
-
-        
         $daftarChat = ModelChat::with('userSatu', 'userDua')
             ->orWhere('id_user_satu', Session()->get('id_user'))
             ->orWhere('id_user_dua', Session()->get('id_user'))
-            ->whereYear('updated_at', date('Y', strtotime($month)))
-            ->whereMonth('updated_at', '=', date('m', strtotime($month)))
             ->orderBy('updated_at', 'DESC')
             ->limit(200)
             ->get();
@@ -46,9 +37,8 @@ class Chat extends Controller
         $data = [
             'title'             => 'Data Chat',
             'subTitle'          => 'Chat',
-            'filterMonth'       => $month,
             'daftarChat'        => $daftarChat,
-            'daftarUser'        => ModelUser::all(),
+            'daftarUser'        => ModelUser::where('role', 'Head Office')->get(),
             'user'              => $this->ModelUser->detail(Session()->get('id_user')),
         ];
 
@@ -67,34 +57,14 @@ class Chat extends Controller
             return redirect()->route('login');
         }
 
-        if(Request()->filterDate) {
-            $date = Request()->filterDate;
-        } else {
-            $date = date('Y-m-d');
-        }
-
-        if (Request()->filterMonth) {
-            $month = Request()->filterMonth;
-            $detailChat = ModelDetailChat::with('chat', 'user')
-                ->whereYear('created_at', date('Y', strtotime($month)))
-                ->whereMonth('created_at', '=', date('m', strtotime($month)))
-                ->orderBy('created_at', 'ASC')
-                ->where('id_chat', $id_chat)
-                ->get();
-        } else {
-            $month = date('Y-m', strtotime($date));
-            $detailChat = ModelDetailChat::with('chat', 'user')
-                ->whereDate('created_at', $date)
-                ->orderBy('created_at', 'ASC')
-                ->where('id_chat', $id_chat)
-                ->get();
-        }
+        $detailChat = ModelDetailChat::with('chat', 'user')
+            ->orderBy('created_at', 'ASC')
+            ->where('id_chat', $id_chat)
+            ->get();
 
         $data = [
             'title'             => 'Data Chat',
             'subTitle'          => 'Chat',
-            'filterMonth'       => $month,
-            'filterDate'        => $date,
             'detailChat'        => $detailChat,
             'chat'              => ModelChat::with('userSatu', 'userDua')->find($id_chat),
             'user'              => $this->ModelUser->detail(Session()->get('id_user')),

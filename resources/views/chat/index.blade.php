@@ -14,12 +14,7 @@
                     <div class="col-lg-8 mb-1">
                         <button type="button" class="btn btn-primary mb-4"  data-bs-toggle="modal" data-bs-target="#tambah">Tambah</button>
                     </div>
-                    <div class="col-lg-4 mb-1">
-                        <form action="" class="d-flex">
-                            <input type="MONTH" class="form-control" name="filterMonth" id="filterMonth" value="{{$filterMonth}}">
-                            <button type="submit" class="btn btn-primary">Filter</button>
-                        </form>
-                    </div>
+                    
                     @if (session('success'))
                         <div class="col-lg-12">
                             <div class="alert bg-primary text-white alert-dismissible">
@@ -45,41 +40,50 @@
             <div class="card-body px-0">
                 <div class="table-responsive">
                 <table id="user-list-table" class="table table-striped" role="grid" data-toggle="data-table">
-                <thead>
-                    <tr class="ligth">
-                        <th>No</th>
-                        <th>Pengguna</th>
-                        <th>Waktu</th>
-                        <th style="min-width: 100px">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php $no = 1;?>
-                    @foreach ($daftarChat sebagai $item)
-                        <tr>
-                            <td>{{$no++}}</td>
-                            <td><span class="badge bg-primary">
-                                {{$item->userSatu->nama_user}} <!-- atau gunakan $item->userDua->nama_user sesuai kebutuhan -->
-                            </span></td>
-                            <td>{{date('d F Y | H:m', strtotime($item->created_at))}}</td>
-                            <td>
-                                <div class="flex align-items-center list-user-action">
-                                    <a href="/detail-chat/{{$item->id_chat}}" class="btn btn-sm btn-icon btn-primary" data-toggle="tooltip"  data-placement="top" title="Chat" data-original-title="Chat">
-                                        <span class="btn-inner">
-                                            <!-- SVG Icon -->
-                                        </span>
-                                    </a>
-                                    <button type="button" class="btn btn-sm btn-icon btn-danger btn-delete" data-toggle="tooltip" data-placement="top" title="Hapus" data-original-title="Hapus" data-href="/hapus-chat/{{$item->id_chat}}" data-content="Apakah Anda yakin akan hapus data ini ?">
-                                        <span class="btn-inner">
-                                            <!-- SVG Icon -->
-                                        </span>
-                                    </button>
-                                </div>
-                            </td>
+                    <thead>
+                        <tr class="ligth">
+                            <th>No</th>
+                            @if (Session()->get('role') == 'Manajemen')
+                                <th>Head Office</th>
+                            @elseif(Session()->get('role') == 'Head Office')
+                                <th>Manajemen</th>
+                            @endif
+                            <th>Waktu</th>
+                            <th style="min-width: 100px">Aksi</th>
                         </tr>
-                    @endforeach
-                </tbody>
-
+                    </thead>
+                    <tbody>
+                        <?php $no = 1;?>
+                        @foreach ($daftarChat as $item)
+                            <tr>
+                                <td>{{$no++}}</td>
+                                @if (Session()->get('role') == 'Manajemen')
+                                    <td><span class="badge bg-primary">{{$item->userDua->nama_user}}</span></td>
+                                @elseif(Session()->get('role') == 'Head Office')
+                                    <td><span class="badge bg-primary">{{$item->userSatu->nama_user}}</span></td>
+                                @endif
+                                <td>{{date('d F Y | H:m', strtotime($item->created_at))}}</td>
+                                <td>
+                                    <div class="flex align-items-center list-user-action">
+                                        <a href="/detail-chat/{{$item->id_chat}}" class="btn btn-sm btn-icon btn-primary" data-toggle="tooltip"  data-placement="top" title="Chat" data-original-title="Chat">
+                                            <span class="btn-inner">
+                                                <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">                                    <path d="M15.8325 8.17463L10.109 13.9592L3.59944 9.88767C2.66675 9.30414 2.86077 7.88744 3.91572 7.57893L19.3712 3.05277C20.3373 2.76963 21.2326 3.67283 20.9456 4.642L16.3731 20.0868C16.0598 21.1432 14.6512 21.332 14.0732 20.3953L10.106 13.9602" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>                                </svg>                                                           
+                                            </span>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-icon btn-danger btn-delete" data-toggle="tooltip" data-placement="top" title="Hapus" data-original-title="Hapus" data-href="/hapus-chat/{{$item->id_chat}}" data-content="Apakah Anda yakin akan hapus data ini ?">
+                                            <span class="btn-inner">
+                                                <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+                                                <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                <path d="M20.708 6.23975H3.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                <path d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                </svg>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
                 </table>
                 </div>
             </div>
@@ -90,7 +94,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Tambah Chat</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Tambah</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -98,7 +102,7 @@
                     <div class="row">
                         @csrf
                         <div class="form-group col-md-12">
-                            <label class="form-label" for="id_user_dua">Pilih Pengguna</label>
+                            <label class="form-label" for="id_user_dua">Head Office</label>
                             <select class="form-control selectpicker" data-live-search="true" id="id_user_dua" name="id_user_dua" required>
                                 <option value="" selected disabled>-- Pilih --</option>
                                 @foreach ($daftarUser as $item)
@@ -116,6 +120,5 @@
         </div>
     </div>
 </div>
-
 
 @endsection

@@ -31,8 +31,9 @@ class ModelAkhlak extends Model
         return DB::table('akhlak')
             ->join('user', 'user.id_user', '=', 'akhlak.id_user')
             ->where('id_akhlak', $id_akhlak)
-            ->first();
+            ->first(); // Mengembalikan objek atau null
     }
+
 
     public function lastData()
     {
