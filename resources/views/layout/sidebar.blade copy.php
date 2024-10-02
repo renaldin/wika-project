@@ -738,10 +738,42 @@
                     @endif
                 @elseif ($user->role == 'Tim Proyek')
                     @if ($user->divisi == 'Engineering')
+                      <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Change Leader Program') active @endif" aria-current="page"  href="/change-leader">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">Change Leader Program</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Dashboard Change Leader') active @endif" aria-current="page"  href="/dashboard-change">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">Dashboard Change</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Panduan Spesifik') active @endif" aria-current="page"  href="/panduan-spesifik">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">Panduan Spesifik</span>
+                            </a>
+                        </li>
                         <li class="nav-item static-item">
                             <a class="nav-link static-item disabled" href="#" tabindex="-1">
                                 <span class="default-icon">Form</span>
                                 <span class="mini-icon">-</span>
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Daftar AKHLAK') active @endif" aria-current="page"  href="/daftar-akhlak">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">AKHLAK</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -994,6 +1026,38 @@
                                 <span class="mini-icon">-</span>
                             </a>
                         </li>
+                          <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Change Leader Program') active @endif" aria-current="page"  href="/change-leader">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">Change Leader Program</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Dashboard Change Leader') active @endif" aria-current="page"  href="/dashboard-change">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">Dashboard Change</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Panduan Spesifik') active @endif" aria-current="page"  href="/panduan-spesifik">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">Panduan Spesifik</span>
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Daftar AKHLAK') active @endif" aria-current="page"  href="/daftar-akhlak">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">AKHLAK</span>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link @if ($title == 'Data Agenda') active @endif" aria-current="page" href="/daftar-agenda">
                                 <i class="icon">
@@ -1062,6 +1126,38 @@
                             <a class="nav-link static-item disabled" href="#" tabindex="-1">
                                 <span class="default-icon">PCP</span>
                                 <span class="mini-icon">-</span>
+                            </a>
+                        </li>
+                          <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Change Leader Program') active @endif" aria-current="page"  href="/change-leader">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">Change Leader Program</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Dashboard Change Leader') active @endif" aria-current="page"  href="/dashboard-change">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">Dashboard Change</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Panduan Spesifik') active @endif" aria-current="page"  href="/panduan-spesifik">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">Panduan Spesifik</span>
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Daftar AKHLAK') active @endif" aria-current="page"  href="/daftar-akhlak">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">AKHLAK</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -1546,6 +1642,47 @@
                                 <span class="mini-icon">-</span>
                             </a>
                         </li>
+                               <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Daftar AKHLAK') active @endif" aria-current="page"  href="/daftar-akhlak">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">AKHLAK</span>
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Change Leader Program') active @endif" aria-current="page"  href="/change-leader">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">Change Leader Program</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Dashboard Change Leader') active @endif" aria-current="page"  href="/dashboard-change">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">Dashboard Change</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Panduan Spesifik') active @endif" aria-current="page"  href="/panduan-spesifik">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">Panduan Spesifik</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Data Task') active @endif" aria-current="page" href="/daftar-task">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">Task</span>
+                            </a>
+                        </li>
+                     
                         <li class="nav-item">
                             <a class="nav-link @if ($title == 'Data Agenda') active @endif" aria-current="page" href="/daftar-agenda">
                                 <i class="icon">
@@ -1614,6 +1751,53 @@
                             <a class="nav-link static-item disabled" href="#" tabindex="-1">
                                 <span class="default-icon">PCP</span>
                                 <span class="mini-icon">-</span>
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Daftar AKHLAK') active @endif" aria-current="page"  href="/daftar-akhlak">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">AKHLAK</span>
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Change Leader Program') active @endif" aria-current="page"  href="/change-leader">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">Change Leader Program</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Dashboard Change Leader') active @endif" aria-current="page"  href="/dashboard-change">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">Dashboard Change</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Panduan Spesifik') active @endif" aria-current="page"  href="/panduan-spesifik">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">Panduan Spesifik</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Data Task') active @endif" aria-current="page" href="/daftar-task">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">Task</span>
+                            </a>
+                        </li>  <li class="nav-item">
+                            <a class="nav-link @if ($title == 'Data Dokumen Timeline') active @endif" aria-current="page" href="/daftar-dokumen-timeline">
+                                <i class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon-32" width="20" viewBox="0 0 24 24" fill="none">                                    <circle cx="12" cy="12" r="7.5" fill="currentColor" fill-opacity="0.4" stroke="currentColor"></circle>                                </svg>  
+                                </i>
+                                <span class="item-name">Dokumen Timeline</span>
                             </a>
                         </li>
                         <li class="nav-item">
