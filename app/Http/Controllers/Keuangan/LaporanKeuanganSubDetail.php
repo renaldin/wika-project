@@ -23,17 +23,30 @@ class LaporanKeuanganSubDetail extends Controller
         if (!Session()->get('role')) {
             return redirect()->route('login');
         }
-
+    
+        // Ambil detail laporan keuangan berdasarkan ID
+        $laporanKeuanganDetail = LaporanKeuanganDetails::with('dokumen', 'laporanKeuanganSubDetails')->find($id_laporan_keuangan_details);
+        
+        // Pastikan bahwa data ditemukan
+        if (!$laporanKeuanganDetail) {
+            return redirect()->back()->with('error', 'Data laporan keuangan tidak ditemukan.');
+        }
+    
         $data = [
             'title' => 'Data Detail Laporan Keuangan',
             'subTitle' => 'Sub Detail Laporan Keuangan',
-           'detail' => LaporanKeuanganDetails::with('dokumen', 'laporanKeuanganSubDetails')->find($id_laporan_keuangan_details),
-            'daftar' => LaporanKeuanganSubDetails::with('LaporanKeuanganDetail')->where('id_laporan_keuangan_details', $id_laporan_keuangan_details)->get(),
+            'laporanKeuanganDetail' => $laporanKeuanganDetail, // Mengirimkan $laporanKeuanganDetail
+            'detail' => $laporanKeuanganDetail,
+            'daftar' => LaporanKeuanganSubDetails::with('LaporanKeuanganDetail')
+                ->where('id_laporan_keuangan_details', $id_laporan_keuangan_details)
+                ->get(),
             'user' => $this->ModelUser->detail(Session()->get('id_user')),
         ];
-
+    
         return view('keuangan/laporanKeuanganSubDetail.index', $data);
     }
+    
+    
 
     public function tambah($id_laporan_keuangan_details)
     {
@@ -92,6 +105,27 @@ class LaporanKeuanganSubDetail extends Controller
         // Kirim data ke view
         return view('keuangan.detail', compact('laporanKeuanganDetails', 'subDetails'));
     }
+
+    public function edit($id_laporan_keuangan_details, $id_laporan_keuangan_sub_details)
+    {
+        if (!Session()->get('role')) {
+            return redirect()->route('login');
+        }
+
+        $data = [
+            'title'             => 'Data Laporan Keuangan',
+            'subTitle'          => 'Edit Sub Detail Laporan Keuangan',
+            'form'              => 'Edit',
+            'LaporanKeuanganDetail'    => LaporanKeuanganDetails::with('dokumen', 'laporanKeuangan')->find($id_laporan_keuangan_details),
+            'detail'            => LaporanKeuanganSubDetails::with('LaporanKeuanganDetail')->find($id_laporan_keuangan_sub_details),
+            'user'              => $this->ModelUser->detail(Session()->get('id_user')),
+        ];
+        
+        return view('keuangan/laporanKeuanganSubDetail.form', $data);
+    }
+
+    
+
     public function prosesEdit(Request $request, $id_laporan_keuangan_details, $id_laporan_keuangan_sub_details)
     {
         if (!Session()->get('role')) {

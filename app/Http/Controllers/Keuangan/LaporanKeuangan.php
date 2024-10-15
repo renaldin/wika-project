@@ -88,7 +88,7 @@ class LaporanKeuangan extends Controller
         
         // Mengambil detail pengguna yang sedang login
         $user = $this->ModelUser->detail(Session()->get('id_user'));
-    
+     
         // Mengatur data untuk view
         $data = [
             'title' => 'Data Laporan Keuangan',
