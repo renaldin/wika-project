@@ -49,6 +49,7 @@
                             <th class="text-center text-wrap">Review RKP Tahap 6</th>
                             <th>File</th>
                             <th>Review Hasil</th>
+                            <th>Komentar</th>
                             <th style="min-width: 100px">Aksi</th>
                         </tr>
                     </thead>
@@ -145,6 +146,7 @@
                                             Belum Ada Hasil
                                         @endif
                                     </td>
+                                    <td>{{$item->note}}</td>
                                     <td>
                                         <div class="flex align-items-center list-user-action">
                                             <a href="/edit-rkp-mankon/{{$item->id_rkp_mankon}}" class="btn btn-sm btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Edit" data-original-title="Edit">

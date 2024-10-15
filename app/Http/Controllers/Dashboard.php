@@ -75,6 +75,7 @@ class Dashboard extends Controller
         $jumlahProyek = $this->ModelProyek->jumlahProyek();
         $jumlahSoftware = $this->ModelSoftware->jumlahSoftware();
         $jumlahDokumen = $this->ModelDokumenLps->jumlahData();
+        $jumlahKIKM = $this->ModelKiKm->jumlahKIKM();
         $jumlahDokumenLps = $jumlahDokumen['utama'] + $jumlahDokumen['pendukung'];
 
         $daftarDetailCsi = $this->ModelDetailCsi->data();
@@ -115,12 +116,15 @@ class Dashboard extends Controller
         if ($role == 'Admin' && $divisi == 'Engineering') {
             $route = 'engineering.admin.dashboard';
             $user = $this->ModelUser->detail(Session()->get('id_user'));
+            $daftarAkhlak = $this->ModelAkhlak->data();
+            $daftarDetailAkhlak = $this->ModelDetailAkhlak->data();
             $data = [
-                'title'                     => null,
-                'user'                      => $user,
+                'title'                 => null,
+                'user'                  => $user,
                 'jumlahUser'                => $jumlahUser,
                 'jumlahHeadOffice'          => $jumlahHeadOffice,
                 'jumlahProyek'              => $jumlahProyek,
+                'jumlahKIKM'              => $jumlahKIKM,
                 'jumlahSoftware'            => $jumlahSoftware,
                 'jumlahDokumenLps'          => $jumlahDokumenLps,
                 'daftarRkp'                 => $this->ModelRkp->dataIsRespon(1),
@@ -157,7 +161,8 @@ class Dashboard extends Controller
                 'realisasiBukanPrioritas'   => $this->prioritasProyek('Bukan Prioritas'),
                 'chartLicense'              => $this->ModelDetailLicense->progress(),
                 'tahun'                     => $tahun,
-                'subTitle'                  => 'Dashboard',
+                'subTitle'              => 'Dashboard',
+                'daftarAkhlak' => $daftarAkhlak,
             ];
         } elseif ($role == 'Divisi') {
             $route = 'Divisi.index';
@@ -170,6 +175,7 @@ class Dashboard extends Controller
                 'jumlahUser'                => $jumlahUser,
                 'jumlahHeadOffice'          => $jumlahHeadOffice,
                 'jumlahProyek'              => $jumlahProyek,
+                'jumlahKIKM'              => $jumlahKIKM,
                 'jumlahSoftware'            => $jumlahSoftware,
                 'jumlahDokumenLps'          => $jumlahDokumenLps,
                 'daftarRkp'                 => $this->ModelRkp->dataIsRespon(1),
@@ -220,6 +226,7 @@ class Dashboard extends Controller
                 'jumlahUser'                => $jumlahUser,
                 'jumlahHeadOffice'          => $jumlahHeadOffice,
                 'jumlahProyek'              => $jumlahProyek,
+                'jumlahKIKM'              => $jumlahKIKM,
                 'jumlahSoftware'            => $jumlahSoftware,
                 'jumlahDokumenLps'          => $jumlahDokumenLps,
                 'daftarRkp'                 => $this->ModelRkp->dataIsRespon(1),
@@ -292,6 +299,7 @@ class Dashboard extends Controller
                 'jumlahUser'            => $jumlahUser,
                 'jumlahHeadOffice'      => $jumlahHeadOffice,
                 'jumlahProyek'          => $jumlahProyek,
+                'jumlahKIKM'              => $jumlahKIKM,
                 'jumlahSoftware'        => $jumlahSoftware,
                 'jumlahDokumenLps'      => $jumlahDokumenLps,
                 'daftarRkp'             => $this->ModelRkp->dataIsRespon(1),
@@ -366,6 +374,7 @@ class Dashboard extends Controller
                 'jumlahUser'                => $jumlahUser,
                 'jumlahHeadOffice'          => $jumlahHeadOffice,
                 'jumlahProyek'              => $jumlahProyek,
+                'jumlahKIKM'              => $jumlahKIKM,
                 'jumlahSoftware'            => $jumlahSoftware,
                 'jumlahDokumenLps'          => $jumlahDokumenLps,
                 'daftarRkp'                 => $this->ModelRkp->dataIsRespon(1),
@@ -407,7 +416,7 @@ class Dashboard extends Controller
                 'subTitle'                  => 'Dashboard',
             ];
         } elseif ($role == 'Manajemen') {
-            $route = 'manajemen.dashboard';
+            $route = 'engineering.admin.dashboard';
             $user = $this->ModelUser->detail(Session()->get('id_user'));
 
             $data = [
@@ -416,6 +425,7 @@ class Dashboard extends Controller
                 'jumlahUser'                => $jumlahUser,
                 'jumlahHeadOffice'          => $jumlahHeadOffice,
                 'jumlahProyek'              => $jumlahProyek,
+                'jumlahKIKM'              => $jumlahKIKM,
                 'jumlahSoftware'            => $jumlahSoftware,
                 'jumlahDokumenLps'          => $jumlahDokumenLps,
                 'daftarRkp'                 => $this->ModelRkp->dataIsRespon(1),

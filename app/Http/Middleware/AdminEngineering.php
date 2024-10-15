@@ -16,7 +16,7 @@ class AdminEngineering
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Session()->get('role') == 'Admin' && Session()->get('divisi') == 'Engineering') {
+        if (Session()->get('role') == 'Admin' ) {
             return $next($request);
         } else {
             return redirect()->route('login');

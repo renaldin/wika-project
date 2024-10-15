@@ -17,6 +17,10 @@
                             <input type="text" class="form-control" value="{{$detailAkhlak->nama_user}}" readonly>
                         </div>
                     </div>
+                    <div class="form-group col-md-6">
+                            <label class="form-label">Periode</label>
+                            <input type="text" class="form-control" value="{{date('F Y', strtotime($detailAkhlak->periode))}}" readonly>
+                        </div>
                     <br>
                     <div class="row">
                         <div class="col-lg-12">

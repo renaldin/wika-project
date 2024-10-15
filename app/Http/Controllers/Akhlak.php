@@ -36,7 +36,7 @@ class Akhlak extends Controller
             'title'                     => 'AKHLAK',
             'subTitle'                  => 'Daftar AKHLAK',
             'monitoring'                => true,
-            'daftarAkhlak'              => $this->ModelAkhlak->data(),
+            'daftarAkhlak'              => $this->ModelAkhlak->data(), 
             'user'                      => $this->ModelUser->detail(Session()->get('id_user')),
         ];
 
@@ -48,6 +48,7 @@ class Akhlak extends Controller
         
         return view('Divisi.index', $data);
     }
+
 
     public function monitoring()
     {
@@ -97,7 +98,6 @@ class Akhlak extends Controller
         return view('Divisi.detail', $data);
     }
 
-
     public function prosesTambah() 
     {
         if (!Session()->get('role')) {
@@ -105,15 +105,17 @@ class Akhlak extends Controller
         }
     
         // Mengecek apakah data user sudah ada
-        $check = $this->ModelAkhlak->checkData(Request()->id_user);
+        $check = $this->ModelAkhlak->checkData(Request()->id_user, Request()->periode);
         if ($check) {
-            return back()->with('fail', 'Data user sudah ada!');
+            return back()->with('fail', 'Data user dan periode sudah ada!');
         }
     
-        // Menyimpan hanya id_user
+        // Menyimpan id_user dan periode
         $data = [
             'id_user' => Request()->id_user,
+            'periode' => Request()->periode, // Pastikan periode ditambahkan di sini
         ];
+        
         $this->ModelAkhlak->tambah($data); 
     
         // Mendapatkan data akhlak terakhir
@@ -124,7 +126,8 @@ class Akhlak extends Controller
         foreach ($dataAspekAkhlak as $item) {
             $dataDetailAkhlak = [
                 'id_akhlak'        => $lastDataAkhlak->id_akhlak,
-                'id_aspek_akhlak'  => $item->id_aspek_akhlak
+                'id_aspek_akhlak'  => $item->id_aspek_akhlak,
+                'periode'          => Request()->periode // Pastikan periode ditambahkan di detail akhlak juga
             ];
             $this->ModelDetailAkhlak->tambah($dataDetailAkhlak);
         }
@@ -138,16 +141,20 @@ class Akhlak extends Controller
         return back()->with('success', 'Data berhasil ditambahkan!');
     }
     
+    
 
     public function prosesEdit($id_akhlak) 
     {
+        // dd(Request()->all());
         if (!Session()->get('role')) {
             return redirect()->route('login');
         }
 
         $data = [
             'id_akhlak'        => $id_akhlak,
-            'id_user' => Request()->id_user
+            'id_user' => Request()->id_user,
+            'periode'       => Request()->periode
+
         ];
 
         $log            = new ModelLog();
@@ -254,14 +261,10 @@ class Akhlak extends Controller
         }
 
         $namaFile = 'Laporan Akhlak';
-
         $pdf = Pdf::loadview('Divisi.downloadPdf', [
             'namaFile'          => $namaFile,
             'akhlak'               => ModelAkhlak::with('user')->find($id_akhlak),
-            'daftarDetailAkhlak'   => ModelDetailAkhlak::with('aspekAkhlak', 'akhlak')
-                                    ->where('id_akhlak', $id_akhlak)
-                                    ->orderBy('id_detail_akhlak', 'ASC')
-                                    ->get()
+            'daftarDetailAkhlak'   => $this->ModelDetailAkhlak->dataByIdAkhlak($id_akhlak)
           ])->setPaper('a4', 'landscape');
       
         return $pdf->stream($namaFile . '.pdf');
@@ -308,6 +311,7 @@ class Akhlak extends Controller
         
         return view('Divisi.dashboardChange', $data);
     }
+
     public function panduanSpesifik()
     {
         if (!Session()->get('role')) {
@@ -327,6 +331,48 @@ class Akhlak extends Controller
         $log->save();
         
         return view('Divisi.panduanSpesifik', $data);
+    }
+
+    public function leaderProject()
+    {
+        if (!Session()->get('role')) {
+            return redirect()->route('login');
+        }
+
+        $data = [
+            'title'                     => 'AKHLAK',
+            'subTitle'                  => 'Change Leader Project',
+            'user'                      => $this->ModelUser->detail(Session()->get('id_user')),
+        ];
+
+        $log            = new ModelLog();
+        $log->id_user   = Session()->get('id_user');
+        $log->activity  = 'Melihat Halaman Change Leader Project.';
+        $log->feature   = 'AKHLAK';
+        $log->save();
+        
+        return view('Divisi.leaderProject', $data);
+    }
+
+    public function ruangTransformasi()
+    {
+        if (!Session()->get('role')) {
+            return redirect()->route('login');
+        }
+
+        $data = [
+            'title'                     => 'AKHLAK',
+            'subTitle'                  => 'Ruang Transformasi',
+            'user'                      => $this->ModelUser->detail(Session()->get('id_user')),
+        ];
+
+        $log            = new ModelLog();
+        $log->id_user   = Session()->get('id_user');
+        $log->activity  = 'Melihat Halaman Ruang Tranformasi.';
+        $log->feature   = 'AKHLAK';
+        $log->save();
+        
+        return view('Divisi.ruangTransformasi', $data);
     }
 
     public function exportDetailAkhlak($id_akhlak)

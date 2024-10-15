@@ -111,7 +111,7 @@
                                     @enderror
                                 </div>
                             @endif
-                            {{-- <div class="form-group col-md-6">
+                           <div class="form-group col-md-6">
                                 <label class="form-label" for="note">Note</label>
                                 <textarea class="form-control @error('note') is-invalid @enderror" id="note" name="note" rows="5" placeholder="Masukkan Note">@if($form == 'Tambah'){{ old('note') }}@elseif($form == 'Edit'){{$detail->note}}@endif</textarea>
                                 @error('note')
@@ -119,7 +119,7 @@
                                     {{ $message }}
                                     </div>
                                 @enderror
-                            </div> --}}
+                            </div> 
                         @endif
 
                     </div>

@@ -9,8 +9,8 @@
     <meta name="keywords" content="admin template, Riho admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="pixelstrap">
 
-    <link rel="icon" href="{{ asset('admin/assets/images/favicon.png') }}" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ asset('admin/assets/images/favicon.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('image/wider1.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('image/wider1.png') }}" type="image/x-icon">
     <title>Infrastructure 2 Division | {{ $subTitle }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -108,7 +108,7 @@
             </div>
           </form>
           <div class="header-logo-wrapper col-auto p-0">  
-            <div class="logo-wrapper"> <a href="index.html"><img class="img-fluid for-light" src="{{ asset('admin/assets/images/logo/logo_dark.png') }}" alt="logo-light"><img class="img-fluid for-dark" src="{{ asset('admin/assets/images/logo/logo.png') }}" alt="logo-dark"></a></div>
+            <div class="logo-wrapper"> <a href="index.html"><img class="img-fluid for-light" src="{{ asset('image/wider 2.png') }}" alt="logo-light"><img class="img-fluid for-dark" src="{{ asset('image/wider 2.png') }}" alt="logo-dark"></a></div>
             <div class="toggle-sidebar"> <i class="status_toggle middle sidebar-toggle" data-feather="align-center"></i></div>
           </div>
           <div class="left-header col-xxl-5 col-xl-6 col-lg-5 col-md-4 col-sm-3 p-0">
@@ -186,6 +186,8 @@
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="{{ asset('admin/assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('admin/assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
@@ -242,29 +244,35 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function () {
+        var isDarkMode = document.body.classList.contains('dark-mode'); // Cek apakah dark mode aktif
+
         var chart = Highcharts.chart('pie-chart-progress-proyek', {
             chart: {
-                type: 'pie'
+                type: 'pie',
+                backgroundColor: 'transparent' // Buat background chart transparan
             },
             title: {
                 text: 'Progress Proyek',
                 style: {
-                    display: 'none' // Hide the title if you don't want it
+                    display: 'none'
                 }
             },
             tooltip: {
-                useHTML: true, // Enable HTML content in tooltips
-                pointFormat: '<b>{point.name}</b>: {point.y} proyek', // Format tooltip text
-                followPointer: true // Follow the cursor
+                useHTML: true,
+                pointFormat: '<b>{point.name}</b>: {point.y} proyek',
+                followPointer: true,
+                style: {
+                    color: isDarkMode ? '#ffffff' : '#000000' // Warna teks tooltip sesuai mode
+                }
             },
             plotOptions: {
                 pie: {
                     allowPointSelect: true,
                     cursor: 'pointer',
                     dataLabels: {
-                        enabled: false // Disable data labels
+                        enabled: false
                     },
-                    innerSize: '50%', // Creates the donut effect
+                    innerSize: '50%' // Efek donut
                 }
             },
             series: [{
@@ -272,25 +280,31 @@
                 colorByPoint: true,
                 data: [{
                     name: '0 - 30%',
-                    y: {{ $persen_0_30 ?? 0 }}, // Provide default value if $persen_0_30 is not set
-                    color: '#007bff'
+                    y: {{ $persen_0_30 ?? 0 }},
+                    color: '#64b5f6'
                 }, {
                     name: '30 - 50%',
-                    y: {{ $persen_30_50 ?? 0 }}, // Provide default value if $persen_30_50 is not set
-                    color: '#28a745'
+                    y: {{ $persen_30_50 ?? 0 }},
+                    color: '#f66d00'
                 }, {
                     name: '50 - 70%',
-                    y: {{ $persen_50_70 ?? 0 }}, // Provide default value if $persen_50_70 is not set
-                    color: '#ffc107'
+                    y: {{ $persen_50_70 ?? 0 }},
+                    color: '#1565c0'
                 }, {
                     name: '70 - 100%',
-                    y: {{ $persen_70_100 ?? 0 }}, // Provide default value if $persen_70_100 is not set
-                    color: '#dc3545'
+                    y: {{ $persen_70_100 ?? 0 }},
+                    color: '#388e3c'
                 }]
-            }]
+            }],
+            credits: {
+                enabled: false // Hilangkan logo Highcharts
+            }
         });
     });
-    </script>
+</script>
+
+
+
 
 <script>
     // Memastikan elemen grafik ada di DOM
@@ -309,7 +323,7 @@
             },
             labels: ["Bukan Prioritas", "Prioritas 1", "Prioritas 2", "Prioritas 3"],
             series: [bukanPrioritas, prioritas1, prioritas2, prioritas3],
-            colors: ["#64B5F6", "#388E3C", "#1565C0", "#F66D00"],
+            colors: ["#1565c0", "#f66d00", "#388e3c", "#64b5f6"],
             legend: {
                 position: "bottom"
             }
@@ -362,7 +376,7 @@
 </script>
 
 
-<script>
+<!-- <script>
 document.addEventListener("DOMContentLoaded", function () {
     const options = {
         chart: {
@@ -444,7 +458,280 @@ document.addEventListener("DOMContentLoaded", function () {
     const chart = new ApexCharts(document.querySelector("#chart-productivity-rate-mixed"), options);
     chart.render();
 });
+</script> -->
+ <!-- <script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Menginisialisasi chart menggunakan ECharts
+    var chartDom = document.getElementById('chart-productivity-rate-mixed');
+    var myChart = echarts.init(chartDom);
+
+    var option = {
+        title: {
+            text: 'Productivity Rate {{date('Y')}}',
+            left: 'center'
+        },
+        xAxis: {
+            type: 'category',
+            data: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            axisTick: { show: false },
+            axisLine: { lineStyle: { color: '#8A92A6' } }
+        },
+        yAxis: {
+            type: 'value',
+            max: 100,
+            axisLine: { show: false },
+            axisTick: { show: false },
+            splitLine: { lineStyle: { color: '#e0e0e0' } }
+        },
+        series: [
+            {
+                name: 'Productivity',
+                type: 'pictorialBar',
+                symbol: 'rect', // Anda bisa mengganti dengan path gambar atau simbol lain
+                symbolRepeat: true,
+                symbolSize: [30, 10],
+                symbolMargin: 2,
+                data: [
+                    parseFloat("{{ $productivityJan ?? 0 }}"), 
+                    parseFloat("{{ $productivityFeb ?? 0 }}"), 
+                    parseFloat("{{ $productivityMar ?? 0 }}"), 
+                    parseFloat("{{ $productivityApr ?? 0 }}"), 
+                    parseFloat("{{ $productivityMei ?? 0 }}"), 
+                    parseFloat("{{ $productivityJun ?? 0 }}"), 
+                    parseFloat("{{ $productivityJul ?? 0 }}"), 
+                    parseFloat("{{ $productivityAug ?? 0 }}"), 
+                    parseFloat("{{ $productivitySep ?? 0 }}"), 
+                    parseFloat("{{ $productivityOct ?? 0 }}"), 
+                    parseFloat("{{ $productivityNov ?? 0 }}"), 
+                    parseFloat("{{ $productivityDes ?? 0 }}")
+                ],
+                z: 10,
+                label: {
+                    show: true,
+                    position: 'top',
+                    formatter: '{c}%'
+                },
+                itemStyle: {
+                    color: '#64b5f6'
+                }
+            },
+            {
+                name: 'Target Productivity',
+                type: 'line',
+                data: [80, 85, 90, 80, 85, 90, 95, 90, 92, 93, 94, 95],
+                lineStyle: { color: '#f39c12', width: 3 },
+                symbolSize: 8
+            }
+        ],
+        tooltip: {
+            trigger: 'axis',
+            formatter: function(params) {
+                let output = '';
+                params.forEach((param) => {
+                    output += `${param.seriesName}: ${param.data}%<br>`;
+                });
+                return output;
+            }
+        }
+    };
+
+    // Menampilkan chart dengan opsi yang telah didefinisikan
+    myChart.setOption(option);
+});
+</script>  -->
+<!-- <script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Mendapatkan elemen container untuk chart
+    var chartDom = document.getElementById('chart-productivity-rate-mixed');
+    var myChart = echarts.init(chartDom);
+
+    // Data productivity untuk tiap bulan
+    var option = {
+        title: {
+            text: 'Pictorial Single Chart',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            data: ['line', 'bar'],
+            top: '5%'
+        },
+        xAxis: {
+            type: 'category',
+            data: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Des'],
+            axisLabel: {
+                color: '#8A92A6'
+            }
+        },
+        yAxis: {
+            type: 'value',
+            max: 100,  // Sesuaikan dengan range produktivitas
+            axisLabel: {
+                formatter: '{value}%',
+            }
+        },
+        series: [
+            {
+                name: 'bar',
+                type: 'pictorialBar',
+                barCategoryGap: '-130%',
+                symbol: 'rect',
+                itemStyle: {
+                    color: '#64b5f6'
+                },
+                label: {
+                    show: true,
+                    position: 'top',
+                    formatter: '{c}%',
+                },
+                symbolRepeat: true,
+                symbolSize: [12, 8],
+                data: [
+                    {{ $productivityJan ?? 0 }},
+                    {{ $productivityFeb ?? 0 }},
+                    {{ $productivityMar ?? 0 }},
+                    {{ $productivityApr ?? 0 }},
+                    {{ $productivityMei ?? 0 }},
+                    {{ $productivityJun ?? 0 }},
+                    {{ $productivityJul ?? 0 }},
+                    {{ $productivityAug ?? 0 }},
+                    {{ $productivitySep ?? 0 }},
+                    {{ $productivityOct ?? 0 }},
+                    {{ $productivityNov ?? 0 }},
+                    {{ $productivityDes ?? 0 }}
+                ]
+            },
+            {
+                name: 'line',
+                type: 'line',
+                smooth: true,
+                lineStyle: {
+                    width: 2
+                },
+                data: [
+                    {{ $productivityJan ?? 0 }},
+                    {{ $productivityFeb ?? 0 }},
+                    {{ $productivityMar ?? 0 }},
+                    {{ $productivityApr ?? 0 }},
+                    {{ $productivityMei ?? 0 }},
+                    {{ $productivityJun ?? 0 }},
+                    {{ $productivityJul ?? 0 }},
+                    {{ $productivityAug ?? 0 }},
+                    {{ $productivitySep ?? 0 }},
+                    {{ $productivityOct ?? 0 }},
+                    {{ $productivityNov ?? 0 }},
+                    {{ $productivityDes ?? 0 }}
+                ]
+            }
+        ]
+    };
+
+    // Render the chart
+    myChart.setOption(option);
+});
+</script> -->
+<script>
+    var myChart = echarts.init(document.getElementById('chart-productivity-rate-mixed'));
+
+    // Data example from Laravel
+    var xData = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var productivityData = [
+        parseFloat("{{ $productivityJan ?? 0 }}"), 
+        parseFloat("{{ $productivityFeb ?? 0 }}"), 
+        parseFloat("{{ $productivityMar ?? 0 }}"), 
+        parseFloat("{{ $productivityApr ?? 0 }}"), 
+        parseFloat("{{ $productivityMei ?? 0 }}"), 
+        parseFloat("{{ $productivityJun ?? 0 }}"), 
+        parseFloat("{{ $productivityJul ?? 0 }}"), 
+        parseFloat("{{ $productivityAug ?? 0 }}"), 
+        parseFloat("{{ $productivitySep ?? 0 }}"), 
+        parseFloat("{{ $productivityOct ?? 0 }}"), 
+        parseFloat("{{ $productivityNov ?? 0 }}"), 
+        parseFloat("{{ $productivityDes ?? 0 }}")
+    ]; // Ganti dengan data Anda
+
+    var targetData = [80, 85, 90, 80, 85, 90, 95, 90, 92, 93, 94, 95]; // Data target yang dapat diubah sesuai kebutuhan
+
+    var option = {
+        title: {
+            text: 'Productivity Rate',
+            left: 'center',
+            top: '20px',
+            textStyle: {
+                color: '#000',
+                fontSize: 18
+            }
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['Productivity', 'Target'],
+            bottom: '5%'
+        },
+        xAxis: {
+            type: 'category',
+            data: xData,
+            axisLabel: {
+                color: '#000'
+            }
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                color: '#000'
+            },
+            splitLine: {
+                show: false
+            }
+        },
+        series: [
+            {
+                name: 'Productivity',
+                type: 'bar',
+                itemStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        colorStops: [
+                            { offset: 0, color: 'rgba(64, 224, 208, 1)' }, // Gradient color start
+                            { offset: 1, color: 'rgba(0, 191, 165, 1)' } // Gradient color end
+                        ],
+                        global: false // false by default
+                    },
+                    barBorderRadius: [10, 10, 0, 0], // Rounded corners
+                },
+                data: productivityData
+            },
+            {
+                name: 'Target',
+                type: 'line',
+                smooth: true,
+                symbol: 'circle',
+                symbolSize: 10,
+                itemStyle: {
+                    color: 'rgba(128, 148, 212, 1)',
+                },
+                lineStyle: {
+                    width: 2,
+                    color: 'rgba(128, 148, 212, 1)',
+                },
+                data: targetData
+            }
+        ],
+    };
+
+    myChart.setOption(option);
 </script>
+
 
 
 

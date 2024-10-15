@@ -2,11 +2,11 @@
     $firstDivisi = 'engineering';
 @endphp
 <div class="sidebar-wrapper" data-layout="stroke-svg">
-    <div class="logo-wrapper"><a href="index.html"><img class="img-fluid" src="{{ asset('admin/assets/images/logo/logo.png') }}" alt=""></a>
+    <div class="logo-wrapper"><a href="index.html"><img class="img-fluid" src="{{ asset('image/wider2.png') }}" alt=""></a>
       <div class="back-btn"><i class="fa fa-angle-left"> </i></div>
       <div class="toggle-sidebar"><i class="status_toggle middle sidebar-toggle" data-feather="grid"> </i></div>
     </div>
-    <div class="logo-icon-wrapper"><a href="index.html"><img class="img-fluid" src="{{ asset('admin/assets/images/logo/logo-icon.png') }}" alt=""></a></div>
+    <div class="logo-icon-wrapper"><a href="index.html"><img class="img-fluid" src="{{ asset('image/wider1.png') }}" alt=""></a></div>
     <nav class="sidebar-main">
       <div class="left-arrow" id="left-arrow"><i data-feather="arrow-left"></i></div>
       <div id="sidebar-menu">
@@ -19,13 +19,13 @@
               <h6>Pinned</h6>
             </div>
           </li>
-          @if ($user->role == 'Head Office')
+          @if ($user->role == 'Head Office' && $user->divisi == 'Engineering')
             <li class="sidebar-main-title">
                 <div>
                     <h6>General</h6>
                 </div>
             </li>
-            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="">
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/dashboard">
               <svg class="stroke-icon">
                 <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-home') }}"></use>
               </svg>
@@ -260,6 +260,14 @@
                     <h6>Data Master</h6>
                 </div>
             </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/daftar-akhlak">
+              <svg class="stroke-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-form') }}"></use>
+              </svg>
+              <svg class="fill-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-form') }}"></use>
+              </svg><span>Akhlak</span></a>
+            </li>
             <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title" href="#">
                 <svg class="stroke-icon">
                   <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-landing-page') }}"></use>
@@ -467,7 +475,7 @@
                 </svg><span>Log Sistem</span></a>
             </li>
           @endif
-          @if ($user->role == 'Tim Proyek')
+          @if ($user->role == 'Tim Proyek' && $user->divisi == 'Engineering')
             <li class="sidebar-main-title">
                 <div>
                     <h6>General</h6>
@@ -592,13 +600,180 @@
                 </svg><span>SNI</span></a>
             </li>
           @endif
-          @if ($user->role == 'Divisi')
-          <li class="sidebar-main-title">
+          @if ($user->role == 'Tim Proyek' && $user->divisi == 'Finance')
+            <li class="sidebar-main-title">
+                  <div>
+                      <h6>General</h6>
+                  </div>
+              </li>
+              <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="">
+                <svg class="stroke-icon">
+                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-home') }}"></use>
+                </svg>
+                <svg class="fill-icon">
+                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-home') }}"></use>
+                </svg><span>Dashboard</span></a>
+              </li>
+              <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/change-leader">
+                <svg class="stroke-icon">
+                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+                </svg>
+                <svg class="fill-icon">
+                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+                </svg><span>Leader Program</span></a>
+              </li>
+              <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/dashboard-change">
+                <svg class="stroke-icon">
+                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+                </svg>
+                <svg class="fill-icon">
+                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+                </svg><span>Dashboard Change</span></a>
+              </li>
+              <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/panduan-spesifik">
+                <svg class="stroke-icon">
+                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+                </svg>
+                <svg class="fill-icon">
+                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+                </svg><span>Panduan Spesifik</span></a>
+              </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/ruang-transformasi">
+              <svg class="stroke-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+              </svg>
+              <svg class="fill-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+              </svg><span>Ruang Transformasi</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/daftar-laporan-keuangan">
+              <svg class="stroke-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+              </svg>
+              <svg class="fill-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+              </svg><span>Laporan Keuangan</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/daftar-laporan-akuntansi">
+              <svg class="stroke-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+              </svg>
+              <svg class="fill-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+              </svg><span>Laporan Akuntansi</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/daftar-laporan-pajak">
+              <svg class="stroke-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+              </svg>
+              <svg class="fill-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+              </svg><span>Laporan Pajak</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/daftar-laporan-proyek">
+              <svg class="stroke-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+              </svg>
+              <svg class="fill-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+              </svg><span>Dokumen Proyek</span></a>
+            </li>
+          @endif
+          @if ($user->role == 'Head Office' && $user->divisi == 'Finance')
+            <li class="sidebar-main-title">
+                  <div>
+                      <h6>General</h6>
+                  </div>
+              </li>
+              <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="">
+                <svg class="stroke-icon">
+                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-home') }}"></use>
+                </svg>
+                <svg class="fill-icon">
+                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-home') }}"></use>
+                </svg><span>Dashboard</span></a>
+              </li>
+              <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/change-leader">
+                <svg class="stroke-icon">
+                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+                </svg>
+                <svg class="fill-icon">
+                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+                </svg><span>Leader Program</span></a>
+              </li>
+              <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/dashboard-change">
+                <svg class="stroke-icon">
+                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+                </svg>
+                <svg class="fill-icon">
+                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+                </svg><span>Dashboard Change</span></a>
+              </li>
+              <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/panduan-spesifik">
+                <svg class="stroke-icon">
+                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+                </svg>
+                <svg class="fill-icon">
+                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+                </svg><span>Panduan Spesifik</span></a>
+              </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/ruang-transformasi">
+              <svg class="stroke-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+              </svg>
+              <svg class="fill-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+              </svg><span>Ruang Transformasi</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/daftar-dokumen-keuangan">
+              <svg class="stroke-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+              </svg>
+              <svg class="fill-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+              </svg><span>Dokumen Laporan Keuangan</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/daftar-laporan-keuangan">
+              <svg class="stroke-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+              </svg>
+              <svg class="fill-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+              </svg><span>Laporan Keuangan</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/daftar-laporan-akuntansi">
+              <svg class="stroke-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+              </svg>
+              <svg class="fill-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+              </svg><span>Laporan Akuntansi</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/daftar-laporan-pajak">
+              <svg class="stroke-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+              </svg>
+              <svg class="fill-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+              </svg><span>Laporan Pajak</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/daftar-laporan-proyek">
+              <svg class="stroke-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+              </svg>
+              <svg class="fill-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+              </svg><span>Dokumen Proyek</span></a>
+            </li>
+            
+          @endif
+          @if ($user->role == 'Manajemen' && $user->divisi == 'Engineering')
+            <li class="sidebar-main-title">
                 <div>
                     <h6>General</h6>
                 </div>
             </li>
-            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="">
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/dashboard">
               <svg class="stroke-icon">
                 <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-home') }}"></use>
               </svg>
@@ -606,29 +781,127 @@
                 <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-home') }}"></use>
               </svg><span>Dashboard</span></a>
             </li>
-            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/change-leader">
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/daftar-chat">
               <svg class="stroke-icon">
-                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-chat') }}"></use>
               </svg>
               <svg class="fill-icon">
-                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-chat') }}"></use>
+              </svg><span>Chat</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/change-leader">
+              <svg class="stroke-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-project') }}"></use>
+              </svg>
+              <svg class="fill-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-project') }}"></use>
               </svg><span>Leader Program</span></a>
             </li>
             <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/dashboard-change">
               <svg class="stroke-icon">
-                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-project') }}"></use>
               </svg>
               <svg class="fill-icon">
-                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-project') }}"></use>
               </svg><span>Dashboard Change</span></a>
             </li>
             <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/panduan-spesifik">
               <svg class="stroke-icon">
-                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-project') }}"></use>
               </svg>
               <svg class="fill-icon">
-                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
-              </svg><span>Panduan Spesifik</span></a>
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-project') }}"></use>
+              </svg><span>Panduan Spesific</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/ruang-transformasi">
+              <svg class="stroke-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-project') }}"></use>
+              </svg>
+              <svg class="fill-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-project') }}"></use>
+              </svg><span>Ruang Transformasi</span></a>
+            </li>
+            <li class="sidebar-main-title">
+                <div>
+                    <h6>Operasi</h6>
+                </div>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/daftar-akhlak">
+              <svg class="stroke-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-form') }}"></use>
+              </svg>
+              <svg class="fill-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-form') }}"></use>
+              </svg><span>Akhlak</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title" href="#">
+                <svg class="stroke-icon">
+                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-form') }}"></use>
+                </svg>
+                <svg class="fill-icon">
+                  <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-form') }}"></use>
+                </svg><span>Productivity</span></a>
+                <ul class="sidebar-submenu">
+                    <li><a href="/productivity-by-team">By Team</a></li>
+                    <li><a href="/productivity-by-person">By Person</a></li>
+                </ul>
+            </li>
+
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/monitoring-rkp">
+                <svg class="stroke-icon">
+                    <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+                </svg>
+                <svg class="fill-icon">
+                    <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+                </svg><span>Monitoring RKP BAB 3</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/monitoring-lps">
+                <svg class="stroke-icon">
+                    <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+                </svg>
+                <svg class="fill-icon">
+                    <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+                </svg><span>Monitoring LPS</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/monitoring-license">
+                <svg class="stroke-icon">
+                    <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+                </svg>
+                <svg class="fill-icon">
+                    <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+                </svg><span>License Software</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/monitoring-csi">
+                <svg class="stroke-icon">
+                    <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+                </svg>
+                <svg class="fill-icon">
+                    <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+                </svg><span>Monitoring CSI</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/daftar-sni">
+                <svg class="stroke-icon">
+                    <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+                </svg>
+                <svg class="fill-icon">
+                    <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+                </svg><span>SNI</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/daftar-task">
+                <svg class="stroke-icon">
+                    <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+                </svg>
+                <svg class="fill-icon">
+                    <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+                </svg><span>Task</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/monitoring-monthly-report">
+                <svg class="stroke-icon">
+                    <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+                </svg>
+                <svg class="fill-icon">
+                    <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+                </svg><span>Monthly Report</span></a>
             </li>
           @endif
         </ul>

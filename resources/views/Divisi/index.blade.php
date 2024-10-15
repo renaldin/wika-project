@@ -42,16 +42,25 @@
                         <tr class="ligth">
                             <th>No</th>
                             <th>Nama User</th>
+                            <th>Periode</th>
                             <th style="min-width: 100px">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-    <?php $no = 1;?>
-    @foreach ($daftarAkhlak as $item)
-        @if ($user->divisi == 'HC' || $item->id_user == $user->id_user)
+                    <?php $no = 1;?>
+                    @foreach ($daftarAkhlak as $item)
+                        @if ( $user->divisi == 'HC' || $item->id_user == $user->id_user ||  $user->role == 'Admin' || $user->role == 'Manajemen')
+                        @php
+                                $tanggal_input = $item->periode;
+                                $tanggal_input_obj = new DateTime($tanggal_input);
+                                $tanggal_sekarang = new DateTime();
+                                $interval = $tanggal_sekarang->diff($tanggal_input_obj);
+                                $selisih_bulan = $interval->format('%m');
+                        @endphp                                    
             <tr>
                 <td>{{ $no++ }}</td>
                 <td>{{ $item->nama_user }}</td>
+                <td>{{date('F Y', strtotime($item->periode))}}</td>
                 <td>
                     <div class="flex align-items-center list-user-action">
                         <a href="/detail-akhlak/{{ $item->id_akhlak }}" class="btn btn-sm btn-icon btn-primary" data-toggle="tooltip" data-placement="top" title="Detail" data-original-title="Detail">
@@ -67,7 +76,13 @@
                                 </svg>
                             </span>
                         </a>
-                        @if ($user->role == 'Divisi')
+                        <!-- <a href="/edit-akhlak/{{ $item->id_akhlak }}" class="btn btn-sm btn-icon btn-warning" data-toggle="tooltip" data-placement="top" title="Edit" data-original-title="Edit">
+                            <span class="btn-inner">
+                                <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 17.25V21h3.75l12-12.004-3.75-3.75L3 17.25z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </a> -->
                             <button type="button" class="btn btn-sm btn-icon btn-danger" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#hapus{{ $item->id_akhlak }}" data-placement="top" title="Hapus" data-original-title="Hapus">
                                 <span class="btn-inner">
                                     <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
@@ -77,7 +92,6 @@
                                     </svg>
                                 </span>
                             </button>
-                        @endif
                     </div>
                 </td>
             </tr>
@@ -112,6 +126,10 @@
                                 <!-- Jika ingin memberi pilihan user lain, tambahkan opsi lain di sini -->
                             </select>
                         </div>
+                        <div class="form-group col-md-12">
+                            <label class="form-label" for="periode">Periode</label>
+                            <input type="MONTH" class="form-control" name="periode" id="periode" placeholder="Masukkan Periode" required>
+                        </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -122,7 +140,35 @@
         </div>
     </div>
 </div>
-
+@foreach ($daftarAkhlak as $item)
+<div class="modal fade" id="edit{{$item->id_akhlak}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form action="/edit-akhlak/{{$item->id_akhlak}}" method="POST">
+                        @csrf
+                        <!-- Tambahkan input hidden untuk id_user -->
+                        <input type="hidden" name="id_user" value="{{ $item->id_user ?? Session::get('id_user') }}">  <input type="hidden" name="id_user" value="{{$item->id_user}}">
+                        <div class="form-group col-md-12">
+                            <label class="form-label" for="periode">Periode</label>
+                            <input type="MONTH" class="form-control" name="periode" id="periode" value="{{$item->periode}}" placeholder="Masukkan Periode" required>
+                        </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Keluar</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
 @foreach ($daftarAkhlak as $item)
 <div class="modal fade" id="hapus{{$item->id_akhlak}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">

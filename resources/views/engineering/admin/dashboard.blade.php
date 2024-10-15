@@ -97,7 +97,7 @@
                     <span class="f-light f-w-500 f-14">KI/KM <br>&nbsp;</span>
                     <div class="project-details">
                         <div class="project-counter">
-                            <h2 class="f-w-600">{{$akumulasiKiKm}}%</h2>
+                            <h2 class="f-w-600">{{$jumlahKIKM}}</h2>
                         </div>
                         <div class="product-sub bg-secondary-light">
                             <svg class="invoice-icon">
@@ -133,11 +133,12 @@
                         <div class="project-counter">
                             <h2 class="f-w-600">{{$jumlahProyek}}</h2>
                         </div>
-                        <div class="product-sub bg-light-light">
+                        <div class="product-sub" style="background-color: #64b5f6;">
                             <svg class="invoice-icon">
                                 <use href="{{ asset('admin/assets/svg/icon-sprite.svg#edit-2') }}"></use>
                             </svg>
                         </div>
+
                     </div>
                     <ul class="bubbles">
                         <li class="bubble"></li>
@@ -252,7 +253,8 @@
                   </div>
               </div>
               <div class="card-body">
-                  <div id="chart-productivity-rate-mixed"></div>
+              <div id="chart-productivity-rate-mixed" style="height: 400px;"></div>
+
               </div>
           </div>
         </div>

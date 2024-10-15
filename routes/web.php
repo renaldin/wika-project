@@ -29,6 +29,7 @@ use App\Http\Controllers\MonthlyReport;
 use App\Http\Controllers\MonthlyReportAdmin;
 use App\Http\Controllers\Pcp\Agenda;
 use App\Http\Controllers\Pcp\DokumenTimeline;
+use App\Http\Controllers\Keuangan\DokumenKeuangan;
 use App\Http\Controllers\Productivity;
 use App\Http\Controllers\Proyek;
 use App\Http\Controllers\Rencana;
@@ -50,6 +51,9 @@ use App\Http\Controllers\Pcp\TaskPcp;
 use App\Http\Controllers\Pcp\Timeline;
 use App\Http\Controllers\Pcp\TimelineDetail;
 use App\Http\Controllers\Pcp\TimelineSubDetail;
+use App\Http\Controllers\Keuangan\LaporanKeuangan;
+use App\Http\Controllers\Keuangan\LaporanKeuanganDetail;
+use App\Http\Controllers\Keuangan\LaporanKeuanganSubDetail;
 use App\Http\Controllers\ProyekUser;
 use Illuminate\Support\Facades\Route;
 
@@ -105,6 +109,7 @@ Route::group(['middleware' => 'revalidate'], function () {
     Route::get('/change-leader', [Akhlak::class, 'changeLeader']);
     Route::get('/dashboard-change', [Akhlak::class, 'dashboardChange']);
     Route::get('/panduan-spesifik', [Akhlak::class, 'panduanSpesifik']);
+    Route::get('/ruang-transformasi', [Akhlak::class, 'ruangTransformasi']);
     Route::get('/export-detail-akhlak/{id}', [Akhlak::class, 'exportDetailAkhlak'])->name('export-detail-akhlak');
     
 
@@ -342,6 +347,43 @@ Route::group(['middleware' => 'revalidate'], function () {
     Route::post('/hapus-dokumen-timeline/{id}', [DokumenTimeline::class, 'prosesHapus']);
 
     // ============================== end PCP =========================================================
+
+    // ============================== KEUANGAN =========================================================
+    Route::get('/daftar-laporan-keuangan', [LaporanKeuangan::class, 'index'])->name('daftar-laporan-keuangan');
+    Route::get('/detail-laporan-keuangan/{id}', [LaporanKeuangan::class, 'detail'])->name('detail-laporan-keuangan');
+    Route::get('/tambah-laporan-keuangan', [LaporanKeuangan::class, 'tambah'])->name('tambah-laporan-keuangan');
+    Route::post('/tambah-laporan-keuangan', [LaporanKeuangan::class, 'prosesTambah']);
+    Route::get('/edit-laporan-keuangan/{id}', [LaporanKeuangan::class, 'edit']);
+    Route::post('/edit-laporan-keuangan/{id}', [LaporanKeuangan::class, 'prosesEdit']);
+    Route::get('/hapus-laporan-keuangan/{id}', [LaporanKeuangan::class, 'prosesHapus']);
+    Route::get('/verifikasi-laporan-keuangan', [LaporanKeuangan::class, 'verifikasi'])->name('verifikasi-laporan-keuangan');
+    Route::get('/verifikasi-laporan-keuangan/{id}', [LaporanKeuangan::class, 'prosesVerifikasi']);
+    Route::get('/verifikasi-detail-laporan-keuangan/{id}', [LaporanKeuangan::class, 'prosesVerifikasiDetail']);
+    Route::get('/bukaverifikasi-detail-laporan-keuangan/{id}', [LaporanKeuangan::class, 'prosesBukaVerifikasiDetail']);
+    Route::get('/edit-detail-laporan-keuangan/{id}', [LaporanKeuanganDetail::class, 'edit']);
+    Route::post('/edit-detail-laporan-keuangan/{id}', [LaporanKeuanganDetail::class, 'prosesEdit']);
+    Route::get('/download-file-dokumen-laporan-keuangan/{id}', [LaporanKeuanganDetail::class, 'downloadFile']);
+    Route::get('/proses-verifikasi-laporan-keuangan-detail/{id}', [LaporanKeuanganDetail::class, 'prosesVerifikasi'])->name('proses-verifikasi-laporan-keuangan-detail');
+    Route::get('/download-file-laporan-keuangan-detail/{id}', [LaporanKeuanganDetail::class, 'downloadFile'])->name('download-file-laporan-keuangan-detail');
+    Route::get('/edit-laporan-keuangan-detail/{id}', [LaporanKeuanganDetail::class, 'edit'])->name('edit-laporan-keuangan-detail');
+
+
+    Route::get('/sub-detail-laporan-keuangan/{id_laporan_keuangan_details}', [LaporanKeuanganSubDetail::class, 'index']);
+    Route::get('/tambah-laporan-keuangan-sub-detail/{id_laporan_keuangan_details}', [LaporanKeuanganSubDetail::class, 'tambah']);
+    Route::post('/tambah-laporan-keuangan-sub-detail/{id_laporan_keuangan_details}', [LaporanKeuanganSubDetail::class, 'prosesTambah']);
+    Route::get('/edit-laporan-keuangan-sub-detail/{id_laporan_keuangan_details}/{id_laporan_keuangan_sub_details}', [LaporanKeuanganSubDetail::class, 'edit']);
+    Route::post('/edit-laporan-keuangan-sub-detail/{id_laporan_keuangan_details}/{id_laporan_keuangan_sub_details}', [LaporanKeuanganSubDetail::class, 'prosesEdit']);
+    Route::get('/hapus-laporan-keuangan-sub-detail/{id_laporan_keuangan_details}', [LaporanKeuanganSubDetail::class, 'prosesHapus']);
+    Route::get('/download-file-sub-dokumen-laporan-keuangan/{id}', [LaporanKeuanganSubDetail::class, 'downloadFile']);
+
+    Route::get('/daftar-dokumen-keuangan', [DokumenKeuangan::class, 'index'])->name('daftar-dokumen-keuangan');
+    Route::get('/detail-dokumen-keuangan/{id}', [DokumenKeuangan::class, 'detail'])->name('detail-dokumen-keuangan');
+    Route::get('/tambah-dokumen-keuangan', [DokumenKeuangan::class, 'tambah'])->name('tambah-dokumen-keuangan');
+    Route::post('/tambah-dokumen-keuangan', [DokumenKeuangan::class, 'prosesTambah']);
+    Route::get('/edit-dokumen-keuangan/{id}', [DokumenKeuangan::class, 'edit']);
+    Route::post('/edit-dokumen-keuangan/{id}', [DokumenKeuangan::class, 'prosesEdit']);
+    Route::post('/hapus-dokumen-keuangan/{id}', [DokumenKeuangan::class, 'prosesHapus']);
+ // ============================== END OF KEUANGAN =========================================================
 
 
     Route::get('/validasi-monthly-report', [MonthlyReport::class, 'validasi'])->name('validasi-monthly-report');

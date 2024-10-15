@@ -42,17 +42,20 @@ class ModelAkhlak extends Model
             ->first();
     }
 
-    public function checkData($id_user)
+    public function checkData($id_user, $periode)
     {
         return DB::table('akhlak')
             ->where('id_user', $id_user)
+            ->where('periode', $periode)
             ->first();
     }
 
     public function tambah($data)
     {
-        DB::table('akhlak')->insert($data);
+        // Pastikan data yang diterima berisi 'id_user' dan 'periode'
+        return DB::table('akhlak')->insert($data);
     }
+    
 
     public function edit($data)
     {

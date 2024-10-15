@@ -55,6 +55,15 @@
                                     </div>
                                 @enderror
                             </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="link">Link Dokumen</label>
+                                <input type="text" class="form-control @error('link') is-invalid @enderror" @if($form == 'Tambah') value="{{old('link')}}" @else value="{{$detail->link}}" @endif id="link" name="link" @if($form == 'Detail' || Session()->get('role') == 'Manajemen') disabled @endif placeholder="Masukkan Link Dokumen" >
+                                @error('link')
+                                    <div class="invalid-feedback">
+                                    {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
                             @if ($form == 'Edit' && Session()->get('role') == 'Manajemen')
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="item_task">Komentar</label>

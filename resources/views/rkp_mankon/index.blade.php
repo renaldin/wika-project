@@ -58,6 +58,7 @@
                                 <th class="text-center text-wrap">Review RKP Tahap 6</th>
                                 <th>File</th>
                                 <th>Review Hasil</th>
+                                <th>Komentar</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -156,6 +157,7 @@
                                             Belum Ada Review Hasil
                                         @endif
                                     </td>
+                                    <td>{{$item->note}}</td>
                                 </tr>
                             @endforeach
                         </tbody>

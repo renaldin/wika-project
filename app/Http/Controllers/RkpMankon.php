@@ -111,6 +111,7 @@ class RkpMankon extends Controller
         ], [
             'id_proyek.required'    => 'Nama proyek harus diisi!',
             // 'kode_spk.required'     => 'Kode SPK harus diisi!'
+            
         ]);
 
         $data = [

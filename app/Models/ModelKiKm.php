@@ -72,4 +72,9 @@ class ModelKiKm extends Model
 
         return $data;
     }
+
+    public function jumlahKIKM()
+    {
+        return DB::table('ki_km')->count();
+    }
 }
