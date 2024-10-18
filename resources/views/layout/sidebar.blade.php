@@ -606,7 +606,7 @@
                       <h6>General</h6>
                   </div>
               </li>
-              <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="">
+              <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/dashboard">
                 <svg class="stroke-icon">
                   <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-home') }}"></use>
                 </svg>
@@ -732,6 +732,30 @@
               <svg class="fill-icon">
                 <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
               </svg><span>Dokumen Laporan Keuangan</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/daftar-dokumen-akuntansi">
+              <svg class="stroke-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+              </svg>
+              <svg class="fill-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+              </svg><span>Dokumen Laporan Keuangan</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/daftar-dokumen-pajak">
+              <svg class="stroke-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+              </svg>
+              <svg class="fill-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+              </svg><span>Dokumen Laporan Pajak</span></a>
+            </li>
+            <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/daftar-dokumen-proyek">
+              <svg class="stroke-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#stroke-board') }}"></use>
+              </svg>
+              <svg class="fill-icon">
+                <use href="{{ asset('admin/assets/svg/icon-sprite.svg#fill-board') }}"></use>
+              </svg><span>Dokumen Proyek</span></a>
             </li>
             <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title link-nav" href="/daftar-laporan-keuangan">
               <svg class="stroke-icon">

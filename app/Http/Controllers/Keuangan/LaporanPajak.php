@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Keuangan;
 
 use App\Http\Controllers\Controller;
-use App\Models\DokumenKeuangans;
+use App\Models\DokumenPajaks;
 use App\Models\ModelUser;
-use App\Models\LaporanKeuangans;
+use App\Models\LaporanPajaks;
 use App\Models\ModelProyek;
 use App\Models\ProyekUsers;
-use App\Models\LaporanKeuanganDetails;
-use App\Models\LaporanKeuanganSubDetails;
+use App\Models\LaporanPajakDetails;
+use App\Models\LaporanPajakSubDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log; // Pastikan ini ada
 
-class LaporanKeuangan extends Controller
+class LaporanPajak extends Controller
 {
     private $ModelUser, $ModelProyek, $public_path;
 
@@ -23,7 +23,7 @@ class LaporanKeuangan extends Controller
     {
         $this->ModelUser = new ModelUser();
         $this->ModelProyek = new ModelProyek();
-        $this->public_path = 'file_laporan_keuangan';
+        $this->public_path = 'file_laporan_pajak';
     }
 
     public function index()
@@ -31,37 +31,37 @@ class LaporanKeuangan extends Controller
         if (!Session::get('role')) {
             return redirect()->route('login');
         }
+        
+        $proyekUser = ProyekUsers::where('id_user', Session::get('id_user'))->get();
+        $idProyek = [];
+        foreach ($proyekUser as $item) {
+            $idProyek[] = $item->id_proyek;
+        }
     
-        // Mendapatkan semua ID proyek jika pengguna adalah Head Office
         if (Session::get('role') == 'Tim Proyek') {
-            $proyekUser = ProyekUsers::where('id_user', Session::get('id_user'))->get();
-            $idProyek = $proyekUser->pluck('id_proyek')->toArray(); // Menggunakan pluck untuk efisiensi
-    
-            $daftarLaporanKeuangan = LaporanKeuangans::with('proyek')
+            $daftarLaporanPajak = LaporanPajaks::with('proyek') // Memastikan ini benar
                 ->whereIn('id_proyek', $idProyek)
                 ->limit(400)
                 ->get();
         } elseif (Session::get('role') == 'Head Office') {
-            // Menampilkan semua laporan keuangan untuk Head Office tanpa filter ID proyek
-            $daftarLaporanKeuangan = LaporanKeuangans::with('proyek')
-                ->limit(400) // Mengambil semua laporan keuangan
+            $daftarLaporanPajak = LaporanPajaks::with('proyek') // Memastikan ini benar
+                ->where('verifikasi_pajak', 'Sudah Disetujui')
+                ->where('id_verifikator', Session::get('id_user'))
+                ->limit(400)
                 ->get();
-        } else {
-            $daftarLaporanKeuangan = collect(); // Menggunakan koleksi kosong jika role tidak dikenali
         }
     
         $data = [
-            'title' => 'Data Laporan Keuangan',
-            'subTitle' => 'Daftar Laporan Keuangan',
-            'daftarLaporanKeuangan' => $daftarLaporanKeuangan,
+            'title' => 'Data Laporan Pajak',
+            'subTitle' => 'Daftar Laporan Pajak',
+            'daftarLaporanPajak' => $daftarLaporanPajak,
             'user' => $this->ModelUser->detail(Session::get('id_user')),
         ];
     
-        return view('keuangan.laporanKeuangan.index', $data);
+        return view('keuangan.laporanPajak.index', $data);
     }
     
-    
-    public function detail($id_laporan_keuangan)
+    public function detail($id_laporan_pajak)
     {
         // Mengecek apakah pengguna telah login
         if (!Session()->get('role')) {
@@ -76,33 +76,33 @@ class LaporanKeuangan extends Controller
         }
     
         // Mengambil detail laporan keuangan berdasarkan ID
-        $laporanKeuanganDetail = LaporanKeuanganDetails::with(['dokumen', 'laporanKeuangan'])
-            ->withCount(['laporanKeuanganSubDetails' => function ($query) use ($id_laporan_keuangan) {
-                $query->where('id_laporan_keuangan', $id_laporan_keuangan);
+        $laporanPajakDetail = LaporanPajakDetails::with(['dokumen', 'laporanPajak'])
+            ->withCount(['laporanPajakSubDetails' => function ($query) use ($id_laporan_pajak) {
+                $query->where('id_laporan_pajak', $id_laporan_pajak);
             }])
-            ->where('id_laporan_keuangan', $id_laporan_keuangan)
+            ->where('id_laporan_pajak', $id_laporan_pajak)
             ->get();
     
         // Mengambil laporan keuangan dengan proyek terkait
-        $laporanKeuangan = LaporanKeuangans::with('proyek')->find($id_laporan_keuangan);
+        $laporanPajak = LaporanPajaks::with('proyek')->find($id_laporan_pajak);
         
         // Mengambil detail pengguna yang sedang login
         $user = $this->ModelUser->detail(Session()->get('id_user'));
      
         // Mengatur data untuk view
         $data = [
-            'title' => 'Data Laporan Keuangan',
-            'subTitle' => 'Detail Laporan Keuangan',
+            'title' => 'Data Laporan Pajak',
+            'subTitle' => 'Detail Laporan Pajak',
             'form' => 'Detail',
             'daftarProyek' => $dataProyekByUser,
-            'laporanKeuanganDetail' => $laporanKeuanganDetail,
-            'laporanKeuangan' => $laporanKeuangan,
+            'laporanPajakDetail' => $laporanPajakDetail,
+            'laporanPajak' => $laporanPajak,
             'user' => $user,
-            'detail' => $laporanKeuangan // Pastikan variabel detail ada dan diisi
+            'detail' => $laporanPajak// Pastikan variabel detail ada dan diisi
         ];
     
         // Mengembalikan view dengan data yang telah diambil
-        return view('keuangan.laporanKeuangan.edit', $data);
+        return view('keuangan.laporanPajak.edit', $data);
     }
     
 
@@ -120,15 +120,15 @@ class LaporanKeuangan extends Controller
         }
 
         $data = [
-            'title'             => 'Data Laporan Keuangan',
-            'subTitle'          => 'Tambah Laporan Keuangan',
+            'title'             => 'Data Laporan Pajak',
+            'subTitle'          => 'Tambah Laporan Pajak',
             'form'              => 'Tambah',
-            'dokumenKeuangan'   => DokumenKeuangans::get(),
+            'dokumenPajak'   => DokumenPajaks::get(),
             'daftarProyek'      => $dataProyekByUser,
             'user'              => $this->ModelUser->detail(Session()->get('id_user')),
         ];
 
-        return view('keuangan/laporanKeuangan.form', $data);
+        return view('keuangan/laporanPajak.form', $data);
     }
 
     public function prosesTambah(Request $request)
@@ -142,28 +142,28 @@ class LaporanKeuangan extends Controller
 
         try {
             // Buat objek laporan keuangan baru
-            $laporanKeuangan = new LaporanKeuangans();
-            $laporanKeuangan->id_proyek = $validatedData['id_proyek']; // Menyimpan id_proyek yang valid
-            $laporanKeuangan->verifikasi_keuangan = 'Belum Disetujui'; // Misalnya status default
+            $laporanPajak = new LaporanPajaks();
+            $laporanPajak->id_proyek = $validatedData['id_proyek']; // Menyimpan id_proyek yang valid
+            $laporanPajak->verifikasi_pajak = 'Belum Disetujui'; // Misalnya status default
 
             // Log informasi sebelum menyimpan
-            Log::info('Menyimpan laporan keuangan:', [
-                'id_proyek' => $laporanKeuangan->id_proyek,
+            Log::info('Menyimpan laporan pajak:', [
+                'id_proyek' => $laporanPajak->id_proyek,
             ]);
 
             // Simpan laporan keuangan
-            $laporanKeuangan->save();
+            $laporanPajak->save();
 
             DB::commit(); // Komit transaksi jika berhasil
-            return redirect('/daftar-laporan-keuangan')->with('success', 'Laporan keuangan berhasil ditambahkan!');
+            return redirect('/daftar-laporan-pajak')->with('success', 'Laporan pajak berhasil ditambahkan!');
         } catch (\Exception $e) {
             DB::rollBack(); // Rollback jika terjadi kesalahan
-            Log::error('Kesalahan saat menyimpan laporan keuangan: ' . $e->getMessage());
+            Log::error('Kesalahan saat menyimpan laporan pajak: ' . $e->getMessage());
             return back()->with('fail', 'Terjadi kesalahan sistem!'); 
         }
     }
 
-    public function edit($id_laporan_keuangan)
+    public function edit($id_laporan_akuntansi)
     {
         if (!Session()->get('role')) {
             return redirect()->route('login');
@@ -176,34 +176,34 @@ class LaporanKeuangan extends Controller
         }
 
         $data = [
-            'title'             => 'Data Laporan Keuangan',
-            'subTitle'          => 'Edit Laporan Keuangan',
+            'title'             => 'Data Laporan Pajak',
+            'subTitle'          => 'Edit Laporan Pajak',
             'form'              => 'Edit',
             'daftarProyek'      => $dataProyekByUser,
-            'LaporanKeuanganDetail'    => LaporanKeuanganDetails::with(['dokumen', 'LaporanKeuangan'])
-                                    ->withCount(['LaporanKeuanganSubDetails' => function ($query) use ($id_laporan_keuangan) {
-                                        $query->where('id_laporan_keuangans', $id_laporan_keuangan);
+            'LaporanPajakDetail'    => LaporanPajakDetails::with(['dokumen', 'LaporanPajak'])
+                                    ->withCount(['LaporanPajakSubDetails' => function ($query) use ($id_laporan_pajak) {
+                                        $query->where('id_laporan_pajaks', $id_laporan_pajak);
                                     }])
-                                    ->where('id_laporan_keuangans', $id_laporan_keuangan)
+                                    ->where('id_laporan_pajaks', $id_laporan_pajak)
                                     ->get(),
-            'detail'            => LaporanKeuangans::with('proyek')->find($id_laporan_keuangan),
+            'detail'            => LaporanPajaks::with('proyek')->find($id_laporan_pajak),
             'user'              => $this->ModelUser->detail(Session()->get('id_user')),
         ];
         
-        return view('keuangan/laporanKeuangan.edit', $data);
+        return view('keuangan/laporanPajak.edit', $data);
     }
     
-    public function prosesHapus($id_laporan_keuangan)
+    public function prosesHapus($id_laporan_pajak)
     {
         if (!Session::get('role')) {
             return redirect()->route('login');
         }
 
-        $laporanKeuangan = LaporanKeuangans::find($id_laporan_keuangan);
-        $laporanKeuangan->delete();
+        $LaporanPajak = LaporanPajak::find($id_laporan_pajak);
+        $LaporanPajak->delete();
 
-        $laporanKeuanganDetail = LaporanKeuanganDetails::where('id_laporan_keuangan', $id_laporan_keuangan)->get();
-        foreach ($laporanKeuanganDetail as $item) {
+        $LaporanPajakDetails = LaporanPajakDetails::where('id_laporan_pajak', $id_laporan_pajak)->get();
+        foreach ($LaporanPajakDetails as $item) {
             if ($item->file_dokumen != "") {
                 unlink(public_path($this->public_path) . '/' . $item->file_dokumen);
             }
@@ -219,42 +219,42 @@ class LaporanKeuangan extends Controller
             return redirect()->route('login');
         }
 
-        $daftarLaporanKeuangan = LaporanKeuangans::with('proyek')->limit(400)->get();
+        $daftarLaporanPajak = LaporanPajak::with('proyek')->limit(400)->get();
 
         $data = [
-            'title' => 'Data Laporan Keuangan',
-            'subTitle' => 'Verifikasi Laporan Keuangan',
-            'daftarLaporanKeuangan' => $daftarLaporanKeuangan,
+            'title' => 'Data Laporan Pajak',
+            'subTitle' => 'Verifikasi Laporan Pajak',
+            'daftarLaporanPajak' => $daftarLaporanPajak,
             'user' => $this->ModelUser->detail(Session::get('id_user')),
         ];
 
-        return view('keuangan.laporanKeuangan.verifikasi', $data);
+        return view('keuangan.laporanPajak.verifikasi', $data);
     }
 
-    public function prosesVerifikasi($id_laporan_keuangan)
+    public function prosesVerifikasi($id_laporan_pajak)
     {
         if (!Session::get('role')) {
             return redirect()->route('login');
         }
 
-        $laporanKeuangan = LaporanKeuangans::find($id_laporan_keuangan);
-        $laporanKeuangan->verifikasi_keuangan = 'Sudah Disetujui';
-        $laporanKeuangan->id_verifikator = Session::get('id_user');
-        $laporanKeuangan->save();
+        $LaporanPajak = LaporanAkuntansi::find($id_laporan_pajak);
+        $LaporanPajak->verifikasi_akuntansi = 'Sudah Disetujui';
+        $LaporanPajak->id_verifikator = Session::get('id_user');
+        $LaporanPajak->save();
 
         return back()->with('success', 'Data berhasil diverifikasi!');
     }
 
-    public function prosesBukaVerifikasiDetail($id_laporan_keuangan)
+    public function prosesBukaVerifikasiDetail($id_laporan_pajak)
     {
         if (!Session()->get('role')) {
             return redirect()->route('login');
         }
         
-        $laporanKeuangan = LaporanKeuanganDetails::find($id_laporan_keuangan);
-        $laporanKeuangan->status = 0;
-        $laporanKeuangan->id_verifikator = Session()->get('id_user');
-        $laporanKeuangan->save();
+        $LaporanPajak = LaporanPajakDetails::find($id_laporan_pajak);
+        $LaporanPajak->status = 0;
+        $LaporanPajak->id_verifikator = Session()->get('id_user');
+        $LaporanPajak->save();
         
         return back()->with('success', 'Data berhasil diverifikasi!');
     }

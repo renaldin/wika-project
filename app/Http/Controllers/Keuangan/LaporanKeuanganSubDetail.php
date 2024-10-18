@@ -157,17 +157,23 @@ class LaporanKeuanganSubDetail extends Controller
         if (!Session()->get('role')) {
             return redirect()->route('login');
         }
-
+    
         $LaporanKeuanganSubDetail = LaporanKeuanganSubDetails::find($id_laporan_keuangan_sub_details);
         
-        if ($LaporanKeuanganSubDetail->file_dokumen_keuangan <> "") {
+        // Cek jika data ditemukan
+        if (!$LaporanKeuanganSubDetail) {
+            return back()->with('error', 'Data tidak ditemukan!');
+        }
+    
+        if ($LaporanKeuanganSubDetail->file_dokumen_keuangan !== "") {
             unlink(public_path($this->public_path) . '/' . $LaporanKeuanganSubDetail->file_dokumen_keuangan);
         }
-
+    
         $LaporanKeuanganSubDetail->delete();
-
-        return back()->with('success', 'Data berhasil dihapus !');
+    
+        return back()->with('success', 'Data berhasil dihapus!');
     }
+    
 
     public function downloadFile($id_laporan_keuangan_sub_details)
     {

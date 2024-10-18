@@ -21,7 +21,7 @@
                     <br>
                     <div class="row">
                         <div class="col-md-12">
-                            <a href="/detail-laporan-keuangan/{{$detail->id_laporan_keuangan}}" class="btn btn-secondary">Kembali</a>
+                            <a href="/detail-laporan-pajak/{{$detail->id_laporan_pajak}}" class="btn btn-secondary">Kembali</a>
                         </div>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                 <div class="row">
                     @if ($user->role == 'Tim Proyek')
                         <div class="col-lg-8 mb-1">
-                            <a href="/tambah-laporan-keuangan-sub-detail/{{$detail->id}}" class="btn btn-primary mb-4">Tambah</a>
+                            <a href="/tambah-laporan-pajak-sub-detail/{{$detail->id}}" class="btn btn-primary mb-4">Tambah</a>
                         </div>
                     @endif
                     @if (session('success'))
@@ -88,10 +88,10 @@
                         @foreach ($daftar as $item)
                             <tr>
                                 <td>{{$no++}}</td>
-                                <td>{{$item->nama_dokumen_keuangan}}</td>
-                                <td>{{$item->tanggal_dokumen_keuangan}}</td>
+                                <td>{{$item->nama_dokumen_pajak}}</td>
+                                <td>{{$item->tanggal_dokumen_pajak}}</td>
                                 <td>
-                                    <a href="/download-file-sub-dokumen-laporan-keuangan/{{$item->id}}" class="btn btn-sm btn-primary">
+                                    <a href="/download-file-sub-dokumen-laporan-pajak/{{$item->id}}" class="btn btn-sm btn-primary">
                                         <svg class="icon-32" width="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">                                    <path d="M7.38948 8.98403H6.45648C4.42148 8.98403 2.77148 10.634 2.77148 12.669V17.544C2.77148 19.578 4.42148 21.228 6.45648 21.228H17.5865C19.6215 21.228 21.2715 19.578 21.2715 17.544V12.659C21.2715 10.63 19.6265 8.98403 17.5975 8.98403L16.6545 8.98403" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>                                    <path d="M12.0215 2.19044V14.2314" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>                                    <path d="M9.10645 5.1189L12.0214 2.1909L14.9374 5.1189" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>                                </svg>                            
                                         File
                                     </a>
@@ -100,7 +100,7 @@
                                     @if ($user->role == 'Tim Proyek')
                                         <td>
                                             <div class="flex align-items-center list-user-action">
-                                                <a href="/edit-laporan-keuangan-sub-detail/{{$detail->id}}/{{$item->id}}" class="btn btn-sm btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Edit" data-original-title="Edit">
+                                                <a href="/edit-laporan-pajak-sub-detail/{{$detail->id}}/{{$item->id}}" class="btn btn-sm btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Edit" data-original-title="Edit">
                                                     <span class="btn-inner">
                                                         <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -115,7 +115,7 @@
     data-placement="top" 
     title="Hapus" 
     data-original-title="Hapus" 
-    data-href="/hapus-laporan-keuangan-sub-detail/{{$item->id}}" 
+    data-href="/hapus-laporan-pajak-sub-detail/{{$item->id}}" 
     data-content="Apakah Anda yakin akan hapus data ini?" 
     onclick="confirmDelete(this)">
     <span class="btn-inner">
