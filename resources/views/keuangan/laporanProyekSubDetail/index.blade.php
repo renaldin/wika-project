@@ -21,7 +21,7 @@
                     <br>
                     <div class="row">
                         <div class="col-md-12">
-                            <a href="/edit-laporan-proyek/{{$detail->id_laporan_proyek}}" class="btn btn-secondary">Kembali</a>
+                            <a href="/detail-laporan-proyek/{{$detail->id_laporan_proyek}}" class="btn btn-secondary">Kembali</a>
                         </div>
                     </div>
                 </div>

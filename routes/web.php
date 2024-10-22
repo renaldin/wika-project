@@ -370,8 +370,8 @@ Route::group(['middleware' => 'revalidate'], function () {
     Route::get('/hapus-laporan-keuangan/{id}', [LaporanKeuangan::class, 'prosesHapus']);
     Route::get('/verifikasi-laporan-keuangan', [LaporanKeuangan::class, 'verifikasi'])->name('verifikasi-laporan-keuangan');
     Route::get('/verifikasi-laporan-keuangan/{id}', [LaporanKeuangan::class, 'prosesVerifikasi']);
-    Route::get('/verifikasi-detail-laporan-keuangan/{id}', [LaporanKeuangan::class, 'prosesVerifikasiDetail']);
-    Route::get('/bukaverifikasi-detail-laporan-keuangan/{id}', [LaporanKeuangan::class, 'prosesBukaVerifikasiDetail']);
+    Route::post('/verifikasi-detail-laporan-keuangan/{id}', [LaporanKeuangan::class, 'prosesVerifikasiDetail']);
+    Route::post('/bukaverifikasi-detail-laporan-keuangan/{id}', [LaporanKeuangan::class, 'prosesBukaVerifikasiDetail']);
     Route::get('/edit-detail-laporan-keuangan/{id}', [LaporanKeuanganDetail::class, 'edit']);
     Route::post('/edit-detail-laporan-keuangan/{id}', [LaporanKeuanganDetail::class, 'prosesEdit']);
     Route::get('/download-file-dokumen-laporan-keuangan/{id}', [LaporanKeuanganDetail::class, 'downloadFile']);
@@ -407,8 +407,8 @@ Route::group(['middleware' => 'revalidate'], function () {
   Route::get('/hapus-laporan-akuntansi/{id}', [LaporanAkuntansi::class, 'prosesHapus']);
   Route::get('/verifikasi-laporan-akuntansi', [LaporanAkuntansi::class, 'verifikasi'])->name('verifikasi-laporan-akuntansi');
   Route::get('/verifikasi-laporan-akuntansi/{id}', [LaporanAkuntansi::class, 'prosesVerifikasi']);
-  Route::get('/verifikasi-detail-laporan-akuntansi/{id}', [LaporanAkuntansi::class, 'prosesVerifikasiDetail']);
-  Route::get('/bukaverifikasi-detail-laporan-akuntansi/{id}', [LaporanAkuntansi::class, 'prosesBukaVerifikasiDetail']);
+  Route::post('/verifikasi-detail-laporan-akuntansi/{id}', [LaporanAkuntansi::class, 'prosesVerifikasiDetail']);
+  Route::post('/bukaverifikasi-detail-laporan-akuntansi/{id}', [LaporanAkuntansi::class, 'prosesBukaVerifikasiDetail']);
   Route::get('/edit-detail-laporan-akuntansi/{id}', [LaporanAkuntansiDetail::class, 'edit']);
   Route::post('/edit-detail-laporan-akuntansi/{id}', [LaporanAkuntansiDetail::class, 'prosesEdit']);
   Route::get('/download-file-dokumen-laporan-akuntansi/{id}', [LaporanAkuntansiDetail::class, 'downloadFile']);
@@ -443,8 +443,8 @@ Route::group(['middleware' => 'revalidate'], function () {
  Route::get('/hapus-laporan-pajak/{id}', [LaporanPajak::class, 'prosesHapus']);
  Route::get('/verifikasi-laporan-pajak', [LaporanPajak::class, 'verifikasi'])->name('verifikasi-laporan-pajak');
  Route::get('/verifikasi-laporan-pajak/{id}', [LaporanPajak::class, 'prosesVerifikasi']);
- Route::get('/verifikasi-detail-laporan-pajak/{id}', [LaporanPajak::class, 'prosesVerifikasiDetail']);
- Route::get('/bukaverifikasi-detail-laporan-pajak/{id}', [LaporanPajak::class, 'prosesBukaVerifikasiDetail']);
+ Route::post('/verifikasi-detail-laporan-pajak/{id}', [LaporanPajak::class, 'prosesVerifikasiDetail']);
+ Route::post('/bukaverifikasi-detail-laporan-pajak/{id}', [LaporanPajak::class, 'prosesBukaVerifikasiDetail']);
  Route::get('/edit-detail-laporan-pajak/{id}', [LaporanPajakDetail::class, 'edit']);
  Route::post('/edit-detail-laporan-pajak/{id}', [LaporanPajakDetail::class, 'prosesEdit']);
  Route::get('/download-file-dokumen-laporan-pajak/{id}', [LaporanPajakDetail::class, 'downloadFile']);
@@ -479,8 +479,8 @@ Route::group(['middleware' => 'revalidate'], function () {
  Route::get('/hapus-laporan-proyek/{id}', [LaporanProyek::class, 'prosesHapus']);
  Route::get('/verifikasi-laporan-proyek', [LaporanProyek::class, 'verifikasi'])->name('verifikasi-laporan-proyek');
  Route::get('/verifikasi-laporan-proyek/{id}', [LaporanProyek::class, 'prosesVerifikasi']);
- Route::get('/verifikasi-detail-laporan-proyek/{id}', [LaporanProyek::class, 'prosesVerifikasiDetail']);
- Route::get('/bukaverifikasi-detail-laporan-proyek/{id}', [LaporanProyek::class, 'prosesBukaVerifikasiDetail']);
+ Route::post('/verifikasi-detail-laporan-proyek/{id}', [LaporanProyek::class, 'prosesVerifikasiDetail']);
+ Route::post('/bukaverifikasi-detail-laporan-proyek/{id}', [LaporanProyek::class, 'prosesBukaVerifikasiDetail']);
  Route::get('/edit-detail-laporan-proyek/{id}', [LaporanProyekDetail::class, 'edit']);
  Route::post('/edit-detail-laporan-proyek/{id}', [LaporanProyekDetail::class, 'prosesEdit']);
  Route::get('/download-file-dokumen-laporan-proyek/{id}', [LaporanProyekDetail::class, 'downloadFile']);

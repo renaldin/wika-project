@@ -93,98 +93,98 @@ class LaporanProyekSubDetail extends Controller
     public function detail($id)
     {
         // Ambil data laporan akuntansi detail berdasarkan ID
-        $laporanPajakDetails = LaporanPajakDetails::find($id);
+        $laporanProyekDetails = LaporanProyekDetails::find($id);
 
         // Cek apakah data ditemukan
-        if (!$laporanPajakDetails) {
+        if (!$laporanProyekDetails) {
             return redirect()->back()->with('error', 'Data tidak ditemukan.');
         }
 
         // Ambil sub detail menggunakan metode yang benar
-        $subDetails = $laporanPajakDetails->laporanPajakSubDetails;
+        $subDetails = $laporanProyekDetails->laporanProyekSubDetails;
 
         // Kirim data ke view
-        return view('Pajak.detail', compact('laporanAkuntansiDetails', 'subDetails'));
+        return view('Proyek.detail', compact('laporanProyekDetails', 'subDetails'));
     }
 
-    public function edit($id_laporan_pajak_details, $id_laporan_pajak_sub_details)
+    public function edit($id_laporan_proyek_details, $id_laporan_proyek_sub_details)
     {
         if (!Session()->get('role')) {
             return redirect()->route('login');
         }
 
         $data = [
-            'title'             => 'Data Laporan Pajak',
-            'subTitle'          => 'Edit Sub Detail Laporan pajak',
+            'title'             => 'Data Laporan Proyek',
+            'subTitle'          => 'Edit Sub Detail Laporan proyek',
             'form'              => 'Edit',
-            'LaporanPajakDetail'    => LaporanPajakDetails::with('dokumen', 'laporanAkuntansi')->find($id_laporan_pajak_details),
-            'detail'            => LaporanPajakSubDetails::with('LaporanAkuntansiDetail')->find($id_laporan_pajak_sub_details),
+            'LaporanProyekDetail'    => LaporanProyekDetails::with('dokumen', 'laporanProyek')->find($id_laporan_proyek_details),
+            'detail'            => LaporanProyekSubDetails::with('LaporanProyekDetail')->find($id_laporan_proyek_sub_details),
             'user'              => $this->ModelUser->detail(Session()->get('id_user')),
         ];
         
-        return view('keuangan/laporanPajakSubDetail.form', $data);
+        return view('keuangan/laporanProyekSubDetail.form', $data);
     }
 
     
 
-    public function prosesEdit(Request $request, $id_laporan_pajak_details, $id_laporan_pajak_sub_details)
+    public function prosesEdit(Request $request, $id_laporan_proyek_details, $id_laporan_proyek_sub_details)
     {
         if (!Session()->get('role')) {
             return redirect()->route('login');
         }
 
-        $LaporaPajakDetail = LaporanPajakSubDetails::find($id_laporan_pajak_sub_details);
-        $LaporanPajakDetail->nama_dokumen_pajak = $request->nama_dokumen_pajak;
-        $LaporanPajakDetail->tanggal_dokumen_pajak = $request->tanggal_dokumen_pajak;
+        $LaporaProyekDetail = LaporanProyekSubDetails::find($id_laporan_proyek_sub_details);
+        $LaporanProyekDetail->nama_dokumen_proyek = $request->nama_dokumen_proyek;
+        $LaporanProyekDetail->tanggal_dokumen_proyek = $request->tanggal_dokumen_proyek;
 
-        if ($request->file_dokumen_pajak <> "") {
-            if ($LaporanPajakDetail->file_dokumen_pajak <> "") {
-                unlink(public_path($this->public_path) . '/' . $LaporanPajakDetail->file_dokumen_pajak);
+        if ($request->file_dokumen_proyek <> "") {
+            if ($LaporanProyekDetail->file_dokumen_proyek <> "") {
+                unlink(public_path($this->public_path) . '/' . $LaporanProyekDetail->file_dokumen_proyek);
             }
 
-            $file = $request->file_dokumen_pajak;
-            $fileName = date('mdYHis') . ' ' . $request->nama_dokumen_pajak . '.' . $file->extension();
+            $file = $request->file_dokumen_proyek;
+            $fileName = date('mdYHis') . ' ' . $request->nama_dokumen_proyek . '.' . $file->extension();
             $file->move(public_path($this->public_path), $fileName);
-            $LaporanPajakDetail->file_dokumen_Pajak = $fileName;
+            $LaporanProyekDetail->file_dokumen_Proyek = $fileName;
         }
 
-        $LaporanPajakDetail->save();
+        $LaporanProyekDetail->save();
 
-        return redirect("/sub-detail-laporan-pajak/$id_laporan_pajak_details")->with('success', 'Data berhasil diedit!');
+        return redirect("/sub-detail-laporan-proyek/$id_laporan_proyek_details")->with('success', 'Data berhasil diedit!');
     }
 
-    public function prosesHapus($id_laporan_pajak_sub_details)
+    public function prosesHapus($id_laporan_proyek_sub_details)
     {
         if (!Session()->get('role')) {
             return redirect()->route('login');
         }
     
-        $LaporanPajakSubDetail = LaporanPajakSubDetails::find($id_laporan_pajak_sub_details);
+        $LaporanProyekSubDetail = LaporanProyekSubDetails::find($id_laporan_proyek_sub_details);
         
         // Cek jika data ditemukan
-        if (!$LaporanPajakSubDetail) {
+        if (!$LaporanProyekSubDetail) {
             return back()->with('error', 'Data tidak ditemukan!');
         }
     
-        if ($LaporanPajakSubDetail->file_dokumen_pajak !== "") {
-            unlink(public_path($this->public_path) . '/' . $LaporanPajakSubDetail->file_dokumen_pajak);
+        if ($LaporanProyekSubDetail->file_dokumen_proyek !== "") {
+            unlink(public_path($this->public_path) . '/' . $LaporanProyekSubDetail->file_dokumen_proyek);
         }
     
-        $LaporanPajakSubDetail->delete();
+        $LaporanProyekSubDetail->delete();
     
         return back()->with('success', 'Data berhasil dihapus!');
     }
     
 
-    public function downloadFile($id_laporan_pajak_sub_details)
+    public function downloadFile($id_laporan_proyek_sub_details)
     {
         if (!Session()->get('role')) {
             return redirect()->route('login');
         }
 
-        $data = LaporanPajakSubDetails::find($id_laporan_pajak_sub_details);
+        $data = LaporanProyekSubDetails::find($id_laporan_proyek_sub_details);
 
-        $fileName = $data->file_dokumen_pajak;
+        $fileName = $data->file_dokumen_proyek;
         return response()->download(public_path($this->public_path) . '/' . $fileName);
     }
 

@@ -45,8 +45,6 @@ class LaporanAkuntansi extends Controller
                 ->get();
         } elseif (Session::get('role') == 'Head Office') {
             $daftarLaporanAkuntansi = LaporanAkuntansis::with('proyek') // Memastikan ini benar
-                ->where('verifikasi_akuntansi', 'Sudah Disetujui')
-                ->where('id_verifikator', Session::get('id_user'))
                 ->limit(400)
                 ->get();
         }
@@ -237,11 +235,25 @@ class LaporanAkuntansi extends Controller
             return redirect()->route('login');
         }
 
-        $LaporanAkuntansi = LaporanAkuntansi::find($id_laporan_akuntansi);
-        $LaporanAkuntansi->verifikasi_akuntansi = 'Sudah Disetujui';
-        $LaporanAkuntansi->id_verifikator = Session::get('id_user');
-        $LaporanAkuntansi->save();
+        $laporanAkuntansi = LaporanAkuntansis::find($id_laporan_akuntansi);
+        $laporanAkuntansi->verifikasi_akuntansi = 'Sudah Disetujui';
+        $laporanAkuntansi->id_verifikator = Session::get('id_user');
+        $laporanAkuntansi->save();
 
+        return back()->with('success', 'Data berhasil diverifikasi!');
+    }
+
+    public function prosesVerifikasiDetail($id_laporan_akuntansi)
+    {
+        if (!Session()->get('role')) {
+            return redirect()->route('login');
+        }
+        
+        $laporanAkuntansi = LaporanAkuntansiDetails::find($id_laporan_akuntansi);
+        $laporanAkuntansi->status = 1;
+        $laporanAkuntansi->id_verifikator = Session()->get('id_user');
+        $laporanAkuntansi->save();
+        
         return back()->with('success', 'Data berhasil diverifikasi!');
     }
 
@@ -251,10 +263,10 @@ class LaporanAkuntansi extends Controller
             return redirect()->route('login');
         }
         
-        $LaporanAkuntansi = LaporanAkuntansiDetails::find($id_laporan_akuntansi);
-        $LaporanAkuntansi->status = 0;
-        $LaporanAkuntansi->id_verifikator = Session()->get('id_user');
-        $LaporanAkuntansi->save();
+        $laporanAkuntansi = LaporanAkuntansiDetails::find($id_laporan_akuntansi);
+        $laporanAkuntansi->status = 0;
+        $laporanAkuntansi->id_verifikator = Session()->get('id_user');
+        $laporanAkuntansi->save();
         
         return back()->with('success', 'Data berhasil diverifikasi!');
     }

@@ -340,6 +340,302 @@ class Dashboard extends Controller
                 'dokumenTimeline'       => DokumenTimelines::get(),
                 'subTitle'              => 'Dashboard',
             ];
+        } elseif ($role == 'Tim Proyek' && $divisi == 'PCP') {
+            // if ($divisi == 'PCP') {
+            //     $route = 'pcp.dashboard';
+            // } elseif ($divisi == 'Mankon') {
+            //     $route = 'mankon.dashboard';
+            // } else {
+            //     $route = 'timProyek.dashboard';
+            // }
+            $route          = 'engineering.admin.dashboard';
+            $user           = $this->ModelUser->detail(Session()->get('id_user'));
+            $maxDokumenId   = DokumenTimelines::count();
+            $select         = ['timelines.id', 'proyek.nama_proyek'];
+
+            for ($i = 1; $i <= $maxDokumenId; $i++) {
+                $select[] = DB::raw("SUM(CASE WHEN timeline_details.id_dokumen_timeline = $i THEN 1 ELSE 0 END) as jumlah_dokumen_$i");
+            }
+
+            $timelineMonitor = DB::table('timelines')
+                ->join('proyek', 'timelines.id_proyek', '=', 'proyek.id_proyek')
+                ->join('timeline_details', 'timelines.id', '=', 'timeline_details.id_timeline')
+                ->join('timeline_sub_details', 'timeline_details.id', '=', 'timeline_sub_details.id_timeline_detail')
+                ->select($select)
+                ->groupBy('timelines.id', 'proyek.nama_proyek')
+                ->orderBy('timelines.id')
+                ->limit(400)
+                ->get();
+
+            $data = [
+                'title'                 => null,
+                'user'                  => $user,
+                'jumlahUser'            => $jumlahUser,
+                'jumlahHeadOffice'      => $jumlahHeadOffice,
+                'jumlahProyek'          => $jumlahProyek,
+                'jumlahKIKM'              => $jumlahKIKM,
+                'jumlahSoftware'        => $jumlahSoftware,
+                'jumlahDokumenLps'      => $jumlahDokumenLps,
+                'daftarRkp'             => $this->ModelRkp->dataIsRespon(1),
+                'daftarRkpMankon'       => $this->ModelRkpMankon->dataIsRespon(1),
+                'akumulasiCsi'          => $akumulasiCsi / $jumlahCsi,
+                'akumulasiTechnicalSupport' => $persenTechnicalSupport,
+                'akumulasiKiKm'         => $persenKiKm,
+                'proyekLps'             => $progressLps,
+                'dokumenLps'            => $dokumenLps,
+                'daftarProyek'          => $daftarProyek,
+                'persen_0_30'           => $persen_0_30,
+                'persen_30_50'          => $persen_30_50,
+                'persen_50_70'          => $persen_50_70,
+                'persen_70_100'         => $persen_70_100,
+                'productivityJan'       => $this->productivity($tahun . '-01'),
+                'productivityFeb'       => $this->productivity($tahun . '-02'),
+                'productivityMar'       => $this->productivity($tahun . '-03'),
+                'productivityApr'       => $this->productivity($tahun . '-04'),
+                'productivityMei'       => $this->productivity($tahun . '-05'),
+                'productivityJun'       => $this->productivity($tahun . '-06'),
+                'productivityJul'       => $this->productivity($tahun . '-07'),
+                'productivityAug'       => $this->productivity($tahun . '-08'),
+                'productivitySep'       => $this->productivity($tahun . '-09'),
+                'productivityOct'       => $this->productivity($tahun . '-10'),
+                'productivityNov'       => $this->productivity($tahun . '-11'),
+                'productivityDes'       => $this->productivity($tahun . '-12'),
+                'bukanPrioritas'        => $this->ModelProyek->jumlah('Bukan Prioritas'),
+                'prioritas1'            => $this->ModelProyek->jumlah('Prioritas 1'),
+                'prioritas2'            => $this->ModelProyek->jumlah('Prioritas 2'),
+                'prioritas3'            => $this->ModelProyek->jumlah('Prioritas 3'),
+                'realisasiPrioritas1'   => $this->prioritasProyek('Prioritas 1'),
+                'realisasiPrioritas2'   => $this->prioritasProyek('Prioritas 2'),
+                'realisasiPrioritas3'   => $this->prioritasProyek('Prioritas 3'),
+                'realisasiBukanPrioritas' => $this->prioritasProyek('Bukan Prioritas'),
+                'chartLicense'          => $this->ModelDetailLicense->progress(),
+                'tahun'                 => $tahun,
+                'timelineMonitor'       => $timelineMonitor,
+                'dokumenTimeline'       => DokumenTimelines::get(),
+                'subTitle'              => 'Dashboard',
+            ];
+        } elseif ($role == 'Tim Proyek' && $divisi == 'Finance') {
+            // if ($divisi == 'PCP') {
+            //     $route = 'pcp.dashboard';
+            // } elseif ($divisi == 'Mankon') {
+            //     $route = 'mankon.dashboard';
+            // } else {
+            //     $route = 'timProyek.dashboard';
+            // }
+            $route          = 'engineering.admin.dashboard';
+            $user           = $this->ModelUser->detail(Session()->get('id_user'));
+            $maxDokumenId   = DokumenTimelines::count();
+            $select         = ['timelines.id', 'proyek.nama_proyek'];
+
+            for ($i = 1; $i <= $maxDokumenId; $i++) {
+                $select[] = DB::raw("SUM(CASE WHEN timeline_details.id_dokumen_timeline = $i THEN 1 ELSE 0 END) as jumlah_dokumen_$i");
+            }
+
+            $timelineMonitor = DB::table('timelines')
+                ->join('proyek', 'timelines.id_proyek', '=', 'proyek.id_proyek')
+                ->join('timeline_details', 'timelines.id', '=', 'timeline_details.id_timeline')
+                ->join('timeline_sub_details', 'timeline_details.id', '=', 'timeline_sub_details.id_timeline_detail')
+                ->select($select)
+                ->groupBy('timelines.id', 'proyek.nama_proyek')
+                ->orderBy('timelines.id')
+                ->limit(400)
+                ->get();
+
+            $data = [
+                'title'                 => null,
+                'user'                  => $user,
+                'jumlahUser'            => $jumlahUser,
+                'jumlahHeadOffice'      => $jumlahHeadOffice,
+                'jumlahProyek'          => $jumlahProyek,
+                'jumlahKIKM'              => $jumlahKIKM,
+                'jumlahSoftware'        => $jumlahSoftware,
+                'jumlahDokumenLps'      => $jumlahDokumenLps,
+                'daftarRkp'             => $this->ModelRkp->dataIsRespon(1),
+                'daftarRkpMankon'       => $this->ModelRkpMankon->dataIsRespon(1),
+                'akumulasiCsi'          => $akumulasiCsi / $jumlahCsi,
+                'akumulasiTechnicalSupport' => $persenTechnicalSupport,
+                'akumulasiKiKm'         => $persenKiKm,
+                'proyekLps'             => $progressLps,
+                'dokumenLps'            => $dokumenLps,
+                'daftarProyek'          => $daftarProyek,
+                'persen_0_30'           => $persen_0_30,
+                'persen_30_50'          => $persen_30_50,
+                'persen_50_70'          => $persen_50_70,
+                'persen_70_100'         => $persen_70_100,
+                'productivityJan'       => $this->productivity($tahun . '-01'),
+                'productivityFeb'       => $this->productivity($tahun . '-02'),
+                'productivityMar'       => $this->productivity($tahun . '-03'),
+                'productivityApr'       => $this->productivity($tahun . '-04'),
+                'productivityMei'       => $this->productivity($tahun . '-05'),
+                'productivityJun'       => $this->productivity($tahun . '-06'),
+                'productivityJul'       => $this->productivity($tahun . '-07'),
+                'productivityAug'       => $this->productivity($tahun . '-08'),
+                'productivitySep'       => $this->productivity($tahun . '-09'),
+                'productivityOct'       => $this->productivity($tahun . '-10'),
+                'productivityNov'       => $this->productivity($tahun . '-11'),
+                'productivityDes'       => $this->productivity($tahun . '-12'),
+                'bukanPrioritas'        => $this->ModelProyek->jumlah('Bukan Prioritas'),
+                'prioritas1'            => $this->ModelProyek->jumlah('Prioritas 1'),
+                'prioritas2'            => $this->ModelProyek->jumlah('Prioritas 2'),
+                'prioritas3'            => $this->ModelProyek->jumlah('Prioritas 3'),
+                'realisasiPrioritas1'   => $this->prioritasProyek('Prioritas 1'),
+                'realisasiPrioritas2'   => $this->prioritasProyek('Prioritas 2'),
+                'realisasiPrioritas3'   => $this->prioritasProyek('Prioritas 3'),
+                'realisasiBukanPrioritas' => $this->prioritasProyek('Bukan Prioritas'),
+                'chartLicense'          => $this->ModelDetailLicense->progress(),
+                'tahun'                 => $tahun,
+                'timelineMonitor'       => $timelineMonitor,
+                'dokumenTimeline'       => DokumenTimelines::get(),
+                'subTitle'              => 'Dashboard',
+            ];
+        } elseif ($role == 'Head Office' && $divisi == 'PCP') {
+            // if ($divisi == 'PCP') {
+            //     $route = 'pcp.dashboard';
+            // } elseif ($divisi == 'Mankon') {
+            //     $route = 'mankon.dashboard';
+            // } else {
+            //     $route = 'timProyek.dashboard';
+            // }
+            $route          = 'engineering.admin.dashboard';
+            $user           = $this->ModelUser->detail(Session()->get('id_user'));
+            $maxDokumenId   = DokumenTimelines::count();
+            $select         = ['timelines.id', 'proyek.nama_proyek'];
+
+            for ($i = 1; $i <= $maxDokumenId; $i++) {
+                $select[] = DB::raw("SUM(CASE WHEN timeline_details.id_dokumen_timeline = $i THEN 1 ELSE 0 END) as jumlah_dokumen_$i");
+            }
+
+            $timelineMonitor = DB::table('timelines')
+                ->join('proyek', 'timelines.id_proyek', '=', 'proyek.id_proyek')
+                ->join('timeline_details', 'timelines.id', '=', 'timeline_details.id_timeline')
+                ->join('timeline_sub_details', 'timeline_details.id', '=', 'timeline_sub_details.id_timeline_detail')
+                ->select($select)
+                ->groupBy('timelines.id', 'proyek.nama_proyek')
+                ->orderBy('timelines.id')
+                ->limit(400)
+                ->get();
+
+            $data = [
+                'title'                 => null,
+                'user'                  => $user,
+                'jumlahUser'            => $jumlahUser,
+                'jumlahHeadOffice'      => $jumlahHeadOffice,
+                'jumlahProyek'          => $jumlahProyek,
+                'jumlahKIKM'              => $jumlahKIKM,
+                'jumlahSoftware'        => $jumlahSoftware,
+                'jumlahDokumenLps'      => $jumlahDokumenLps,
+                'daftarRkp'             => $this->ModelRkp->dataIsRespon(1),
+                'daftarRkpMankon'       => $this->ModelRkpMankon->dataIsRespon(1),
+                'akumulasiCsi'          => $akumulasiCsi / $jumlahCsi,
+                'akumulasiTechnicalSupport' => $persenTechnicalSupport,
+                'akumulasiKiKm'         => $persenKiKm,
+                'proyekLps'             => $progressLps,
+                'dokumenLps'            => $dokumenLps,
+                'daftarProyek'          => $daftarProyek,
+                'persen_0_30'           => $persen_0_30,
+                'persen_30_50'          => $persen_30_50,
+                'persen_50_70'          => $persen_50_70,
+                'persen_70_100'         => $persen_70_100,
+                'productivityJan'       => $this->productivity($tahun . '-01'),
+                'productivityFeb'       => $this->productivity($tahun . '-02'),
+                'productivityMar'       => $this->productivity($tahun . '-03'),
+                'productivityApr'       => $this->productivity($tahun . '-04'),
+                'productivityMei'       => $this->productivity($tahun . '-05'),
+                'productivityJun'       => $this->productivity($tahun . '-06'),
+                'productivityJul'       => $this->productivity($tahun . '-07'),
+                'productivityAug'       => $this->productivity($tahun . '-08'),
+                'productivitySep'       => $this->productivity($tahun . '-09'),
+                'productivityOct'       => $this->productivity($tahun . '-10'),
+                'productivityNov'       => $this->productivity($tahun . '-11'),
+                'productivityDes'       => $this->productivity($tahun . '-12'),
+                'bukanPrioritas'        => $this->ModelProyek->jumlah('Bukan Prioritas'),
+                'prioritas1'            => $this->ModelProyek->jumlah('Prioritas 1'),
+                'prioritas2'            => $this->ModelProyek->jumlah('Prioritas 2'),
+                'prioritas3'            => $this->ModelProyek->jumlah('Prioritas 3'),
+                'realisasiPrioritas1'   => $this->prioritasProyek('Prioritas 1'),
+                'realisasiPrioritas2'   => $this->prioritasProyek('Prioritas 2'),
+                'realisasiPrioritas3'   => $this->prioritasProyek('Prioritas 3'),
+                'realisasiBukanPrioritas' => $this->prioritasProyek('Bukan Prioritas'),
+                'chartLicense'          => $this->ModelDetailLicense->progress(),
+                'tahun'                 => $tahun,
+                'timelineMonitor'       => $timelineMonitor,
+                'dokumenTimeline'       => DokumenTimelines::get(),
+                'subTitle'              => 'Dashboard',
+            ];
+        } elseif ($role == 'Head Office' && $divisi == 'Finance') {
+            // if ($divisi == 'PCP') {
+            //     $route = 'pcp.dashboard';
+            // } elseif ($divisi == 'Mankon') {
+            //     $route = 'mankon.dashboard';
+            // } else {
+            //     $route = 'timProyek.dashboard';
+            // }
+            $route          = 'engineering.admin.dashboard';
+            $user           = $this->ModelUser->detail(Session()->get('id_user'));
+            $maxDokumenId   = DokumenTimelines::count();
+            $select         = ['timelines.id', 'proyek.nama_proyek'];
+
+            for ($i = 1; $i <= $maxDokumenId; $i++) {
+                $select[] = DB::raw("SUM(CASE WHEN timeline_details.id_dokumen_timeline = $i THEN 1 ELSE 0 END) as jumlah_dokumen_$i");
+            }
+
+            $timelineMonitor = DB::table('timelines')
+                ->join('proyek', 'timelines.id_proyek', '=', 'proyek.id_proyek')
+                ->join('timeline_details', 'timelines.id', '=', 'timeline_details.id_timeline')
+                ->join('timeline_sub_details', 'timeline_details.id', '=', 'timeline_sub_details.id_timeline_detail')
+                ->select($select)
+                ->groupBy('timelines.id', 'proyek.nama_proyek')
+                ->orderBy('timelines.id')
+                ->limit(400)
+                ->get();
+
+            $data = [
+                'title'                 => null,
+                'user'                  => $user,
+                'jumlahUser'            => $jumlahUser,
+                'jumlahHeadOffice'      => $jumlahHeadOffice,
+                'jumlahProyek'          => $jumlahProyek,
+                'jumlahKIKM'              => $jumlahKIKM,
+                'jumlahSoftware'        => $jumlahSoftware,
+                'jumlahDokumenLps'      => $jumlahDokumenLps,
+                'daftarRkp'             => $this->ModelRkp->dataIsRespon(1),
+                'daftarRkpMankon'       => $this->ModelRkpMankon->dataIsRespon(1),
+                'akumulasiCsi'          => $akumulasiCsi / $jumlahCsi,
+                'akumulasiTechnicalSupport' => $persenTechnicalSupport,
+                'akumulasiKiKm'         => $persenKiKm,
+                'proyekLps'             => $progressLps,
+                'dokumenLps'            => $dokumenLps,
+                'daftarProyek'          => $daftarProyek,
+                'persen_0_30'           => $persen_0_30,
+                'persen_30_50'          => $persen_30_50,
+                'persen_50_70'          => $persen_50_70,
+                'persen_70_100'         => $persen_70_100,
+                'productivityJan'       => $this->productivity($tahun . '-01'),
+                'productivityFeb'       => $this->productivity($tahun . '-02'),
+                'productivityMar'       => $this->productivity($tahun . '-03'),
+                'productivityApr'       => $this->productivity($tahun . '-04'),
+                'productivityMei'       => $this->productivity($tahun . '-05'),
+                'productivityJun'       => $this->productivity($tahun . '-06'),
+                'productivityJul'       => $this->productivity($tahun . '-07'),
+                'productivityAug'       => $this->productivity($tahun . '-08'),
+                'productivitySep'       => $this->productivity($tahun . '-09'),
+                'productivityOct'       => $this->productivity($tahun . '-10'),
+                'productivityNov'       => $this->productivity($tahun . '-11'),
+                'productivityDes'       => $this->productivity($tahun . '-12'),
+                'bukanPrioritas'        => $this->ModelProyek->jumlah('Bukan Prioritas'),
+                'prioritas1'            => $this->ModelProyek->jumlah('Prioritas 1'),
+                'prioritas2'            => $this->ModelProyek->jumlah('Prioritas 2'),
+                'prioritas3'            => $this->ModelProyek->jumlah('Prioritas 3'),
+                'realisasiPrioritas1'   => $this->prioritasProyek('Prioritas 1'),
+                'realisasiPrioritas2'   => $this->prioritasProyek('Prioritas 2'),
+                'realisasiPrioritas3'   => $this->prioritasProyek('Prioritas 3'),
+                'realisasiBukanPrioritas' => $this->prioritasProyek('Bukan Prioritas'),
+                'chartLicense'          => $this->ModelDetailLicense->progress(),
+                'tahun'                 => $tahun,
+                'timelineMonitor'       => $timelineMonitor,
+                'dokumenTimeline'       => DokumenTimelines::get(),
+                'subTitle'              => 'Dashboard',
+            ];
         } elseif ($role == 'Head Office' && $divisi == 'Engineering') {
             // if ($divisi == 'PCP') {
             //     $route = 'pcp.dashboard';

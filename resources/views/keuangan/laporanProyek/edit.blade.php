@@ -87,19 +87,38 @@
                                 <td>
                                     <div class="flex align-items-center list-user-action">
                                         @if ($user->role == 'Head Office')
-                                            @if($item->status == 0)
-                                                <button type="button" href="/verifikasi-detail-laporan-proyek/{{$item->id}}" class="btn btn-sm btn-icon btn-success btn-verifikasi" data-toggle="tooltip"  data-placement="top" title="Verifikasi" data-original-title="Verifikasi" data-href="/verifikasi-detail-laporan-proyek/{{$item->id}}" data-content="Apakah Anda yakin akan verifikasi data ini?">
-                                                    <span class="btn-inner">
-                                                        <svg class="icon-32" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16.3345 2.75024H7.66549C4.64449 2.75024 2.75049 4.88924 2.75049 7.91624V16.0842C2.75049 19.1112 4.63549 21.2502 7.66549 21.2502H16.3335C19.3645 21.2502 21.2505 19.1112 21.2505 16.0842V7.91624C21.2505 4.88924 19.3645 2.75024 16.3345 2.75024Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>                                    <path d="M8.43994 12.0002L10.8139 14.3732L15.5599 9.6272" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>                                </svg>                            
-                                                    </span>
-                                                </button>
-                                            @else
-                                                <button type="button" href="/bukaverifikasi-detail-laporan-proyek/{{$item->id}}" class="btn btn-sm btn-icon btn-danger btn-verifikasi" data-toggle="tooltip"  data-placement="top" title="Buka Verifikasi" data-original-title="Buka Verifikasi" data-href="/bukaverifikasi-detail-laporan-proyek/{{$item->id}}" data-content="Apakah Anda yakin akan buka verifikasi data ini?">
-                                                    <span class="btn-inner">
-                                                        <svg class="icon-25" width="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.67 1.99927H16.34C19.73 1.99927 22 4.37927 22 7.91927V16.0903C22 19.6203 19.73 21.9993 16.34 21.9993H7.67C4.28 21.9993 2 19.6203 2 16.0903V7.91927C2 4.37927 4.28 1.99927 7.67 1.99927ZM15.01 14.9993C15.35 14.6603 15.35 14.1103 15.01 13.7703L13.23 11.9903L15.01 10.2093C15.35 9.87027 15.35 9.31027 15.01 8.97027C14.67 8.62927 14.12 8.62927 13.77 8.97027L12 10.7493L10.22 8.97027C9.87 8.62927 9.32 8.62927 8.98 8.97027C8.64 9.31027 8.64 9.87027 8.98 10.2093L10.76 11.9903L8.98 13.7603C8.64 14.1103 8.64 14.6603 8.98 14.9993C9.15 15.1693 9.38 15.2603 9.6 15.2603C9.83 15.2603 10.05 15.1693 10.22 14.9993L12 13.2303L13.78 14.9993C13.95 15.1803 14.17 15.2603 14.39 15.2603C14.62 15.2603 14.84 15.1693 15.01 14.9993Z" fill="currentColor"></path>                            </svg>                        
-                                                    </span>
-                                                </button>
-                                            @endif
+                                        <form id="form-verifikasi-{{ $item->id }}" 
+                                                action="{{ $item->status == 0 ? url('/verifikasi-detail-laporan-proyek/'.$item->id) : url('/bukaverifikasi-detail-laporan-proyek/'.$item->id) }}" 
+                                                method="POST" 
+                                                style="display:inline;">
+                                                @csrf
+                                                @if($item->status == 0)
+                                                    <!-- Tombol untuk verifikasi -->
+                                                    <button type="button" class="btn btn-sm btn-icon btn-success" data-toggle="tooltip" title="Verifikasi"
+                                                            onclick="confirmVerifikasi('form-verifikasi-{{ $item->id }}', 'Apakah Anda yakin akan verifikasi data ini?')">
+                                                        <span class="btn-inner">
+                                                            <!-- Icon untuk verifikasi -->
+                                                            <svg class="icon-32" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M16.3345 2.75024H7.66549C4.64449 2.75024 2.75049 4.88924 2.75049 7.91624V16.0842C2.75049 19.1112 4.63549 21.2502 7.66549 21.2502H16.3335C19.3645 21.2502 21.2505 19.1112 21.2505 16.0842V7.91624C21.2505 4.88924 19.3645 2.75024 16.3345 2.75024Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                                <path d="M8.43994 12.0002L10.8139 14.3732L15.5599 9.6272" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                            </svg>
+                                                        </span>
+                                                    </button>
+                                                @else
+                                                    <!-- Tombol untuk buka verifikasi -->
+                                                    <button type="button" class="btn btn-sm btn-icon btn-danger" data-toggle="tooltip" title="Buka Verifikasi"
+                                                            onclick="confirmVerifikasi('form-verifikasi-{{ $item->id }}', 'Apakah Anda yakin akan buka verifikasi data ini?')">
+                                                        <span class="btn-inner">
+                                                            <!-- Icon untuk buka verifikasi -->
+                                                            <svg class="icon-25" width="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.67 1.99927H16.34C19.73 1.99927 22 4.37927 22 7.91927V16.0903C22 19.6203 19.73 21.9993 16.34 21.9993H7.67C4.28 21.9993 2 19.6203 2 16.0903V7.91927C2 4.37927 4.28 1.99927 7.67 1.99927Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                                <path d="M15.04 14.9874L8.96002 9.00037" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                                <path d="M15.04 9.01331L8.96002 15.0003" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                            </svg>
+                                                        </span>
+                                                    </button>
+                                                @endif
+                                        </form>
                                         @endif
                                         @if($item->status <> 1)
                                             <a class="btn btn-sm btn-icon btn-primary" data-toggle="tooltip" data-placement="top" title="Edit" data-original-title="Edit" href="/sub-detail-laporan-proyek/{{$item->id}}">
@@ -129,5 +148,11 @@
         </div>
     </div>
 </div>
-
+<script>
+function confirmVerifikasi(formId, message) {
+    if (confirm(message)) {
+        document.getElementById(formId).submit();
+    }
+}
+</script>
 @endsection

@@ -45,8 +45,6 @@ class LaporanProyek extends Controller
                 ->get();
         } elseif (Session::get('role') == 'Head Office') {
             $daftarLaporanProyek = LaporanProyeks::with('proyek') // Memastikan ini benar
-                ->where('verifikasi_proyek', 'Sudah Disetujui')
-                ->where('id_verifikator', Session::get('id_user'))
                 ->limit(400)
                 ->get();
         }
@@ -104,6 +102,9 @@ class LaporanProyek extends Controller
         // Mengembalikan view dengan data yang telah diambil
         return view('keuangan.laporanProyek.edit', $data);
     }
+    
+
+
     public function tambah()
     {
         if (!Session()->get('role')) {
@@ -144,7 +145,7 @@ class LaporanProyek extends Controller
             $laporanProyek->verifikasi_proyek = 'Belum Disetujui'; // Misalnya status default
 
             // Log informasi sebelum menyimpan
-            Log::info('Menyimpan laporan akuntansi:', [
+            Log::info('Menyimpan laporan proyek:', [
                 'id_proyek' => $laporanProyek->id_proyek,
             ]);
 
@@ -152,7 +153,7 @@ class LaporanProyek extends Controller
             $laporanProyek->save();
 
             DB::commit(); // Komit transaksi jika berhasil
-            return redirect('/daftar-laporan-proyek')->with('success', 'Laporan proyel berhasil ditambahkan!');
+            return redirect('/daftar-laporan-proyek')->with('success', 'Laporan proyek berhasil ditambahkan!');
         } catch (\Exception $e) {
             DB::rollBack(); // Rollback jika terjadi kesalahan
             Log::error('Kesalahan saat menyimpan laporan proyek: ' . $e->getMessage());
@@ -173,8 +174,8 @@ class LaporanProyek extends Controller
         }
 
         $data = [
-            'title'             => 'Data Laporan Proyek',
-            'subTitle'          => 'Edit Laporan Proyek',
+            'title'             => 'Data Laporan Pajak',
+            'subTitle'          => 'Edit Laporan Pajak',
             'form'              => 'Edit',
             'daftarProyek'      => $dataProyekByUser,
             'LaporanProyekDetail'    => LaporanProyekDetails::with(['dokumen', 'LaporanProyek'])
@@ -196,8 +197,8 @@ class LaporanProyek extends Controller
             return redirect()->route('login');
         }
 
-        $LaporanProyek = LaporanProyek::find($id_laporan_proyek);
-        $LaporanProyek->delete();
+        $laporanProyek = LaporanProyeks::find($id_laporan_proyek);
+        $laporanProyek->delete();
 
         $LaporanProyekDetails = LaporanProyekDetails::where('id_laporan_proyek', $id_laporan_proyek)->get();
         foreach ($LaporanProyekDetails as $item) {
@@ -216,7 +217,7 @@ class LaporanProyek extends Controller
             return redirect()->route('login');
         }
 
-        $daftarLaporanProyek = LaporanProyek::with('proyek')->limit(400)->get();
+        $daftarLaporanProyek = LaporanProyeks::with('proyek')->limit(400)->get();
 
         $data = [
             'title' => 'Data Laporan Proyek',
@@ -228,29 +229,33 @@ class LaporanProyek extends Controller
         return view('keuangan.laporanProyek.verifikasi', $data);
     }
 
-    public function prosesVerifikasi($id)
+    public function prosesVerifikasi($id_laporan_proyek)
     {
-        // Cek apakah user sudah login
         if (!Session::get('role')) {
             return redirect()->route('login');
         }
-    
-        // Mencari laporan keuangan berdasarkan ID
-        $laporanKeuangan = LaporanKeuangan::find($id);
-    
-        // Jika laporan tidak ditemukan
-        if (!$laporanKeuangan) {
-            return back()->with('fail', 'Laporan keuangan tidak ditemukan!');
-        }
-    
-        // Memverifikasi laporan
-        $laporanKeuangan->verifikasi_keuangan = 'Sudah Disetujui';
-        $laporanKeuangan->id_verifikator = Session::get('id_user'); // Simpan ID pengguna yang memverifikasi
-        $laporanKeuangan->save(); // Simpan perubahan
-    
-        return back()->with('success', 'Laporan keuangan berhasil diverifikasi!');
+
+        $laporanProyek = LaporanPajaks::find($id_laporan_proyek);
+        $laporanProyek->verifikasi_proyek = 'Sudah Disetujui';
+        $laporanProyek->id_verifikator = Session::get('id_user');
+        $laporanProyek->save();
+
+        return back()->with('success', 'Data berhasil diverifikasi!');
     }
-    
+
+    public function prosesVerifikasiDetail($id_laporan_proyek)
+    {
+        if (!Session()->get('role')) {
+            return redirect()->route('login');
+        }
+        
+        $laporanProyek = LaporanProyekDetails::find($id_laporan_proyek);
+        $laporanProyek->status = 1;
+        $laporanProyek->id_verifikator = Session()->get('id_user');
+        $laporanProyek->save();
+        
+        return back()->with('success', 'Data berhasil diverifikasi!');
+    }
 
     public function prosesBukaVerifikasiDetail($id_laporan_proyek)
     {
@@ -258,10 +263,10 @@ class LaporanProyek extends Controller
             return redirect()->route('login');
         }
         
-        $LaporanProyek = LaporanProyekDetails::find($id_laporan_proyek);
-        $LaporanProyek->status = 0;
-        $LaporanProyek->id_verifikator = Session()->get('id_user');
-        $LaporanProyek->save();
+        $laporanProyek = LaporanProyekDetails::find($id_laporan_proyek);
+        $laporanProyek->status = 0;
+        $laporanProyek->id_verifikator = Session()->get('id_user');
+        $laporanProyek->save();
         
         return back()->with('success', 'Data berhasil diverifikasi!');
     }

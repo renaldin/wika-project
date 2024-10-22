@@ -104,7 +104,6 @@ class LaporanKeuangan extends Controller
         // Mengembalikan view dengan data yang telah diambil
         return view('keuangan.laporanKeuangan.edit', $data);
     }
-    
 
 
     public function tambah()
@@ -244,18 +243,49 @@ class LaporanKeuangan extends Controller
 
         return back()->with('success', 'Data berhasil diverifikasi!');
     }
-
+   
+    public function prosesVerifikasiDetail($id_laporan_keuangan)
+    {
+        if (!Session()->get('role')) {
+            return redirect()->route('login');
+        }
+    
+        // Temukan laporan berdasarkan ID
+        $laporanKeuangan = LaporanKeuanganDetails::find($id_laporan_keuangan);
+    
+        // Cek jika laporan ditemukan
+        if (!$laporanKeuangan) {
+            return back()->with('error', 'Laporan tidak ditemukan!');
+        }
+    
+        // Ubah status menjadi 1 (sudah diverifikasi)
+        $laporanKeuangan->status = 1;
+        $laporanKeuangan->id_verifikator = Session()->get('id_user');
+        $laporanKeuangan->save();
+    
+        return back()->with('success', 'Data berhasil diverifikasi!');
+    }
+    
     public function prosesBukaVerifikasiDetail($id_laporan_keuangan)
     {
         if (!Session()->get('role')) {
             return redirect()->route('login');
         }
-        
+    
+        // Temukan laporan berdasarkan ID
         $laporanKeuangan = LaporanKeuanganDetails::find($id_laporan_keuangan);
+    
+        // Cek jika laporan ditemukan
+        if (!$laporanKeuangan) {
+            return back()->with('error', 'Laporan tidak ditemukan!');
+        }
+    
+        // Ubah status menjadi 0 (belum diverifikasi)
         $laporanKeuangan->status = 0;
         $laporanKeuangan->id_verifikator = Session()->get('id_user');
         $laporanKeuangan->save();
-        
-        return back()->with('success', 'Data berhasil diverifikasi!');
+    
+        return back()->with('success', 'Data berhasil dibuka verifikasinya!');
     }
+    
 }

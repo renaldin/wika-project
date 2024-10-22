@@ -11,25 +11,26 @@
             </div>
             <div class="card-body">
                 <div class="new-user-info">
-                    <form action="@if($form == 'Tambah')/tambah-laporan-keuangan-sub-detail/{{$LaporanKeuanganDetail->id}} @else/edit-laporan-keuangan-sub-detail/{{$LaporanKeuanganDetail->id}}/{{$detail->id}}@endif" method="POST" enctype="multipart/form-data">
-                        <div class="row">
-                            @csrf
-                            <div class="form-group col-md-6">
-                                <label class="form-label" for="nama_dokumen_keuangan">Nama Dokumen</label>
-                                <input type="text" class="form-control" name="nama_dokumen_keuangan" id="nama_dokumen_keuangan" placeholder="Masukkan Nama Dokumen" @if($form == 'Tambah') value="{{old('nama_dokumen_keuangan')}}" @else value="{{$detail->nama_dokumen_keuangan}}" @endif required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label class="form-label" for="tanggal_dokumen_keuangan">Tanggal </label>
-                                <input type="date" class="form-control" name="tanggal_dokumen_keuangan" id="tanggal_dokumen_keuangan" placeholder="Masukkan Tanggal Dokumen" @if($form == 'Tambah') value="{{old('tanggal_dokumen_keuangan')}}" @else value="{{$detail->tanggal_dokumen_keuangan}}" @endif required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label class="form-label" for="file_dokumen_keuangan">File Dokumen</label>
-                                <input type="file" class="form-control" name="file_dokumen_keuangan" id="file_dokumen">
-                            </div>
-                        </div>
-                        {{-- Component: tombolForm --}}
-                        @include('components.tombolForm', ['linkKembali' => "/sub-detail-laporan-keuangan/$LaporanKeuanganDetail->id"])
-                    </form>
+                <form action="@if($form == 'Tambah')/tambah-laporan-proyek-sub-detail/{{$LaporanProyekDetail->id}} @else/edit-laporan-proyek-sub-detail/{{$LaporanPajakDetail->id}}/{{$detail->id}}@endif" method="POST" enctype="multipart/form-data">
+    <div class="row">
+        @csrf
+        <div class="form-group col-md-6">
+            <label class="form-label" for="nama_dokumen_proyek">Nama Dokumen</label>
+            <input type="text" class="form-control" name="nama_dokumen_proyek" id="nama_dokumen_proyek" placeholder="Masukkan Nama Dokumen" @if($form == 'Tambah') value="{{old('nama_dokumen_proyek')}}" @else value="{{$detail->nama_dokumen_proyek}}" @endif required>
+        </div>
+        <div class="form-group col-md-6">
+            <label class="form-label" for="tanggal_dokumen_proyek">Tanggal </label>
+            <input type="date" class="form-control" name="tanggal_dokumen_proyek" id="tanggal_dokumen_proyek placeholder="Masukkan Tanggal Dokumen" @if($form == 'Tambah') value="{{old('tanggal_dokumen_proyek')}}" @else value="{{$detail->tanggal_dokumen_proyek}}" @endif required>
+        </div>
+        <div class="form-group col-md-6">
+            <label class="form-label" for="file_dokumen_">File Dokumen</label>
+            <input type="file" class="form-control" name="file_dokumen_proyek" id="file_dokumen">
+        </div>
+    </div>
+    {{-- Component: tombolForm --}}
+    @include('components.tombolForm', ['linkKembali' => "/sub-detail-laporan-proyek/$LaporanProyekDetail->id"])
+</form>
+
                 </div>
             </div>
         </div>

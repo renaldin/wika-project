@@ -45,8 +45,6 @@ class LaporanPajak extends Controller
                 ->get();
         } elseif (Session::get('role') == 'Head Office') {
             $daftarLaporanPajak = LaporanPajaks::with('proyek') // Memastikan ini benar
-                ->where('verifikasi_pajak', 'Sudah Disetujui')
-                ->where('id_verifikator', Session::get('id_user'))
                 ->limit(400)
                 ->get();
         }
@@ -199,8 +197,8 @@ class LaporanPajak extends Controller
             return redirect()->route('login');
         }
 
-        $LaporanPajak = LaporanPajak::find($id_laporan_pajak);
-        $LaporanPajak->delete();
+        $laporanPajak = LaporanPajaks::find($id_laporan_pajak);
+        $laporanPajak->delete();
 
         $LaporanPajakDetails = LaporanPajakDetails::where('id_laporan_pajak', $id_laporan_pajak)->get();
         foreach ($LaporanPajakDetails as $item) {
@@ -219,7 +217,7 @@ class LaporanPajak extends Controller
             return redirect()->route('login');
         }
 
-        $daftarLaporanPajak = LaporanPajak::with('proyek')->limit(400)->get();
+        $daftarLaporanPajak = LaporanPajaks::with('proyek')->limit(400)->get();
 
         $data = [
             'title' => 'Data Laporan Pajak',
@@ -237,11 +235,25 @@ class LaporanPajak extends Controller
             return redirect()->route('login');
         }
 
-        $LaporanPajak = LaporanAkuntansi::find($id_laporan_pajak);
-        $LaporanPajak->verifikasi_akuntansi = 'Sudah Disetujui';
-        $LaporanPajak->id_verifikator = Session::get('id_user');
-        $LaporanPajak->save();
+        $laporanPajak = LaporanPajaks::find($id_laporan_pajak);
+        $laporanPajak->verifikasi_pajak = 'Sudah Disetujui';
+        $laporanPajak->id_verifikator = Session::get('id_user');
+        $laporanPajak->save();
 
+        return back()->with('success', 'Data berhasil diverifikasi!');
+    }
+
+    public function prosesVerifikasiDetail($id_laporan_pajak)
+    {
+        if (!Session()->get('role')) {
+            return redirect()->route('login');
+        }
+        
+        $laporanPajak = LaporanPajakDetails::find($id_laporan_pajak);
+        $laporanPajak->status = 1;
+        $laporanPajak->id_verifikator = Session()->get('id_user');
+        $laporanPajak->save();
+        
         return back()->with('success', 'Data berhasil diverifikasi!');
     }
 
@@ -251,10 +263,10 @@ class LaporanPajak extends Controller
             return redirect()->route('login');
         }
         
-        $LaporanPajak = LaporanPajakDetails::find($id_laporan_pajak);
-        $LaporanPajak->status = 0;
-        $LaporanPajak->id_verifikator = Session()->get('id_user');
-        $LaporanPajak->save();
+        $laporanPajak = LaporanPajakDetails::find($id_laporan_pajak);
+        $laporanPajak->status = 0;
+        $laporanPajak->id_verifikator = Session()->get('id_user');
+        $laporanPajak->save();
         
         return back()->with('success', 'Data berhasil diverifikasi!');
     }
