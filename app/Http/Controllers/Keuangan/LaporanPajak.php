@@ -26,27 +26,30 @@ class LaporanPajak extends Controller
         $this->public_path = 'file_laporan_pajak';
     }
 
-    public function index()
+    public function index(Request $request)
     {
         if (!Session::get('role')) {
             return redirect()->route('login');
         }
-        
-        $proyekUser = ProyekUsers::where('id_user', Session::get('id_user'))->get();
-        $idProyek = [];
-        foreach ($proyekUser as $item) {
-            $idProyek[] = $item->id_proyek;
+    
+        // Mendapatkan query dasar laporan keuangan
+        $query = LaporanPajaks::with('proyek')->limit(400);
+    
+        // Filter berdasarkan bulan dan tahun jika parameter 'bulan' ada
+        if ($request->has('bulan') && !empty($request->bulan)) {
+            $query->where('periode', 'like', $request->bulan . '%');
         }
     
+        // Filter data sesuai role pengguna
         if (Session::get('role') == 'Tim Proyek') {
-            $daftarLaporanPajak = LaporanPajaks::with('proyek') // Memastikan ini benar
-                ->whereIn('id_proyek', $idProyek)
-                ->limit(400)
-                ->get();
+            $proyekUser = ProyekUsers::where('id_user', Session::get('id_user'))->get();
+            $idProyek = $proyekUser->pluck('id_proyek')->toArray();
+    
+            $daftarLaporanPajak = $query->whereIn('id_proyek', $idProyek)->get();
         } elseif (Session::get('role') == 'Head Office') {
-            $daftarLaporanPajak = LaporanPajaks::with('proyek') // Memastikan ini benar
-                ->limit(400)
-                ->get();
+            $daftarLaporanPajak = $query->get();
+        } else {
+            $daftarLaporanPajak = collect(); // Menggunakan koleksi kosong jika role tidak dikenali
         }
     
         $data = [
@@ -73,13 +76,10 @@ class LaporanPajak extends Controller
             $dataProyekByUser[] = ModelProyek::find($item->id_proyek);
         }
     
-        // Mengambil detail laporan keuangan berdasarkan ID
         $laporanPajakDetail = LaporanPajakDetails::with(['dokumen', 'laporanPajak'])
-            ->withCount(['laporanPajakSubDetails' => function ($query) use ($id_laporan_pajak) {
-                $query->where('id_laporan_pajak', $id_laporan_pajak);
-            }])
-            ->where('id_laporan_pajak', $id_laporan_pajak)
-            ->get();
+        ->withCount('laporanPajakSubDetails') // Menghitung jumlah sub-detail
+        ->where('id_laporan_pajak', $id_laporan_pajak)
+        ->get();
     
         // Mengambil laporan keuangan dengan proyek terkait
         $laporanPajak = LaporanPajaks::with('proyek')->find($id_laporan_pajak);
@@ -134,24 +134,35 @@ class LaporanPajak extends Controller
         // Validasi input
         $validatedData = $request->validate([
             'id_proyek' => 'required|exists:proyek,id_proyek', // Memastikan id_proyek valid
+            'periode'   => 'required|date_format:Y-m',
         ]);
-
+    
+        // Cek apakah kombinasi id_proyek dan periode sudah ada
+        $existingReport = LaporanPajaks::where('id_proyek', $validatedData['id_proyek'])
+                        ->where('periode', $validatedData['periode'])
+                        ->first();
+    
+        if ($existingReport) {
+            return back()->with('fail', 'Data dengan proyek dan periode tersebut sudah ada!');
+        }
+    
         DB::beginTransaction();
-
+    
         try {
             // Buat objek laporan keuangan baru
             $laporanPajak = new LaporanPajaks();
             $laporanPajak->id_proyek = $validatedData['id_proyek']; // Menyimpan id_proyek yang valid
             $laporanPajak->verifikasi_pajak = 'Belum Disetujui'; // Misalnya status default
-
+            $laporanPajak->periode = $validatedData['periode']; 
+    
             // Log informasi sebelum menyimpan
             Log::info('Menyimpan laporan pajak:', [
                 'id_proyek' => $laporanPajak->id_proyek,
             ]);
-
-            // Simpan laporan keuangan
+    
+            // Simpan laporan pajak
             $laporanPajak->save();
-
+    
             DB::commit(); // Komit transaksi jika berhasil
             return redirect('/daftar-laporan-pajak')->with('success', 'Laporan pajak berhasil ditambahkan!');
         } catch (\Exception $e) {
@@ -196,19 +207,24 @@ class LaporanPajak extends Controller
         if (!Session::get('role')) {
             return redirect()->route('login');
         }
-
-        $laporanPajak = LaporanPajaks::find($id_laporan_pajak);
-        $laporanPajak->delete();
-
-        $LaporanPajakDetails = LaporanPajakDetails::where('id_laporan_pajak', $id_laporan_pajak)->get();
-        foreach ($LaporanPajakDetails as $item) {
-            if ($item->file_dokumen != "") {
-                unlink(public_path($this->public_path) . '/' . $item->file_dokumen);
+    
+        try {
+            $laporanPajak = LaporanPajaks::findOrFail($id_laporan_pajak);
+            $laporanPajak->delete();
+    
+            // Jika ada file yang perlu dihapus juga
+            $laporanPajakDetail = LaporanPajakDetails::where('id_laporan_pajak', $id_laporan_pajak)->get();
+            foreach ($laporanPajakDetail as $item) {
+                if ($item->file_dokumen != "") {
+                    unlink(public_path($this->public_path) . '/' . $item->file_dokumen);
+                }
+                $item->delete();
             }
-            $item->delete();
+    
+            return back()->with('success', 'Data berhasil dihapus!');
+        } catch (\Exception $e) {
+            return back()->with('fail', 'Terjadi kesalahan saat menghapus data!');
         }
-
-        return back()->with('success', 'Data berhasil dihapus!');
     }
 
     public function verifikasi()
@@ -269,5 +285,32 @@ class LaporanPajak extends Controller
         $laporanPajak->save();
         
         return back()->with('success', 'Data berhasil diverifikasi!');
+    }
+
+    public function prosesTolakVerifikasiDetail(Request $request, $id_laporan_pajak)
+    {
+        if (!Session::get('role')) {
+            return redirect()->route('login');
+        }
+    
+        // Validasi input komentar agar tidak kosong
+        $request->validate([
+            'comment' => 'required|string|max:255'
+        ]);
+    
+        // Cari data laporan proyek berdasarkan ID
+        $laporanPajak = LaporanPajakDetails::find($id_laporan_pajak);
+    
+        if (!$laporanPajak) {
+            return back()->with('fail', 'Laporan tidak ditemukan!');
+        }
+    
+        // Update status menjadi 2 (Verifikasi Ditolak) dan simpan komentar penolakan
+        $laporanPajak->status = 2;
+        $laporanPajak->id_verifikator = Session()->get('id_user');
+        $laporanPajak->komentar = $request->comment; // Pastikan kolom komentar tersedia di database
+        $laporanPajak->save();
+    
+        return back()->with('success', 'Data berhasil ditolak verifikasinya dengan komentar!');
     }
 }

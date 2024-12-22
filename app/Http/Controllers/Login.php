@@ -50,6 +50,7 @@ class Login extends Controller
                 Session()->put('role', $cekNip->role);
                 Session()->put('divisi', $cekNip->divisi);
                 Session()->put('log', true);
+                Session()->put('showLoginModal', true); // Session untuk menampilkan modal
 
                 $log = new ModelLog();
                 $log->id_user = $cekNip->id_user;

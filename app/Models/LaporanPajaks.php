@@ -15,6 +15,7 @@ class LaporanPajaks extends Model
         'id_proyek',
         'verifikasi_pajak',
         'id_verifikator',
+        'periode',
         // Tambahkan kolom lain sesuai kebutuhan
     ];
 

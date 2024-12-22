@@ -15,6 +15,7 @@ class LaporanProyeks extends Model
         'id_proyek',
         'verifikasi_royek',
         'id_verifikator',
+        'periode',
         // Tambahkan kolom lain sesuai kebutuhan
     ];
 

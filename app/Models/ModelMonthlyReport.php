@@ -48,4 +48,9 @@ class ModelMonthlyReport extends Model
     {
         DB::table('monthly_report')->where('id_monthly_report', $id_monthly_report)->delete();
     }
+    public function rtl()
+    {
+        return $this->hasOne(ModelRtl::class, 'id_monthly_report', 'id_monthly_report');
+    }
+
 }

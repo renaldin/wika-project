@@ -64,7 +64,7 @@
                                     </div>
                                 @enderror
                             </div>
-                            @if ($form == 'Edit' && Session()->get('role') == 'Manajemen')
+                            @if ($form == 'Edit' && Session()->get('role') == 'Manajemen' && Session()->get('jabatan') == 'Coordinator')
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="item_task">Komentar</label>
                                     <textarea class="form-control" name="komentar" id="komentar" cols="15" rows="5" placeholder="Masukkan Komentar">{{$detail->komentar}}</textarea>

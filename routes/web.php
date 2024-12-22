@@ -4,10 +4,27 @@ use App\Http\Controllers\Engineering\Divisi;
 use App\Http\Controllers\Engineering\Jabatan;
 use App\Http\Controllers\Engineering\User;
 
+use App\Http\Controllers\QHSE\DokumenQa;
+use App\Http\Controllers\QHSE\LaporanQa;
+use App\Http\Controllers\QHSE\LaporanQaDetail;
+use App\Http\Controllers\QHSE\LaporanQaSubDetail;
+use App\Http\Controllers\QHSE\DokumenHse;
+use App\Http\Controllers\QHSE\LaporanHse;
+use App\Http\Controllers\QHSE\LaporanHseDetail;
+use App\Http\Controllers\QHSE\LaporanHseSubDetail;
+use App\Http\Controllers\QHSE\DokumenBulanan;
+use App\Http\Controllers\QHSE\LaporanBulanan;
+use App\Http\Controllers\QHSE\LaporanBulananDetail;
+use App\Http\Controllers\QHSE\LaporanBulananSubDetail;
+use App\Http\Controllers\QHSE\Temuan;
 use App\Http\Controllers\Achievement;
 use App\Http\Controllers\Activity;
 use App\Http\Controllers\Csi;
 use App\Http\Controllers\Dashboard;
+use App\Http\Controllers\DashboardFinance;
+use App\Http\Controllers\DashboardQhse;
+use App\Http\Controllers\DashboardPcp;
+use App\Http\Controllers\DashboardMankon;
 use App\Http\Controllers\HC;
 use App\Http\Controllers\DetailAchievement;
 use App\Http\Controllers\DetailLicense;
@@ -33,6 +50,7 @@ use App\Http\Controllers\Keuangan\DokumenKeuangan;
 use App\Http\Controllers\Keuangan\DokumenAkuntansi;
 use App\Http\Controllers\Keuangan\DokumenPajak;
 use App\Http\Controllers\Keuangan\DokumenProyek;
+use App\Http\Controllers\HC\Pelatihan;
 use App\Http\Controllers\Productivity;
 use App\Http\Controllers\Proyek;
 use App\Http\Controllers\Rencana;
@@ -40,6 +58,7 @@ use App\Http\Controllers\Rkp;
 use App\Http\Controllers\RkpMankon;
 use App\Http\Controllers\Software;
 use App\Http\Controllers\Sni;
+use App\Http\Controllers\QHSE\Library;
 use App\Http\Controllers\Task;
 use App\Http\Controllers\Akhlak;
 use App\Http\Controllers\TechnicalSupporting;
@@ -89,15 +108,30 @@ Route::get('/download-file-rkp/{id}', [Rkp::class, 'downloadFile']);
 Route::get('/download-file-hasil-rkp/{id}', [Rkp::class, 'downloadFileHasil']);
 Route::get('/download-file-rkp-mankon/{id}', [RkpMankon::class, 'downloadFile']);
 Route::get('/download-file-hasil-rkp-mankon/{id}', [RkpMankon::class, 'downloadFileHasil']);
-
+Route::get('/dashboardFinance', [DashboardFinance::class, 'index'])->name('dashboardFinance');
+    Route::post('/dashboardFinance', [DashboardFinance::class, 'index']);
+    Route::get('/dashboardQhse', [DashboardQhse::class, 'index'])->name('dashboardQhse');
+    Route::post('/dashboardQhse', [DashboardQhse::class, 'qhse']);
+    Route::get('/dashboardPcp', [DashboardPcp::class, 'index'])->name('dashboard');
+    Route::post('/dashboardPcp', [DashboardPcp::class, 'qhse']);
+    Route::get('/dashboardMankon', [DashboardMankon::class, 'index'])->name('dashboard');
+    Route::post('/dashboardMankon', [DashboardMankon::class, 'qhse']);
+    Route::get('/laporan-filter', [Dashboard::class, 'index'])->name('filter-laporan');
 Route::group(['middleware' => 'revalidate'], function () {
 
-    Route::get('/', [Landing::class, 'index'])->name('landing');
+    Route::get('/', [Login::class, 'index'])->name('login');
     Route::get('/about', [Landing::class, 'about'])->name('about');
     Route::get('/contact', [Landing::class, 'contact'])->name('contact');
     Route::get('/blog', [Landing::class, 'blog'])->name('blog');
     Route::get('/news/{id}', [Landing::class, 'detailNews']);
     Route::get('/daftar-sni', [Sni::class, 'index'])->name('daftar-sni');
+    Route::get('/tambah-activity', [EngineeringActivity::class, 'tambah'])->name('tambah-activity');
+    Route::post('/tambah-activity', [EngineeringActivity::class, 'prosesTambah']);
+    Route::get('/check-activity', [EngineeringActivity::class, 'check'])->name('check-activity');
+    Route::get('/check-activity/{id}', [EngineeringActivity::class, 'checkProses']);
+    Route::get('/edit-activity/{id}', [EngineeringActivity::class, 'edit'])->name('edit-activity');
+    Route::post('/edit-activity/{id}', [EngineeringActivity::class, 'prosesEdit']);
+    Route::get('/hapus-activity/{id}', [EngineeringActivity::class, 'prosesHapus']);
 
     Route::get('/login', [Login::class, 'index'])->name('login');
     Route::post('/login', [Login::class, 'loginProcess']);
@@ -105,11 +139,15 @@ Route::group(['middleware' => 'revalidate'], function () {
 
     Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
     Route::post('/dashboard', [Dashboard::class, 'index']);
+    
+
+    Route::get('/getProjectData/{id_proyek}', [Dashboard::class, 'getProjectData']);
+
     Route::get('/perilaku-spesifikasi', [Dashboard::class, 'akhlak']);
 
 
     //  divisi
-    Route::get('/daftar-akhlak', [Akhlak::class, 'index']);
+    Route::get('/daftar-akhlak', [Akhlak::class, 'index'])->name('akhlak.index');
     Route::post('/tambah-akhlak', [Akhlak::class, 'prosesTambah']);
     Route::get('/edit-akhlak/{id}', [Akhlak::class, 'prosesEdit']);
     Route::delete('/hapus-akhlak/{id}', [Akhlak::class, 'prosesHapus']);  // Ubah menjadi DELETE jika aksi hapus
@@ -134,8 +172,13 @@ Route::group(['middleware' => 'revalidate'], function () {
     Route::put('/daftar-akhlak/{id}', [Akhlak::class, 'update'])->name('daftar-akhlak.update');
     Route::get('/hc/detail/{id_akhlak}', [HC::class, 'detail'])->name('hc.detail');
     Route::post('/edit-nilai-akhlak/{id_detail_akhlak}', [HC::class, 'updateNilaiAkhlak'])->name('updateNilaiAkhlak');
-
-
+    
+    Route::get('/daftar-library', [Library::class, 'index'])->name('daftar-library');
+    Route::get('/tambah-library', [Library::class, 'tambah'])->name('tambah-library');
+    Route::post('/tambah-library', [Library::class, 'prosesTambah']);
+    Route::get('/edit-library/{id}', [Library::class, 'edit'])->name('edit-library');
+    Route::post('/edit-library/{id}', [Library::class, 'prosesEdit']);
+    Route::get('/hapus-library/{id}', [Library::class, 'prosesHapus']);
 
     // Di dalam web.php atau route file yang sesuai
     Route::post('/update-detail-akhlak/{id}', [HC::class, 'updateDetailAkhlak'])->name('update-detail-akhlak');
@@ -360,6 +403,21 @@ Route::group(['middleware' => 'revalidate'], function () {
 
     // ============================== end PCP =========================================================
 
+    // ============================== HC =========================================================
+    Route::get('/daftar-pelatihan', [Pelatihan::class, 'index'])->name('daftar-pelatihan');
+    Route::get('/detail-pelatihan/{id}', [Pelatihan::class, 'detail'])->name('detail-pelatihan');
+    Route::get('/tambah-pelatihan', [Pelatihan::class, 'tambah'])->name('tambah-pelatihan');
+    Route::post('/tambah-pelatihan', [Pelatihan::class, 'prosesTambah']);
+    Route::get('/edit-pelatihan/{id}', [Pelatihan::class, 'edit']);
+    Route::post('/edit-pelatihan/{id}', [Pelatihan::class, 'prosesEdit']);
+    Route::get('/hapus-pelatihan/{id}', [Pelatihan::class, 'prosesHapus']);
+   Route::get('/kalender-pelatihan', [Pelatihan::class, 'kalenderPelatihan'])->name('kalender-pelatihan');
+    Route::get('/getPelatihan', [Pelatihan::class, 'getPelatihan']);
+    Route::get('/getPelatihan/{id_proyek}', [Pelatihan::class, 'getPelatihanProyek']);
+
+    // ============================== END HC =========================================================
+
+
     // ============================== LAPORAN KEUANGAN =========================================================
     Route::get('/daftar-laporan-keuangan', [LaporanKeuangan::class, 'index'])->name('daftar-laporan-keuangan');
     Route::get('/detail-laporan-keuangan/{id}', [LaporanKeuangan::class, 'detail'])->name('detail-laporan-keuangan');
@@ -372,6 +430,7 @@ Route::group(['middleware' => 'revalidate'], function () {
     Route::get('/verifikasi-laporan-keuangan/{id}', [LaporanKeuangan::class, 'prosesVerifikasi']);
     Route::post('/verifikasi-detail-laporan-keuangan/{id}', [LaporanKeuangan::class, 'prosesVerifikasiDetail']);
     Route::post('/bukaverifikasi-detail-laporan-keuangan/{id}', [LaporanKeuangan::class, 'prosesBukaVerifikasiDetail']);
+    Route::post('/tolak-verifikasi-detail-laporan-keuangan/{id}', [LaporanKeuangan::class, 'prosesTolakVerifikasiDetail']);
     Route::get('/edit-detail-laporan-keuangan/{id}', [LaporanKeuanganDetail::class, 'edit']);
     Route::post('/edit-detail-laporan-keuangan/{id}', [LaporanKeuanganDetail::class, 'prosesEdit']);
     Route::get('/download-file-dokumen-laporan-keuangan/{id}', [LaporanKeuanganDetail::class, 'downloadFile']);
@@ -380,7 +439,9 @@ Route::group(['middleware' => 'revalidate'], function () {
     Route::get('/edit-laporan-keuangan-detail/{id}', [LaporanKeuanganDetail::class, 'edit'])->name('edit-laporan-keuangan-detail');
 
 
-    Route::get('/sub-detail-laporan-keuangan/{id_laporan_keuangan_details}', [LaporanKeuanganSubDetail::class, 'index']);
+   // web.php
+Route::get('/sub-detail-laporan-keuangan/{id_laporan_keuangan_details}', [LaporanKeuanganSubDetail::class, 'index'])->name('laporan-keuangan.sub-detail');
+
     Route::get('/tambah-laporan-keuangan-sub-detail/{id_laporan_keuangan_details}', [LaporanKeuanganSubDetail::class, 'tambah']);
     Route::post('/tambah-laporan-keuangan-sub-detail/{id_laporan_keuangan_details}', [LaporanKeuanganSubDetail::class, 'prosesTambah']);
     Route::get('/edit-laporan-keuangan-sub-detail/{id_laporan_keuangan_details}/{id_laporan_keuangan_sub_details}', [LaporanKeuanganSubDetail::class, 'edit']);
@@ -409,6 +470,7 @@ Route::group(['middleware' => 'revalidate'], function () {
   Route::get('/verifikasi-laporan-akuntansi/{id}', [LaporanAkuntansi::class, 'prosesVerifikasi']);
   Route::post('/verifikasi-detail-laporan-akuntansi/{id}', [LaporanAkuntansi::class, 'prosesVerifikasiDetail']);
   Route::post('/bukaverifikasi-detail-laporan-akuntansi/{id}', [LaporanAkuntansi::class, 'prosesBukaVerifikasiDetail']);
+  Route::post('/tolak-verifikasi-detail-laporan-akuntansi/{id}', [LaporanAkuntansi::class, 'prosesTolakVerifikasiDetail']);
   Route::get('/edit-detail-laporan-akuntansi/{id}', [LaporanAkuntansiDetail::class, 'edit']);
   Route::post('/edit-detail-laporan-akuntansi/{id}', [LaporanAkuntansiDetail::class, 'prosesEdit']);
   Route::get('/download-file-dokumen-laporan-akuntansi/{id}', [LaporanAkuntansiDetail::class, 'downloadFile']);
@@ -432,7 +494,129 @@ Route::group(['middleware' => 'revalidate'], function () {
   Route::post('/edit-dokumen-akuntansi/{id}', [DokumenAkuntansi::class, 'prosesEdit']);
   Route::post('/hapus-dokumen-akuntansi/{id}', [DokumenAkuntansi::class, 'prosesHapus']);
 // ============================== END OF LAPORAN AKUNTANSI =========================================================
+// ============================== LAPORAN QA =========================================================
+Route::get('/daftar-laporan-qa', [LaporanQa::class, 'index'])->name('daftar-laporan-qa');
+Route::get('/detail-laporan-qa/{id}', [LaporanQa::class, 'detail'])->name('detail-laporan-qa');
+Route::get('/tambah-laporan-qa', [LaporanQa::class, 'tambah'])->name('tambah-laporan-qa');
+Route::post('/tambah-laporan-qa', [LaporanQa::class, 'prosesTambah']);
+Route::get('/edit-laporan-qa/{id}', [LaporanQa::class, 'edit']);
+Route::post('/edit-laporan-qa/{id}', [LaporanQa::class, 'prosesEdit']);
+Route::get('/hapus-laporan-qa/{id}', [LaporanQa::class, 'prosesHapus']);
+Route::get('/verifikasi-laporan-qa', [LaporanQa::class, 'verifikasi'])->name('verifikasi-laporan-qa');
+Route::get('/verifikasi-laporan-qa/{id}', [LaporanQa::class, 'prosesVerifikasi']);
+Route::post('/verifikasi-detail-laporan-qa/{id}', [LaporanQa::class, 'prosesVerifikasiDetail']);
+Route::post('/bukaverifikasi-detail-laporan-qa/{id}', [LaporanQa::class, 'prosesBukaVerifikasiDetail']);
+Route::post('/tolak-verifikasi-detail-laporan-qa/{id}', [LaporanQa::class, 'prosesTolakVerifikasiDetail']);
+Route::get('/edit-detail-laporan-qa/{id}', [LaporanQaDetail::class, 'edit']);
+Route::post('/edit-detail-laporan-qa/{id}', [LaporanQaDetail::class, 'prosesEdit']);
+Route::get('/download-file-dokumen-laporan-qa/{id}', [LaporanQaDetail::class, 'downloadFile']);
+Route::get('/proses-verifikasi-laporan-qa-detail/{id}', [LaporanQaDetail::class, 'prosesVerifikasi'])->name('proses-verifikasi-laporan-qa-detail');
+Route::get('/download-file-laporan-qa-detail/{id}', [LaporanQaDetail::class, 'downloadFile'])->name('download-file-laporan-qa-detail');
+Route::get('/edit-laporan-qa-detail/{id}', [LaporanQaDetail::class, 'edit'])->name('edit-laporan-qa-detail');
 
+Route::get('/sub-detail-laporan-qa/{id_laporan_qa_details}', [LaporanQaSubDetail::class, 'index']);
+Route::get('/tambah-laporan-qa-sub-detail/{id_laporan_qa_details}', [LaporanQaSubDetail::class, 'tambah']);
+Route::post('/tambah-laporan-qa-sub-detail/{id_laporan_qa_details}', [LaporanQaSubDetail::class, 'prosesTambah']);
+Route::get('/edit-laporan-qa-sub-detail/{id_laporan_qa_details}/{id_laporan_qa_sub_details}', [LaporanQaSubDetail::class, 'edit']);
+Route::post('/edit-laporan-qa-sub-detail/{id_laporan_qa_details}/{id_laporan_qa_sub_details}', [LaporanQaSubDetail::class, 'prosesEdit']);
+Route::get('/hapus-laporan-qa-sub-detail/{id_laporan_qa_details}', [LaporanQaSubDetail::class, 'prosesHapus']);
+Route::get('/download-file-sub-dokumen-laporan-qa/{id}', [LaporanQaSubDetail::class, 'downloadFile']);
+
+
+Route::get('/daftar-dokumen-qa', [DokumenQa::class, 'index'])->name('daftar-dokumen-qa');
+Route::get('/detail-dokumen-qa/{id}', [DokumenQa::class, 'detail'])->name('detail-dokumen-qa');
+Route::get('/tambah-dokumen-qa', [DokumenQa::class, 'tambah'])->name('tambah-dokumen-qa');
+Route::post('/tambah-dokumen-qa', [DokumenQa::class, 'prosesTambah']);
+Route::get('/edit-dokumen-qa/{id}', [DokumenQa::class, 'edit']);
+Route::post('/edit-dokumen-qa/{id}', [DokumenQa::class, 'prosesEdit']);
+Route::post('/hapus-dokumen-qa/{id}', [DokumenQa::class, 'prosesHapus']);
+
+// ============================== END OF LAPORAN QA =========================================================
+// ============================== LAPORAN HSE =========================================================
+Route::get('/daftar-laporan-hse', [LaporanHse::class, 'index'])->name('daftar-laporan-hse');
+Route::get('/detail-laporan-hse/{id}', [LaporanHse::class, 'detail'])->name('detail-laporan-hse');
+Route::get('/tambah-laporan-hse', [LaporanHse::class, 'tambah'])->name('tambah-laporan-hse');
+Route::post('/tambah-laporan-hse', [LaporanHse::class, 'prosesTambah']);
+Route::get('/edit-laporan-hse/{id}', [LaporanHse::class, 'edit']);
+Route::post('/edit-laporan-hse/{id}', [LaporanHse::class, 'prosesEdit']);
+Route::get('/hapus-laporan-hse/{id}', [LaporanHse::class, 'prosesHapus']);
+Route::get('/verifikasi-laporan-hse', [LaporanHse::class, 'verifikasi'])->name('verifikasi-laporan-hse');
+Route::get('/verifikasi-laporan-hse/{id}', [LaporanHse::class, 'prosesVerifikasi']);
+Route::post('/verifikasi-detail-laporan-hse/{id}', [LaporanHse::class, 'prosesVerifikasiDetail']);
+Route::post('/bukaverifikasi-detail-laporan-hse/{id}', [LaporanHse::class, 'prosesBukaVerifikasiDetail']);
+Route::post('/tolak-verifikasi-detail-laporan-hse/{id}', [LaporanHse::class, 'prosesTolakVerifikasiDetail']);
+Route::get('/edit-detail-laporan-hse/{id}', [LaporanHseDetail::class, 'edit']);
+Route::post('/edit-detail-laporan-hse/{id}', [LaporanHseDetail::class, 'prosesEdit']);
+Route::get('/download-file-dokumen-laporan-hse/{id}', [LaporanHseDetail::class, 'downloadFile']);
+Route::get('/proses-verifikasi-laporan-hse-detail/{id}', [LaporanHseDetail::class, 'prosesVerifikasi'])->name('proses-verifikasi-laporan-hse-detail');
+Route::get('/download-file-laporan-hse-detail/{id}', [LaporanHseDetail::class, 'downloadFile'])->name('download-file-laporan-hse-detail');
+Route::get('/edit-laporan-hse-detail/{id}', [LaporanHseDetail::class, 'edit'])->name('edit-laporan-hse-detail');
+
+Route::get('/sub-detail-laporan-hse/{id_laporan_hse_details}', [LaporanHseSubDetail::class, 'index']);
+Route::get('/tambah-laporan-hse-sub-detail/{id_laporan_hse_details}', [LaporanHseSubDetail::class, 'tambah']);
+Route::post('/tambah-laporan-hse-sub-detail/{id_laporan_hse_details}', [LaporanHseSubDetail::class, 'prosesTambah']);
+Route::get('/edit-laporan-hse-sub-detail/{id_laporan_hse_details}/{id_laporan_hse_sub_details}', [LaporanHseSubDetail::class, 'edit']);
+Route::post('/edit-laporan-hse-sub-detail/{id_laporan_hse_details}/{id_laporan_hse_sub_details}', [LaporanHseSubDetail::class, 'prosesEdit']);
+Route::get('/hapus-laporan-hse-sub-detail/{id_laporan_hse_details}', [LaporanHseSubDetail::class, 'prosesHapus']);
+Route::get('/download-file-sub-dokumen-laporan-hse/{id}', [LaporanHseSubDetail::class, 'downloadFile']);
+
+
+Route::get('/daftar-dokumen-hse', [DokumenHse::class, 'index'])->name('daftar-dokumen-hse');
+Route::get('/detail-dokumen-hse/{id}', [DokumenHse::class, 'detail'])->name('detail-dokumen-hse');
+Route::get('/tambah-dokumen-hse', [DokumenHse::class, 'tambah'])->name('tambah-dokumen-hse');
+Route::post('/tambah-dokumen-hse', [DokumenHse::class, 'prosesTambah']);
+Route::get('/edit-dokumen-hse/{id}', [DokumenHse::class, 'edit']);
+Route::post('/edit-dokumen-hse/{id}', [DokumenHse::class, 'prosesEdit']);
+Route::post('/hapus-dokumen-hse/{id}', [DokumenHse::class, 'prosesHapus']);
+
+// ============================== END OF LAPORAN HSE =========================================================
+
+// ============================== LAPORAN BULANAN QHSE =========================================================
+Route::get('/daftar-laporan-bulanan', [LaporanBulanan::class, 'index'])->name('daftar-laporan-bulanan');
+Route::get('/detail-laporan-bulanan/{id}', [LaporanBulanan::class, 'detail'])->name('detail-laporan-bulanan');
+Route::get('/tambah-laporan-bulanan', [LaporanBulanan::class, 'tambah'])->name('tambah-laporan-bulanan');
+Route::post('/tambah-laporan-bulanan', [LaporanBulanan::class, 'prosesTambah']);
+Route::get('/edit-laporan-bulanan/{id}', [LaporanBulanan::class, 'edit']);
+Route::post('/edit-laporan-bulanan/{id}', [LaporanBulanan::class, 'prosesEdit']);
+Route::get('/hapus-laporan-bulanan/{id}', [LaporanBulanan::class, 'prosesHapus']);
+Route::get('/verifikasi-laporan-bulanan', [LaporanBulanan::class, 'verifikasi'])->name('verifikasi-laporan-bulanan');
+Route::get('/verifikasi-laporan-bulanan/{id}', [LaporanBulanan::class, 'prosesVerifikasi']);
+Route::post('/verifikasi-detail-laporan-bulanan/{id}', [LaporanBulanan::class, 'prosesVerifikasiDetail']);
+Route::post('/bukaverifikasi-detail-laporan-bulanan/{id}', [LaporanBulanan::class, 'prosesBukaVerifikasiDetail']);
+Route::post('/tolak-verifikasi-detail-laporan-bulanan/{id}', [LaporanBulanan::class, 'prosesTolakVerifikasiDetail']);
+Route::get('/edit-detail-laporan-bulanan/{id}', [LaporanBulananDetail::class, 'edit']);
+Route::post('/edit-detail-laporan-bulanan/{id}', [LaporanBulananDetail::class, 'prosesEdit']);
+Route::get('/download-file-dokumen-laporan-bulanan/{id}', [LaporanBulananDetail::class, 'downloadFile']);
+Route::get('/proses-verifikasi-laporan-bulanan-detail/{id}', [LaporanBulananDetail::class, 'prosesVerifikasi'])->name('proses-verifikasi-laporan-bulanan-detail');
+Route::get('/download-file-laporan-bulanan-detail/{id}', [LaporanBulananDetail::class, 'downloadFile'])->name('download-file-laporan-bulanan-detail');
+Route::get('/edit-laporan-bulanan-detail/{id}', [LaporanBulananDetail::class, 'edit'])->name('edit-laporan-bulanan-detail');
+
+Route::get('/sub-detail-laporan-bulanan/{id_laporan_bulanan_details}', [LaporanBulananSubDetail::class, 'index']);
+Route::get('/tambah-laporan-bulanan-sub-detail/{id_laporan_bulanan_details}', [LaporanBulananSubDetail::class, 'tambah']);
+Route::post('/tambah-laporan-bulanan-sub-detail/{id_laporan_bulanan_details}', [LaporanBulananSubDetail::class, 'prosesTambah']);
+Route::get('/edit-laporan-bulanan-sub-detail/{id_laporan_bulanan_details}/{id_laporan_bulanan_sub_details}', [LaporanBulananSubDetail::class, 'edit']);
+Route::post('/edit-laporan-bulanan-sub-detail/{id_laporan_bulanan_details}/{id_laporan_bulanan_sub_details}', [LaporanBulananSubDetail::class, 'prosesEdit']);
+Route::get('/hapus-laporan-bulanan-sub-detail/{id_laporan_bulanan_details}', [LaporanBulananSubDetail::class, 'prosesHapus']);
+Route::get('/download-file-sub-dokumen-laporan-bulanan/{id}', [LaporanBulananSubDetail::class, 'downloadFile']);
+
+
+Route::get('/daftar-dokumen-bulanan', [DokumenBulanan::class, 'index'])->name('daftar-dokumen-bulanan');
+Route::get('/detail-dokumen-bulanan/{id}', [DokumenBulanan::class, 'detail'])->name('detail-dokumen-bulanan');
+Route::get('/tambah-dokumen-bulanan', [DokumenBulanan::class, 'tambah'])->name('tambah-dokumen-bulanan');
+Route::post('/tambah-dokumen-bulanan', [DokumenBulanan::class, 'prosesTambah']);
+Route::get('/edit-dokumen-bulanan/{id}', [DokumenBulanan::class, 'edit']);
+Route::post('/edit-dokumen-bulanan/{id}', [DokumenBulanan::class, 'prosesEdit']);
+Route::post('/hapus-dokumen-bulanan/{id}', [DokumenBulanan::class, 'prosesHapus']);
+
+// ============================== END OF LAPORAN BULANAN QHSE =========================================================
+// ============================== TEMUAN PROYEK =========================================================
+Route::get('/daftar-temuan', [Temuan::class, 'index'])->name('daftar-temuan');
+Route::get('/detail-temuan/{id}', [Temuan::class, 'detail'])->name('detail-temuan');
+Route::get('/tambah-temuan', [Temuan::class, 'tambah'])->name('tambah-temuan');
+Route::post('/tambah-temuan', [Temuan::class, 'prosesTambah'])->name('temuan.store');
+Route::get('/edit-temuan/{id}', [Temuan::class, 'edit'])->name('edit-temuan');
+Route::post('/proses-edit-temuan/{id}', [Temuan::class, 'prosesEdit'])->name('proses-edit-temuan');
+Route::get('/hapus-temuan/{id}', [Temuan::class, 'prosesHapus']);
  // ============================== LAPORAN PAJAK =========================================================
  Route::get('/daftar-laporan-pajak', [LaporanPajak::class, 'index'])->name('daftar-laporan-pajak');
  Route::get('/detail-laporan-pajak/{id}', [LaporanPajak::class, 'detail'])->name('detail-laporan-pajak');
@@ -445,6 +629,7 @@ Route::group(['middleware' => 'revalidate'], function () {
  Route::get('/verifikasi-laporan-pajak/{id}', [LaporanPajak::class, 'prosesVerifikasi']);
  Route::post('/verifikasi-detail-laporan-pajak/{id}', [LaporanPajak::class, 'prosesVerifikasiDetail']);
  Route::post('/bukaverifikasi-detail-laporan-pajak/{id}', [LaporanPajak::class, 'prosesBukaVerifikasiDetail']);
+ Route::post('/tolak-verifikasi-detail-laporan-pajak/{id}', [LaporanPajak::class, 'prosesTolakVerifikasiDetail']);
  Route::get('/edit-detail-laporan-pajak/{id}', [LaporanPajakDetail::class, 'edit']);
  Route::post('/edit-detail-laporan-pajak/{id}', [LaporanPajakDetail::class, 'prosesEdit']);
  Route::get('/download-file-dokumen-laporan-pajak/{id}', [LaporanPajakDetail::class, 'downloadFile']);
@@ -481,6 +666,8 @@ Route::group(['middleware' => 'revalidate'], function () {
  Route::get('/verifikasi-laporan-proyek/{id}', [LaporanProyek::class, 'prosesVerifikasi']);
  Route::post('/verifikasi-detail-laporan-proyek/{id}', [LaporanProyek::class, 'prosesVerifikasiDetail']);
  Route::post('/bukaverifikasi-detail-laporan-proyek/{id}', [LaporanProyek::class, 'prosesBukaVerifikasiDetail']);
+ Route::post('/tolak-verifikasi-detail-laporan-proyek/{id}', [LaporanProyek::class, 'prosesTolakVerifikasiDetail']);
+
  Route::get('/edit-detail-laporan-proyek/{id}', [LaporanProyekDetail::class, 'edit']);
  Route::post('/edit-detail-laporan-proyek/{id}', [LaporanProyekDetail::class, 'prosesEdit']);
  Route::get('/download-file-dokumen-laporan-proyek/{id}', [LaporanProyekDetail::class, 'downloadFile']);
@@ -655,6 +842,7 @@ Route::group(['middleware' => 'revalidate'], function () {
         Route::get('/engineering/hapus-dokumen-lps/{id}', [DokumenLps::class, 'prosesHapus']);
 
         Route::get('/engineering/kelola-proyek', [Proyek::class, 'index'])->name('engineering-daftar-proyek');
+        Route::get('/engineering/search', [Proyek::class, 'search'])->name('engineering-search');
         Route::get('/engineering/detail-proyek/{id}', [Proyek::class, 'detail'])->name('engineering-detail-proyek');
         Route::get('/engineering/tambah-proyek', [Proyek::class, 'tambah'])->name('engineering-tambah-proyek');
         Route::post('/engineering/tambah-proyek', [Proyek::class, 'prosesTambah']);
@@ -691,14 +879,7 @@ Route::group(['middleware' => 'revalidate'], function () {
 
     Route::group(['middleware' => 'headoffice'], function () {
 
-        Route::get('/tambah-activity', [EngineeringActivity::class, 'tambah'])->name('tambah-activity');
-        Route::post('/tambah-activity', [EngineeringActivity::class, 'prosesTambah']);
-        Route::get('/check-activity', [EngineeringActivity::class, 'check'])->name('check-activity');
-        Route::get('/check-activity/{id}', [EngineeringActivity::class, 'checkProses']);
-        Route::get('/edit-activity/{id}', [EngineeringActivity::class, 'edit'])->name('edit-activity');
-        Route::post('/edit-activity/{id}', [EngineeringActivity::class, 'prosesEdit']);
-        Route::get('/hapus-activity/{id}', [EngineeringActivity::class, 'prosesHapus']);
-
+        
         Route::get('/pengajuan-ki-km', [KiKm::class, 'pengajuan'])->name('pengajuan-ki-km');
         Route::get('/receive-ki-km/{id}', [KiKm::class, 'receive']);
 

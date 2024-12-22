@@ -36,8 +36,24 @@
         </div>
         <div class="form-group">
             <label for="password">Password</label>
-            <input class="form-control" type="password" name="login[password]" id="password" required placeholder="Masukkan Password Anda..." style="background-color: white; color: black;">
+            <div class="input-group">
+                <input 
+                    class="form-control" 
+                    type="password" 
+                    name="login[password]" 
+                    id="password" 
+                    required 
+                    placeholder="Masukkan Password Anda..." 
+                    style="background-color: white; color: black;">
+                <span 
+                    class="input-group-text" 
+                    id="togglePassword" 
+                    style="cursor: pointer; background-color: white; border-left: none;">
+                    <i class="fa fa-eye" id="iconToggle"></i>
+                </span>
+            </div>
         </div>
+
         <div class="form-group mb-0 mt-4">
             <div class="text-center mt-3">
                 <button class="btn btn-primary" type="submit">Sign in</button>
@@ -45,4 +61,21 @@
         </div>
     </form>
 </div>
+<script>
+    const togglePassword = document.querySelector("#togglePassword");
+    const passwordField = document.querySelector("#password");
+    const iconToggle = document.querySelector("#iconToggle");
+
+    togglePassword.addEventListener("click", function () {
+        // Toggle tipe input antara password dan teks
+        const type = passwordField.type === "password" ? "text" : "password";
+        passwordField.type = type;
+
+        // Ganti ikon mata
+        iconToggle.classList.toggle("fa-eye");
+        iconToggle.classList.toggle("fa-eye-slash");
+    });
+</script>
+
+
 @endsection

@@ -22,6 +22,14 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="form-group col-md-12">
+                            <label class="form-label" for="periode">Periode (Bulan dan Tahun)</label>
+                            <input type="month" name="periode" id="periode" class="form-control @error('periode') is-invalid @enderror" required>
+                            @error('periode')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </form>
                     @if (session('success'))

@@ -293,4 +293,14 @@ class Proyek extends Controller
 
         return response()->download($filename)->deleteFileAfterSend(true);
     }
+    // Pada ProyekController
+public function search(Request $request)
+{
+    $search = $request->input('search');
+    $daftarProyek = Proyek::where('nama_proyek', 'like', '%' . $search . '%')->get();
+    
+    // Mengembalikan response dalam format JSON
+    return response()->json($daftarProyek);
+}
+
 }

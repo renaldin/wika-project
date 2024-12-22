@@ -6,7 +6,7 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between">
                 <div class="header-title">
-               
+                <h4 class="card-title" style="color: transparent;">{{$title}}</h4>
                 </div>
             </div>
             <div class="card-body px-4" style="margin-bottom: -50px;">
@@ -34,68 +34,93 @@
                 </div>
             </div>
             <div class="card-body px-0">
-            
-            
-          <div class="list-product">
-            <table class="table" id="project-status">
-              <thead> 
-                <tr>
-                  <th><span class="f-light f-w-600">No</span></th>
-                  <th><span class="f-light f-w-600">Nama Proyek</span></th>
-                  <th><span class="f-light f-w-600">Tanggal Input</span></th>
-                  <th><span class="f-light f-w-600">Realisasi Proyek</span></th>
-                  <th><span class="f-light f-w-600">Evidence</span></th>
-                  <th><span class="f-light f-w-600">Status Check</span></th>
-                  <th><span class="f-light f-w-600">Aksi</span></th>
-                </tr>
-              </thead>
-              <tbody> 
-                @php
-                    $no = 1;
-                @endphp
-                @foreach ($daftarMonthlyReport as $item)
-                  <tr class="product-removes">
-                    <td> 
-                      <p class="f-light">{{$no++}}</p>
-                    </td>
-                    <td> 
-                      <div class="product-names">
-                        <p>{{$item->proyek?->nama_proyek}}</p>
-                      </div>
-                    </td>
-                    <td> 
-                      <p class="f-light">{{$item->tanggal_report}}</p>
-                    </td>
-                    <td> 
-                      <p class="f-light">{{$item->realisasi_proyek}}</p>
-                    </td>
-                    <td> 
-                      <p class="f-light">{{$item->evidence_link}}</p>
-                    </td>
-                    <td>
-                                    @if ($item->is_check == 0)
-                                        <span class="badge badge-danger">Belum Proses Validasi</span>
-                                    @elseif($item->is_check == 2)
-                                        <span class="badge badge-primary">Proses Validasi</span>
-                                    @elseif($item->is_check == 1)
-                                        <span class="badge badge-success">Sudah Validasi</span>
-                                    @endif    
-                    </td>
-                    <td> 
-                      <div class="product-action">
-                        <a data-bs-targe="#detail{{$item->id_monthly_report}}"> 
-                          <i class="icofont icofont-eye-alt text-info"></i>
-                        </a>
-                      </div>
-                    </td>
-                  </tr>
-                @endforeach
-              </tbody>
-            </table>
-          </div>
+                <div class="table-responsive">
+                  <div class="list-product">
+                    <table class="table" id="project-status">
+                    <thead> 
+                      <tr> 
+                        <th class="column-no"><b>No</b></th> <!-- Kolom No -->
+                        <th class="column-nama-proyek"><b>Nama Proyek</b></th>
+                        <th class="column-tanggal-input"><b>Tanggal Input</b></th>
+                        <th class="column-realisasi"><b>Realisasi Proyek</b></th>
+                        <th class="column-evidence"><b>Evidence</b></th>
+                        <th class="column-dokumentasi"><b>Link Dokumentasi</b></th>
+                        <th class="column-target"><b>Target</b></th>
+                        <th class="column-qsml"><b>QSML</b></th>
+                        <th class="column-status"><b>Status Check</b></th>
+                        <th class="column-aksi" style="min-width: 100px"><b>Aksi</b></th>
+                      </tr>
+                    </thead>
+
+                      <tbody> 
+                      <?php $no = 1; ?>
+                      @foreach ($daftarMonthlyReport as $item)
+                          <tr>
+                              <td class="column-no">{{$no++}}</td> <!-- Kolom No -->
+                              <td class="column-nama-proyek">{{$item->proyek?->nama_proyek}}</td>
+                              <td class="column-tanggal-input">{{$item->tanggal_report}}</td>
+                              <td class="column-realisasi">{{$item->realisasi_proyek}}%</td>
+                              <td class="column-evidence">
+                                  <button class="btn btn-sm btn-primary">
+                                      <a href="{{$item->evidence_link}}" target="_blank" style="color: inherit; text-decoration: inherit;">Klik</a>
+                                  </button>
+                              </td>
+                              <td class="column-dokumentasi">
+                                  <button class="btn btn-sm btn-primary">
+                                      <a href="{{ $item->link_dokumentasi }}" target="_blank" style="color: inherit; text-decoration: inherit;">Klik</a>
+                                  </button>
+                              </td>
+                              <td class="column-target">{{$item->target}},00</td>
+                              <td class="column-qsml">{{$item->qsml}}</td>
+                              <td class="column-status">
+                                  @if ($item->is_check == 0)
+                                      <span class="badge badge-danger">Belum Proses Validasi</span>
+                                  @elseif($item->is_check == 2)
+                                      <span class="badge badge-primary">Proses Validasi</span>
+                                  @elseif($item->is_check == 1)
+                                      <span class="badge badge-success">Sudah Validasi</span>
+                                  @endif    
+                              </td>
+                              <td class="column-aksi">
+                                  <div class="flex align-items-center list-user-action">
+                                      <button type="button" class="btn btn-sm btn-icon btn-primary" data-toggle="tooltip" data-bs-toggle="modal" data-bs-target="#detail{{$item->id_monthly_report}}" data-placement="top" title="Detail Proyek" data-original-title="Detail">
+                                          <span class="btn-inner">
+                                              <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">                                    
+                                                  <path d="M22.4541 11.3918C22.7819 11.7385 22.7819 12.2615 22.4541 12.6082C21.0124 14.1335 16.8768 18 12 18C7.12317 18 2.98759 14.1335 1.54586 12.6082C1.21811 12.2615 1.21811 11.7385 1.54586 11.3918C2.98759 9.86647 7.12317 6 12 6C16.8768 6 21.0124 9.86647 22.4541 11.3918Z" stroke="currentColor"></path>                                    
+                                                  <circle cx="12" cy="12" r="5" stroke="currentColor"></circle>                                    
+                                                  <circle cx="12" cy="12" r="3" fill="#130F26"></circle>                                    
+                                              </svg>                                
+                                          </span>
+                                      </button>
+                                  </div>
+                              </td>
+                          </tr>
+                      @endforeach
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+<style>
+  
+  /* Striping Baris Tabel */
+  .list-product .table tbody tr:nth-child(odd) {
+      background-color: #b4ced1; /* Warna latar belakang untuk baris ganjil */
+  }
+
+  .list-product .table tbody tr:nth-child(even) {
+      background-color: #e0e0e0; /* Warna latar belakang untuk baris genap */
+  }
+
+  /* Hover efek pada baris */
+  .list-product .table tbody tr:hover {
+      background-color: #d1c4e9; /* Warna latar belakang saat hover di baris tabel */
+  }
+</style>
+
 
 @foreach ($daftarMonthlyReport as $item)
 <div class="modal fade" id="detail{{$item->id_monthly_report}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

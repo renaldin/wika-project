@@ -11,6 +11,7 @@ use App\Models\ModelLog;
 use Barryvdh\DomPDF\Facade\Pdf;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Illuminate\Support\Facades\DB;  
 
 class Akhlak extends Controller
 {
@@ -25,31 +26,94 @@ class Akhlak extends Controller
         $this->ModelDetailAkhlak  = new ModelDetailAkhlak();
         $this->public_path = 'file_akhlak';
     }
-
-    public function index()
+    
+    public function index(Request $request)
     {
+        // Pastikan ada session untuk id_user
         if (!Session()->get('role')) {
             return redirect()->route('login');
         }
-
+    
+        // Ambil data Akhlak
+        $daftarAkhlak = $this->ModelAkhlak->data();
+    
+        // Ambil periode yang dipilih dari filter
+        $periode = $request->get('periode');
+    
+        // Jika periode tidak ada di request, set periode default ke bulan dan tahun saat ini
+        if (!$periode) {
+            $periode = now()->format('Y-m'); // Format default "yyyy-mm"
+        }
+    
+        // Filter data berdasarkan periode (meskipun tidak ada data untuk periode tersebut)
+        $daftarAkhlak = $daftarAkhlak->where('periode', $periode);
+    
+        // Hitung total nilai untuk setiap Akhlak dan urutkan berdasarkan total nilai terbesar
+        $totalNilaiKosong = true; // Flag untuk cek apakah semua nilai total 0
+        foreach ($daftarAkhlak as $akhlak) {
+            $totalNilai = $this->ModelDetailAkhlak
+                                 ->where('id_akhlak', $akhlak->id_akhlak)
+                                 ->sum(DB::raw('COALESCE(nilai, 0) + COALESCE(nilai2, 0) + COALESCE(nilai3, 0)'));
+    
+            $akhlak->total_nilai = $totalNilai;
+    
+            // Cek apakah ada nilai yang tidak nol
+            if ($totalNilai > 0) {
+                $totalNilaiKosong = false;
+            }
+        }
+    
+        // Jika periode yang dipilih tidak ada data dengan total nilai lebih dari 0
+        if ($totalNilaiKosong) {
+            // Pastikan data kosong, dan hanya tampilkan pesan kosong
+            $topThreeAkhlak = collect(); // Kosongkan hasil topThreeAkhlak
+        } else {
+            // Urutkan berdasarkan total nilai terbesar dan ambil 3 teratas
+            $topThreeAkhlak = $daftarAkhlak->sortByDesc('total_nilai')->take(3);
+        }
+    
+        // Ambil data user
+        $user = $this->ModelUser->detail(Session()->get('id_user'));
+    
+        // Siapkan data untuk dikirim ke view
         $data = [
-            'title'                     => 'AKHLAK',
-            'subTitle'                  => 'Daftar AKHLAK',
-            'monitoring'                => true,
-            'daftarAkhlak'              => $this->ModelAkhlak->data(), 
-            'user'                      => $this->ModelUser->detail(Session()->get('id_user')),
+            'title' => 'AKHLAK',
+            'subTitle' => 'Daftar AKHLAK',
+            'monitoring' => true,
+            'daftarAkhlak' => $daftarAkhlak,
+            'topThreeAkhlak' => $topThreeAkhlak,
+            'user' => $user,  // Pastikan ini dikirim ke view
+            'periodeList' => $this->getPeriodeList(),  // Jika ada filter periode
+            'selectedPeriode' => $periode,  // Kirimkan periode yang dipilih
+            'isZeroData' => $totalNilaiKosong, // Flag apakah semua data 0
         ];
-
-        $log            = new ModelLog();
-        $log->id_user   = Session()->get('id_user');
-        $log->activity  = 'Melihat Halaman Daftar AKHLAK.';
-        $log->feature   = 'AKHLAK';
+    
+        // Log aktivitas
+        $log = new ModelLog();
+        $log->id_user = Session()->get('id_user');
+        $log->activity = 'Melihat Halaman Daftar AKHLAK.';
+        $log->feature = 'AKHLAK';
         $log->save();
-        
+    
+        // Kembalikan view dengan data
         return view('Divisi.index', $data);
     }
+    
+    
+    
+// Menambahkan fungsi getPeriodeList() di dalam controller Akhlak
+    public function getPeriodeList()
+    {
+        // Ambil daftar periode unik dari tabel akhlak
+        return $this->ModelAkhlak
+            ->select('periode')
+            ->distinct()  // Menyaring periode yang sama
+            ->orderBy('periode', 'desc') // Urutkan berdasarkan periode, misalnya dari yang terbaru
+            ->pluck('periode');
+    }
 
-
+    
+    
     public function monitoring()
     {
         if (!Session()->get('role')) {

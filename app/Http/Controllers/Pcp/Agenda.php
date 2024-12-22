@@ -215,33 +215,35 @@ class Agenda extends Controller
         if (!Session()->get('role')) {
             return redirect()->route('login');
         }
-
+    
         $daftarAgenda = Agendas::with('createdBy', 'proyek')
+            ->orderBy('tanggal_kegiatan', 'ASC')
             ->limit(200)
             ->get();
-        
+    
         $proyekAgenda = Agendas::with('createdBy', 'proyek')
             ->select('id_proyek')
             ->distinct()
             ->limit(200)
             ->get();
         $idProyek = [];
-        foreach($proyekAgenda as $item) {
+        foreach ($proyekAgenda as $item) {
             if ($item->id_proyek != null) {
                 $idProyek[] = $item->id_proyek;
             }
         }
-        
+    
         $data = [
-            'title'             => 'Kalender',
-            'subTitle'          => 'Kalender',
-            'daftarProyek'      => ModelProyek::whereIn('id_proyek', $idProyek)->get(),
-            'daftarAgenda'      => $daftarAgenda,
-            'user'              => $this->ModelUser->detail(Session()->get('id_user')),
+            'title' => 'Kalender',
+            'subTitle' => 'Kalender',
+            'daftarProyek' => ModelProyek::whereIn('id_proyek', $idProyek)->get(),
+            'daftarAgenda' => $daftarAgenda,
+            'user' => $this->ModelUser->detail(Session()->get('id_user')),
         ];
-        
+    
         return view('pcp/agenda.kalender', $data);
     }
+    
 
     public function getAgenda()
     {

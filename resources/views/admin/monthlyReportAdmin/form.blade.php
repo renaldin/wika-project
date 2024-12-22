@@ -99,6 +99,97 @@
                                 @enderror
                             </div>
                             <div class="form-group col-md-6">
+                                <label class="form-label" for="EIR">EIR (%)</label>
+                                <input type="number" class="form-control @error('EIR') is-invalid @enderror" id="EIR" name="EIR" 
+                                    value="@if($form == 'Tambah'){{ old('EIR') }}@elseif($form == 'Edit'){{$detail->EIR}}@endif" 
+                                    @if($form == 'Detail') disabled @endif
+                                    placeholder="Masukkan EIR" 
+                                    step="0.01" required>
+                                @error('EIR')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="BEP">BEP (%)</label>
+                                <input type="number" class="form-control @error('BEP') is-invalid @enderror" id="BEP" name="BEP" 
+                                    value="@if($form == 'Tambah'){{ old('BEP') }}@elseif($form == 'Edit'){{$detail->BEP}}@endif" 
+                                    @if($form == 'Detail') disabled @endif
+                                    placeholder="Masukkan BEP" 
+                                    step="0.01" required>
+                                @error('BEP')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="produksi_bim">Produksi BIM (%)</label>
+                                <input type="number" class="form-control @error('produksi_bim') is-invalid @enderror" id="produksi_bim" name="produksi_bim" 
+                                    value="@if($form == 'Tambah'){{ old('produksi_bim') }}@elseif($form == 'Edit'){{$detail->produksi_bim}}@endif" 
+                                    @if($form == 'Detail') disabled @endif
+                                    placeholder="Masukkan Produksi BIM" 
+                                    step="0.01" required>
+                                @error('produksi_bim')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="monitoring_evaluasi">Monitoring Evaluasi (%)</label>
+                                <input type="number" class="form-control @error('monitoring_evaluasi') is-invalid @enderror" id="monitoring_evaluasi" name="monitoring_evaluasi" 
+                                    value="@if($form == 'Tambah'){{ old('monitoring_evaluasi') }}@elseif($form == 'Edit'){{$detail->monitoring_evaluasi}}@endif" 
+                                    @if($form == 'Detail') disabled @endif
+                                    placeholder="Masukkan Monitoring Evaluasi" 
+                                    step="0.01" required>
+                                @error('monitoring_evaluasi')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="tigad">3D (%)</label>
+                                <input type="number" class="form-control @error('tigad') is-invalid @enderror" id="tigad" name="tigad" 
+                                    value="@if($form == 'Tambah'){{ old('tigad') }}@elseif($form == 'Edit'){{$detail->tigad}}@endif" 
+                                    @if($form == 'Detail') disabled @endif
+                                    placeholder="Masukkan 3D" 
+                                    step="0.01" required>
+                                @error('tigad')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="empatd">4D (%)</label>
+                                <input type="number" class="form-control @error('empatd') is-invalid @enderror" id="empatd" name="empatd" 
+                                    value="@if($form == 'Tambah'){{ old('empatd') }}@elseif($form == 'Edit'){{$detail->empatd}}@endif" 
+                                    @if($form == 'Detail') disabled @endif
+                                    placeholder="Masukkan 4D" 
+                                    step="0.01" required>
+                                @error('empatd')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-label" for="limad">5D (%)</label>
+                                <input type="number" class="form-control @error('limad') is-invalid @enderror" id="limad" name="limad" 
+                                    value="@if($form == 'Tambah'){{ old('limad') }}@elseif($form == 'Edit'){{$detail->limad}}@endif" 
+                                    @if($form == 'Detail') disabled @endif
+                                    placeholder="Masukkan 5D" 
+                                    step="0.01" required>
+                                @error('produksi_bim')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
                                 <label class="form-label" for="kendala_implementasi_bim">Kendala Implementasi Bim</label>
                                 <input type="text" class="form-control @error('kendala_implementasi_bim') is-invalid @enderror" id="kendala_implementasi_bim" name="kendala_implementasi_bim" value="@if($form == 'Tambah'){{ old('kendala_implementasi_bim') }}@elseif($form == 'Edit'){{$detail->kendala_implementasi_bim}}@endif"  @if($form == 'Detail') disabled @endif placeholder="Masukkan Kendala Implementasi Bim" required>
                                 @error('kendala_implementasi_bim')

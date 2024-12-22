@@ -160,17 +160,32 @@ class HC extends Controller
 
     public function updateDetailAkhlak(Request $request, $id_detail_akhlak)
     {
+        // Validasi input
         $request->validate([
-            'deskripsi' => 'required|string',
-            'periode' => 'required|string',
-            'evidence' => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:2048',
+            'deskripsi' => 'nullable|string',
+            'deskripsi2' => 'nullable|string',
+            'deskripsi3' => 'nullable|string',
+            'evidence' => 'nullable|file|mimes:pdf,jpg,jpeg,png', // Validasi untuk evidence
+            'evidence2' => 'nullable|string',
+            'evidence3' => 'nullable|string',
             'penilaian' => 'nullable|string'
         ]);
     
+        // Temukan detail akhlak berdasarkan ID
         $detailAkhlak = ModelDetailAkhlak::findOrFail($id_detail_akhlak);
-        $detailAkhlak->deskripsi = $request->input('deskripsi');
-        $detailAkhlak->periode = $request->input('periode');
-        
+    
+        // Update semua kolom deskripsi dan penilaian
+        $detailAkhlak->update([
+            'deskripsi' => $request->input('deskripsi'),
+            'deskripsi2' => $request->input('deskripsi2'),
+            'deskripsi3' => $request->input('deskripsi3'),
+            'penilaian' => $request->input('penilaian'),
+            'nilai' => $request->input('deskripsi') ? 10 : null, // Mengisi nilai sesuai deskripsi
+            'nilai2' => $request->input('deskripsi2') ? 10 : null, // Mengisi nilai2 sesuai deskripsi2
+            'nilai3' => $request->input('deskripsi3') ? 10 : null, // Mengisi nilai3 sesuai deskripsi3
+        ]);
+    
+        // Menangani upload file untuk evidence
         if ($request->hasFile('evidence')) {
             $file = $request->file('evidence');
             $filename = time() . '_' . $file->getClientOriginalName();
@@ -178,12 +193,10 @@ class HC extends Controller
             $detailAkhlak->evidence = 'file_akhlak/' . $filename;
         }
     
-        if ($request->has('penilaian')) {
-            $detailAkhlak->penilaian = $request->input('penilaian');
-        }
-    
+        // Simpan perubahan pada model
         $detailAkhlak->save();
     
+        // Redirect kembali dengan pesan sukses
         return redirect()->back()->with('success', 'Detail Akhlak updated successfully.');
     }
     

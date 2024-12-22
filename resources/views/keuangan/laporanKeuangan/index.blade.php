@@ -11,6 +11,19 @@
             </div>
             <div class="card-body px-4" style="margin-bottom: -50px;">
                 <div class="row">
+                    <!-- Filter Bulan -->
+                    <div class="col-lg-4 mb-3">
+                        <form action="{{ route('daftar-laporan-keuangan') }}" method="GET">
+                            <div class="input-group">
+                                <!-- Input untuk memilih bulan dan tahun -->
+                                <input type="month" name="bulan" class="form-control" value="{{ request('bulan') }}">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
                     @if ($user->role == 'Tim Proyek')
                         <div class="col-lg-8 mb-1">
                             <a href="/tambah-laporan-keuangan" class="btn btn-primary mb-4">Tambah</a>
@@ -39,6 +52,7 @@
                             <tr class="ligth">
                                 <th>No</th>
                                 <th>Nama Proyek</th>
+                                <th>Periode</th>
                                 <th style="min-width: 100px">Aksi</th>
                             </tr>
                         </thead>
@@ -47,20 +61,14 @@
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $item->proyek?->nama_proyek }}</td>
+                                    <td>{{ $item->periode }}</td>
                                     <td>
                                         <div class="flex align-items-center list-user-action">
                                             @if ($user->role == 'Tim Proyek')
-                                                <a href="/edit-laporan-keuangan/{{$item->id}}" class="btn btn-sm btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Edit">
-                                                    <span class="btn-inner">
-                                                        <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M8.82812 10.921L16.3011 3.44799C17.2321 2.51799 18.7411 2.51799 19.6721 3.44799L20.8891 4.66499C21.8201 5.59599 21.8201 7.10599 20.8891 8.03599L13.3801 15.545C12.9731 15.952 12.4211 16.181 11.8451 16.181H8.09912L8.19312 12.401C8.20712 11.845 8.43412 11.315 8.82812 10.921Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                            <path d="M15.1655 4.60254L19.7315 9.16854" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                        </svg>
-                                                    </span>
-                                                </a>
                                                 @if (!$item->id_verifikator)
-                                                    <button type="button" class="btn btn-sm btn-icon btn-danger btn-delete" data-toggle="tooltip" data-placement="top" title="Hapus" data-href="/hapus-laporan-keuangan/{{$item->id}}" data-content="Apakah Anda yakin akan hapus data ini?">
+                                                    <button type="button" class="btn btn-sm btn-icon btn-danger btn-delete" 
+                                                        data-href="/hapus-laporan-keuangan/{{$item->id}}" 
+                                                        data-toggle="tooltip" data-placement="top" title="Hapus">
                                                         <span class="btn-inner">
                                                             <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
                                                                 <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -83,7 +91,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="text-center">Tidak ada laporan keuangan yang tersedia.</td>
+                                    <td colspan="4" class="text-center">Tidak ada laporan keuangan yang tersedia.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -94,3 +102,4 @@
     </div>
 </div>
 @endsection
+

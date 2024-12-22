@@ -26,32 +26,35 @@ class LaporanProyek extends Controller
         $this->public_path = 'file_laporan_proyek';
     }
 
-    public function index()
+    public function index(Request $request)
     {
         if (!Session::get('role')) {
             return redirect()->route('login');
         }
-        
-        $proyekUser = ProyekUsers::where('id_user', Session::get('id_user'))->get();
-        $idProyek = [];
-        foreach ($proyekUser as $item) {
-            $idProyek[] = $item->id_proyek;
+    
+        // Mendapatkan query dasar laporan keuangan
+        $query = LaporanProyeks::with('proyek')->limit(400);
+    
+        // Filter berdasarkan bulan dan tahun jika parameter 'bulan' ada
+        if ($request->has('bulan') && !empty($request->bulan)) {
+            $query->where('periode', 'like', $request->bulan . '%');
         }
     
+        // Filter data sesuai role pengguna
         if (Session::get('role') == 'Tim Proyek') {
-            $daftarLaporanProyek = LaporanProyeks::with('proyek') // Memastikan ini benar
-                ->whereIn('id_proyek', $idProyek)
-                ->limit(400)
-                ->get();
+            $proyekUser = ProyekUsers::where('id_user', Session::get('id_user'))->get();
+            $idProyek = $proyekUser->pluck('id_proyek')->toArray();
+    
+            $daftarLaporanProyek = $query->whereIn('id_proyek', $idProyek)->get();
         } elseif (Session::get('role') == 'Head Office') {
-            $daftarLaporanProyek = LaporanProyeks::with('proyek') // Memastikan ini benar
-                ->limit(400)
-                ->get();
+            $daftarLaporanProyek = $query->get();
+        } else {
+            $daftarLaporanProyek = collect(); // Menggunakan koleksi kosong jika role tidak dikenali
         }
     
         $data = [
-            'title' => 'Data Laporan Proyek',
-            'subTitle' => 'Daftar Laporan Proyek',
+            'title' => 'Data Laporan Keuangan',
+            'subTitle' => 'Daftar Laporan Keuangan',
             'daftarLaporanProyek' => $daftarLaporanProyek,
             'user' => $this->ModelUser->detail(Session::get('id_user')),
         ];
@@ -73,13 +76,11 @@ class LaporanProyek extends Controller
             $dataProyekByUser[] = ModelProyek::find($item->id_proyek);
         }
     
-        // Mengambil detail laporan keuangan berdasarkan ID
         $laporanProyekDetail = LaporanProyekDetails::with(['dokumen', 'laporanProyek'])
-            ->withCount(['laporanProyekSubDetails' => function ($query) use ($id_laporan_proyek) {
-                $query->where('id_laporan_proyek', $id_laporan_proyek);
-            }])
-            ->where('id_laporan_proyek', $id_laporan_proyek)
-            ->get();
+        ->withCount('laporanProyekSubDetails') // Menghitung jumlah sub-detail
+        ->where('id_laporan_proyek', $id_laporan_proyek)
+        ->get();
+
     
         // Mengambil laporan keuangan dengan proyek terkait
         $laporanProyek = LaporanProyeks::with('proyek')->find($id_laporan_proyek);
@@ -134,24 +135,35 @@ class LaporanProyek extends Controller
         // Validasi input
         $validatedData = $request->validate([
             'id_proyek' => 'required|exists:proyek,id_proyek', // Memastikan id_proyek valid
+            'periode'   => 'required|date_format:Y-m',
         ]);
-
+    
+        // Cek apakah kombinasi id_proyek dan periode sudah ada
+        $existingReport = LaporanProyeks::where('id_proyek', $validatedData['id_proyek'])
+                        ->where('periode', $validatedData['periode'])
+                        ->first();
+    
+        if ($existingReport) {
+            return back()->with('fail', 'Data dengan proyek dan periode tersebut sudah ada!');
+        }
+    
         DB::beginTransaction();
-
+    
         try {
             // Buat objek laporan keuangan baru
             $laporanProyek = new LaporanProyeks();
             $laporanProyek->id_proyek = $validatedData['id_proyek']; // Menyimpan id_proyek yang valid
             $laporanProyek->verifikasi_proyek = 'Belum Disetujui'; // Misalnya status default
-
+            $laporanProyek->periode = $validatedData['periode']; 
+    
             // Log informasi sebelum menyimpan
             Log::info('Menyimpan laporan proyek:', [
                 'id_proyek' => $laporanProyek->id_proyek,
             ]);
-
-            // Simpan laporan keuangan
+    
+            // Simpan laporan proyek
             $laporanProyek->save();
-
+    
             DB::commit(); // Komit transaksi jika berhasil
             return redirect('/daftar-laporan-proyek')->with('success', 'Laporan proyek berhasil ditambahkan!');
         } catch (\Exception $e) {
@@ -196,19 +208,24 @@ class LaporanProyek extends Controller
         if (!Session::get('role')) {
             return redirect()->route('login');
         }
-
-        $laporanProyek = LaporanProyeks::find($id_laporan_proyek);
-        $laporanProyek->delete();
-
-        $LaporanProyekDetails = LaporanProyekDetails::where('id_laporan_proyek', $id_laporan_proyek)->get();
-        foreach ($LaporanProyekDetails as $item) {
-            if ($item->file_dokumen != "") {
-                unlink(public_path($this->public_path) . '/' . $item->file_dokumen);
+    
+        try {
+            $laporanProyek = LaporanProyeks::findOrFail($id_laporan_proyek);
+            $laporanProyek->delete();
+    
+            // Jika ada file yang perlu dihapus juga
+            $laporanProyekDetail = LaporanProyekDetails::where('id_laporan_proyek', $id_laporan_proyek)->get();
+            foreach ($laporanProyekDetail as $item) {
+                if ($item->file_dokumen != "") {
+                    unlink(public_path($this->public_path) . '/' . $item->file_dokumen);
+                }
+                $item->delete();
             }
-            $item->delete();
+    
+            return back()->with('success', 'Data berhasil dihapus!');
+        } catch (\Exception $e) {
+            return back()->with('fail', 'Terjadi kesalahan saat menghapus data!');
         }
-
-        return back()->with('success', 'Data berhasil dihapus!');
     }
 
     public function verifikasi()
@@ -270,4 +287,32 @@ class LaporanProyek extends Controller
         
         return back()->with('success', 'Data berhasil diverifikasi!');
     }
+
+    public function prosesTolakVerifikasiDetail(Request $request, $id_laporan_proyek)
+    {
+        if (!Session::get('role')) {
+            return redirect()->route('login');
+        }
+    
+        // Validasi input komentar agar tidak kosong
+        $request->validate([
+            'comment' => 'required|string|max:255'
+        ]);
+    
+        // Cari data laporan proyek berdasarkan ID
+        $laporanProyek = LaporanProyekDetails::find($id_laporan_proyek);
+    
+        if (!$laporanProyek) {
+            return back()->with('fail', 'Laporan tidak ditemukan!');
+        }
+    
+        // Update status menjadi 2 (Verifikasi Ditolak) dan simpan komentar penolakan
+        $laporanProyek->status = 2;
+        $laporanProyek->id_verifikator = Session()->get('id_user');
+        $laporanProyek->komentar = $request->comment; // Pastikan kolom komentar tersedia di database
+        $laporanProyek->save();
+    
+        return back()->with('success', 'Data berhasil ditolak verifikasinya dengan komentar!');
+    }
+    
 }

@@ -15,6 +15,7 @@ class LaporanAkuntansis extends Model
         'id_proyek',
         'verifikasi_akuntansi',
         'id_verifikator',
+        'periode',
         // Tambahkan kolom lain sesuai kebutuhan
     ];
 

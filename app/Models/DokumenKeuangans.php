@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class DokumenKeuangans extends Model
 {
     use HasFactory;
+    
 }

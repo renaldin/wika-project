@@ -303,8 +303,8 @@
         <script src="{{ asset('vendor/ckeditor/ckeditor.js') }}"></script>
 
         <!-- Fullcalender Javascript -->
-        <script src='{{ asset('template/html/assets/vendor/fullcalendar/core/main.js') }}'></script>
         <script src='{{ asset('template/html/assets/vendor/fullcalendar/daygrid/main.js') }}'></script>
+        <script src='{{ asset('template/html/assets/vendor/fullcalendar/core/main.js') }}'></script>
         <script src='{{ asset('template/html/assets/vendor/fullcalendar/timegrid/main.js') }}'></script>
         <script src='{{ asset('template/html/assets/vendor/fullcalendar/list/main.js') }}'></script>
         <script src='{{ asset('template/html/assets/vendor/fullcalendar/interaction/main.js') }}'></script>
@@ -971,7 +971,7 @@
                     (chart = new ApexCharts(document.querySelector("#pie-chart-status-implementasi-bim"), options)).render()
                 }
             }
-          </script>
+        </script>
 
         <script>
             // umum

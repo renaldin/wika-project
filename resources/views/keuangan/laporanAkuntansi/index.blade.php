@@ -11,6 +11,18 @@
             </div>
             <div class="card-body px-4" style="margin-bottom: -50px;">
                 <div class="row">
+                    <!-- Filter Bulan -->
+                    <div class="col-lg-4 mb-3">
+                        <form action="{{ route('daftar-laporan-akuntansi') }}" method="GET">
+                            <div class="input-group">
+                                <!-- Input untuk memilih bulan dan tahun -->
+                                <input type="month" name="bulan" class="form-control" value="{{ request('bulan') }}">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     @if ($user->role == 'Tim Proyek')
                         <div class="col-lg-8 mb-1">
                             <a href="/tambah-laporan-akuntansi" class="btn btn-primary mb-4">Tambah</a>
@@ -45,6 +57,7 @@
                         <tr class="ligth">
                             <th>No</th>
                             <th>Nama Proyek</th>
+                            <th>Periode</th>
                             {{-- <th>Status Verifikasi</th> --}}
                             <th style="min-width: 100px">Aksi</th>
                         </tr>
@@ -55,6 +68,7 @@
                             <tr>
                                 <td>{{$no++}}</td>
                                 <td>{{$item->proyek?->nama_proyek}}</td>
+                                <td>{{$item->periode}}</td>
                                 {{-- <td>{{$item->verifikasi_akuntansi}}</td> --}}
                                 <td>
                                     <div class="flex align-items-center list-user-action">

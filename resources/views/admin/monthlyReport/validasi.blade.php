@@ -65,14 +65,11 @@
                                 </td>
                                 <td>
                                 <div class="d-flex justify-content-start align-items-center list-user-action">
-    <!-- Tombol Kirim Ke Head Office -->
-    <button type="button" class="btn btn-sm btn-icon btn-warning btn-verifikasi" data-toggle="tooltip" data-placement="top" title="Kirim Ke Head Office">
-        <span class="btn-inner">
-            <svg class="icon-32" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2L2 12h3v8h14v-8h3L12 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-        </span>
-    </button>
+                                <button type="button" class="btn btn-sm btn-icon btn-primary btn-verifikasi" data-toggle="tooltip" data-placement="top" title="Kirim Ke Head Office" data-original-title="Kirim Ke Head Office" data-href="/proses-validasi-monthly-report/{{$item->id_monthly_report}}" data-content="Apakah Anda yakin akan kirim ke Head Office?" data-title="Kirim ke Head Office">
+                                            <span class="btn-inner">
+                                                <svg class="icon-32" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">                                    <path d="M15.8325 8.17463L10.109 13.9592L3.59944 9.88767C2.66675 9.30414 2.86077 7.88744 3.91572 7.57893L19.3712 3.05277C20.3373 2.76963 21.2326 3.67283 20.9456 4.642L16.3731 20.0868C16.0598 21.1432 14.6512 21.332 14.0732 20.3953L10.106 13.9602" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>                                </svg>                                 
+                                            </span>
+                                        </button>
 
     <!-- Tombol Kirim Kembali ke Tim Proyek -->
     <button type="button" class="btn btn-sm btn-icon btn-danger btn-verifikasi" data-toggle="tooltip" data-placement="top" title="Kirim Kembali ke Tim Proyek">

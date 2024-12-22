@@ -53,17 +53,18 @@ class LaporanKeuanganSubDetail extends Controller
         if (!Session()->get('role')) {
             return redirect()->route('login');
         }
-
+    
         $data = [
             'title' => 'Data Laporan Keuangan',
-            'subTitle' => 'Tambah Sub Detail Laporan Keuangan',
+            'subTitle' => 'Tambah Sub Detail Keuangan Keuangan',
             'form' => 'Tambah',
-            'LaporanKeuanganDetail' => LaporanKeuanganDetails::with('dokumen', 'laporanKeuanganSubDetails')->find($id_laporan_keuangan_details),
+            'LaporanKeuanganDetail' => LaporanKeuanganDetails::with('dokumen', 'laporanKeuanganSubDetails')->find($id_laporan_keuangan_details), // This variable name is correct
             'user' => $this->ModelUser->detail(Session()->get('id_user')),
         ];
-
+    
         return view('keuangan/laporanKeuanganSubDetail.form', $data);
     }
+    
 
     public function prosesTambah(Request $request, $id_laporan_keuangan_details)
     {
@@ -87,6 +88,7 @@ class LaporanKeuanganSubDetail extends Controller
 
         return redirect("/sub-detail-laporan-keuangan/$id_laporan_keuangan_details")->with('success', 'Data berhasil ditambahkan!');
     }
+
 
  
     public function detail($id)

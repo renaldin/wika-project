@@ -11,6 +11,18 @@ class ModelDetailAkhlak extends Model
     use HasFactory;
     protected $table = 'detail_akhlak';
     protected $primaryKey = 'id_detail_akhlak';
+    protected $fillable = [
+        'deskripsi',
+        'deskripsi2',
+        'deskripsi3',
+        'nilai',
+        'nilai2',
+        'nilai3',
+        'evidence',
+        'evidence2',
+        'evidence3',
+        'penilaian'
+    ];
 
     public function akhlak()
     {
@@ -30,23 +42,6 @@ class ModelDetailAkhlak extends Model
             ->get();
     }
 
-    public function dataAkhlak($id_akhlak)
-    {
-        return DB::table('detail_akhlak')
-            ->join('aspek_akhlak', 'detail_akhlak.id_aspek_akhlak', '=', 'aspek_akhlak.id_aspek_akhlak')
-            ->where('id_akhlak', $id_akhlak)
-            ->orderBy('id_detail_akhlak', 'ASC')
-            ->get();
-    }
-    
-    public function dataByIdAkhlak($id_akhlak)
-    {
-        return DB::table('detail_akhlak')
-            ->join('aspek_akhlak', 'detail_akhlak.id_aspek_akhlak', '=', 'aspek_akhlak.id_aspek_akhlak')
-            ->where('id_akhlak', $id_akhlak)
-            ->orderBy('id_detail_akhlak', 'ASC')
-            ->get();
-    }
 
     public function detail($id_detail_akhlak)
     {
@@ -57,6 +52,14 @@ class ModelDetailAkhlak extends Model
             ->first();
     }
 
+    public function dataByIdAkhlak($id_akhlak)
+    {
+        return DB::table('detail_akhlak')
+            ->join('aspek_akhlak', 'detail_akhlak.id_aspek_akhlak', '=', 'aspek_akhlak.id_aspek_akhlak')
+            ->where('id_akhlak', $id_akhlak)
+            ->orderBy('id_detail_akhlak', 'ASC')
+            ->get();
+    }
     public function tambah($data)
     {
         DB::table('detail_akhlak')->insert($data);
@@ -76,4 +79,25 @@ class ModelDetailAkhlak extends Model
     {
         DB::table('detail_akhlak')->where('id_akhlak', $id_akhlak)->delete();
     }
+
+     // Mutator untuk deskripsi
+     public function setDeskripsiAttribute($value)
+     {
+         $this->attributes['deskripsi'] = $value;
+         $this->attributes['nilai'] = $value ? 10 : null;
+     }
+ 
+     // Mutator untuk deskripsi2
+     public function setDeskripsi2Attribute($value)
+     {
+         $this->attributes['deskripsi2'] = $value;
+         $this->attributes['nilai2'] = $value ? 10 : null;
+     }
+ 
+     // Mutator untuk deskripsi3
+     public function setDeskripsi3Attribute($value)
+     {
+         $this->attributes['deskripsi3'] = $value;
+         $this->attributes['nilai3'] = $value ? 10 : null;
+     }
 }

@@ -83,5 +83,29 @@
         </div>
     </div>
 </div>
+<script>
+    function confirmDelete(button) {
+        var url = button.getAttribute('data-href');
+        if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = url;
 
+            var csrfToken = document.createElement('input');
+            csrfToken.type = 'hidden';
+            csrfToken.name = '_token';
+            csrfToken.value = '{{ csrf_token() }}';
+            form.appendChild(csrfToken);
+
+            var method = document.createElement('input');
+            method.type = 'hidden';
+            method.name = '_method';
+            method.value = 'POST'; // Gunakan 'DELETE' jika Anda menggunakan rute DELETE
+            form.appendChild(method);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script>
 @endsection

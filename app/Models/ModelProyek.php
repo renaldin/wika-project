@@ -91,4 +91,9 @@ class ModelProyek extends Model
     {
         return DB::table('proyek')->where('prioritas', $prioritas)->get();
     }
+
+    public function temuans()
+    {
+        return $this->hasMany(Temuans::class, 'id_proyek', 'id'); // Menunjukkan bahwa setiap proyek dapat memiliki banyak temuan
+    }
 }

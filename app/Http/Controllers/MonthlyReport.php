@@ -267,6 +267,7 @@ class MonthlyReport extends Controller
             'konsep_lean_construction_berjalan' => Request()->konsep_lean_construction_berjalan,
             'feedback_untuk_perusahaan'         => Request()->feedback_untuk_perusahaan,
             'evidence_link'                     => Request()->evidence_link,
+            'link_dokumentasi'                     => Request()->link_dokumentasi,
             'bulan_report'                      => Request()->bulan_report,
             'is_check'                          => 0,
             'dua_d_temp'                        => $dua_d,
@@ -389,6 +390,7 @@ class MonthlyReport extends Controller
             'konsep_lean_construction_berjalan' => Request()->konsep_lean_construction_berjalan,
             'feedback_untuk_perusahaan'         => Request()->feedback_untuk_perusahaan,
             'evidence_link'                     => Request()->evidence_link,
+            'link_dokumentasi'                  => Request()->link_dokumentasi,
             'bulan_report'                      => Request()->bulan_report,
         ];
 
@@ -458,6 +460,7 @@ class MonthlyReport extends Controller
             'konsep_lean_construction_berjalan' => Request()->konsep_lean_construction_berjalan,
             'feedback_untuk_perusahaan'         => Request()->feedback_untuk_perusahaan,
             'evidence_link'                     => Request()->evidence_link,
+            'link_dokumentasi'                     => Request()->link_dokumentasi,
             'bulan_report'                      => Request()->bulan_report,
             'dua_d_temp'                        => $dua_d_temp,
             'tiga_d_temp'                       => $tiga_d_temp,

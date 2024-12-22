@@ -15,6 +15,7 @@ class LaporanKeuangans extends Model
         'id_proyek',
         'verifikasi_keuangan',
         'id_verifikator',
+        'periode'
         // Tambahkan kolom lain sesuai kebutuhan
     ];
 
@@ -27,4 +28,6 @@ class LaporanKeuangans extends Model
     {
         return $this->hasMany(LaporanKeuanganDetails::class, 'id_laporan_keuangan'); // pastikan nama kolom foreign key sesuai
     }
+
+
 }

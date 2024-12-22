@@ -96,7 +96,7 @@
                                         File
                                     </a>
                                 </td>
-                                @if($detail->status == 0)
+                  
                                     @if ($user->role == 'Tim Proyek')
                                         <td>
                                             <div class="flex align-items-center list-user-action">
@@ -131,7 +131,7 @@
                                             </div>
                                         </td>
                                     @endif
-                                @endif
+                      
                             </tr>
                         @endforeach
                     </tbody>

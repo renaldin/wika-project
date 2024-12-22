@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class ModelEngineeringActivity extends Model
 {
@@ -24,13 +25,16 @@ class ModelEngineeringActivity extends Model
 
     public function data()
     {
-        return DB::table('engineering_activity')
-            ->join('user', 'user.id_user', '=', 'engineering_activity.id_user')
-            ->join('kategori_pekerjaan', 'kategori_pekerjaan.id_kategori_pekerjaan', '=', 'engineering_activity.id_kategori_pekerjaan')
-            ->orderBy('id_engineering_activity', 'DESC')
-            ->limit(200)
-            ->get();
+        return Cache::remember('engineering_activity_data', 60, function () {
+            return DB::table('engineering_activity')
+                ->join('user', 'user.id_user', '=', 'engineering_activity.id_user')
+                ->join('kategori_pekerjaan', 'kategori_pekerjaan.id_kategori_pekerjaan', '=', 'engineering_activity.id_kategori_pekerjaan')
+                ->orderBy('id_engineering_activity', 'DESC')
+                ->limit(700)
+                ->get();
+        });
     }
+    
 
     public function dataProductivityTeam($monthYear)
     {

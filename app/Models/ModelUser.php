@@ -56,4 +56,9 @@ class ModelUser extends Model
     {
         return DB::table('user')->where('role', 'Head Office')->count();
     }
+    public function picPelatihans()
+    {
+        return $this->hasMany(PicPelatihans::class, 'id_pic', 'id_user');
+    }
+
 }

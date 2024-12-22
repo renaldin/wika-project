@@ -26,26 +26,28 @@ class LaporanKeuangan extends Controller
         $this->public_path = 'file_laporan_keuangan';
     }
 
-    public function index()
+    public function index(Request $request)
     {
         if (!Session::get('role')) {
             return redirect()->route('login');
         }
     
-        // Mendapatkan semua ID proyek jika pengguna adalah Head Office
+        // Mendapatkan query dasar laporan keuangan
+        $query = LaporanKeuangans::with('proyek')->limit(400);
+    
+        // Filter berdasarkan bulan dan tahun jika parameter 'bulan' ada
+        if ($request->has('bulan') && !empty($request->bulan)) {
+            $query->where('periode', 'like', $request->bulan . '%');
+        }
+    
+        // Filter data sesuai role pengguna
         if (Session::get('role') == 'Tim Proyek') {
             $proyekUser = ProyekUsers::where('id_user', Session::get('id_user'))->get();
-            $idProyek = $proyekUser->pluck('id_proyek')->toArray(); // Menggunakan pluck untuk efisiensi
+            $idProyek = $proyekUser->pluck('id_proyek')->toArray();
     
-            $daftarLaporanKeuangan = LaporanKeuangans::with('proyek')
-                ->whereIn('id_proyek', $idProyek)
-                ->limit(400)
-                ->get();
+            $daftarLaporanKeuangan = $query->whereIn('id_proyek', $idProyek)->get();
         } elseif (Session::get('role') == 'Head Office') {
-            // Menampilkan semua laporan keuangan untuk Head Office tanpa filter ID proyek
-            $daftarLaporanKeuangan = LaporanKeuangans::with('proyek')
-                ->limit(400) // Mengambil semua laporan keuangan
-                ->get();
+            $daftarLaporanKeuangan = $query->get();
         } else {
             $daftarLaporanKeuangan = collect(); // Menggunakan koleksi kosong jika role tidak dikenali
         }
@@ -59,6 +61,7 @@ class LaporanKeuangan extends Controller
     
         return view('keuangan.laporanKeuangan.index', $data);
     }
+    
     
     
     public function detail($id_laporan_keuangan)
@@ -75,14 +78,12 @@ class LaporanKeuangan extends Controller
             $dataProyekByUser[] = ModelProyek::find($item->id_proyek);
         }
     
-        // Mengambil detail laporan keuangan berdasarkan ID
+        // Mengambil detail laporan keuangan berdasarkan ID, dengan menghitung jumlah file
         $laporanKeuanganDetail = LaporanKeuanganDetails::with(['dokumen', 'laporanKeuangan'])
-            ->withCount(['laporanKeuanganSubDetails' => function ($query) use ($id_laporan_keuangan) {
-                $query->where('id_laporan_keuangan', $id_laporan_keuangan);
-            }])
+            ->withCount('laporanKeuanganSubDetails') // Hitung jumlah sub-detail
             ->where('id_laporan_keuangan', $id_laporan_keuangan)
             ->get();
-    
+            
         // Mengambil laporan keuangan dengan proyek terkait
         $laporanKeuangan = LaporanKeuangans::with('proyek')->find($id_laporan_keuangan);
         
@@ -135,24 +136,35 @@ class LaporanKeuangan extends Controller
         // Validasi input
         $validatedData = $request->validate([
             'id_proyek' => 'required|exists:proyek,id_proyek', // Memastikan id_proyek valid
+            'periode'   => 'required|date_format:Y-m',
         ]);
-
+    
+        // Cek apakah kombinasi id_proyek dan periode sudah ada
+        $existingReport = LaporanKeuangans::where('id_proyek', $validatedData['id_proyek'])
+                        ->where('periode', $validatedData['periode'])
+                        ->first();
+    
+        if ($existingReport) {
+            return back()->with('fail', 'Data dengan proyek dan periode tersebut sudah ada!');
+        }
+    
         DB::beginTransaction();
-
+    
         try {
             // Buat objek laporan keuangan baru
             $laporanKeuangan = new LaporanKeuangans();
             $laporanKeuangan->id_proyek = $validatedData['id_proyek']; // Menyimpan id_proyek yang valid
             $laporanKeuangan->verifikasi_keuangan = 'Belum Disetujui'; // Misalnya status default
-
+            $laporanKeuangan->periode = $validatedData['periode']; 
+    
             // Log informasi sebelum menyimpan
             Log::info('Menyimpan laporan keuangan:', [
                 'id_proyek' => $laporanKeuangan->id_proyek,
             ]);
-
-            // Simpan laporan keuangan
+    
+            // Simpan laporan pajak
             $laporanKeuangan->save();
-
+    
             DB::commit(); // Komit transaksi jika berhasil
             return redirect('/daftar-laporan-keuangan')->with('success', 'Laporan keuangan berhasil ditambahkan!');
         } catch (\Exception $e) {
@@ -161,6 +173,7 @@ class LaporanKeuangan extends Controller
             return back()->with('fail', 'Terjadi kesalahan sistem!'); 
         }
     }
+    
 
     public function edit($id_laporan_keuangan)
     {
@@ -197,21 +210,26 @@ class LaporanKeuangan extends Controller
         if (!Session::get('role')) {
             return redirect()->route('login');
         }
-
-        $laporanKeuangan = LaporanKeuangans::find($id_laporan_keuangan);
-        $laporanKeuangan->delete();
-
-        $laporanKeuanganDetail = LaporanKeuanganDetails::where('id_laporan_keuangan', $id_laporan_keuangan)->get();
-        foreach ($laporanKeuanganDetail as $item) {
-            if ($item->file_dokumen != "") {
-                unlink(public_path($this->public_path) . '/' . $item->file_dokumen);
+    
+        try {
+            $laporanKeuangan = LaporanKeuangans::findOrFail($id_laporan_keuangan);
+            $laporanKeuangan->delete();
+    
+            // Jika ada file yang perlu dihapus juga
+            $laporanKeuanganDetail = LaporanKeuanganDetails::where('id_laporan_keuangan', $id_laporan_keuangan)->get();
+            foreach ($laporanKeuanganDetail as $item) {
+                if ($item->file_dokumen != "") {
+                    unlink(public_path($this->public_path) . '/' . $item->file_dokumen);
+                }
+                $item->delete();
             }
-            $item->delete();
+    
+            return back()->with('success', 'Data berhasil dihapus!');
+        } catch (\Exception $e) {
+            return back()->with('fail', 'Terjadi kesalahan saat menghapus data!');
         }
-
-        return back()->with('success', 'Data berhasil dihapus!');
     }
-
+    
     public function verifikasi()
     {
         if (!Session::get('role')) {
@@ -286,6 +304,33 @@ class LaporanKeuangan extends Controller
         $laporanKeuangan->save();
     
         return back()->with('success', 'Data berhasil dibuka verifikasinya!');
+    }
+
+    public function prosesTolakVerifikasiDetail(Request $request, $id_laporan_keuangan)
+    {
+        if (!Session::get('role')) {
+            return redirect()->route('login');
+        }
+    
+        // Validasi input komentar agar tidak kosong
+        $request->validate([
+            'comment' => 'required|string|max:255'
+        ]);
+    
+        // Cari data laporan proyek berdasarkan ID
+        $laporanKeuangan = LaporanKeuanganDetails::find($id_laporan_keuangan);
+    
+        if (!$laporanKeuangan) {
+            return back()->with('fail', 'Laporan tidak ditemukan!');
+        }
+    
+        // Update status menjadi 2 (Verifikasi Ditolak) dan simpan komentar penolakan
+        $laporanKeuangan->status = 2;
+        $laporanKeuangan->id_verifikator = Session()->get('id_user');
+        $laporanKeuangan->komentar = $request->comment; // Pastikan kolom komentar tersedia di database
+        $laporanKeuangan->save();
+    
+        return back()->with('success', 'Data berhasil ditolak verifikasinya dengan komentar!');
     }
     
 }

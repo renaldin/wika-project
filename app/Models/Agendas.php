@@ -18,4 +18,9 @@ class Agendas extends Model
     {
         return $this->belongsTo(ModelProyek::class, 'id_proyek', 'id_proyek');
     }
+
+    public function temuans()
+    {
+        return $this->hasMany(Temuans::class, 'id_agenda', 'id');
+    }
 }
